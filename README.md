@@ -98,7 +98,3 @@ re-downloading dependencies. Instructions can be found [here](https://github.com
 
 On Linux you'll also need opengl, X11 and XInput installed. Those can be installed
 with `sudo apt install libgl1-mesa-dev libglu1-mesa-dev libx11-dev libxi-dev` on Debian/Ubuntu
-
-## License
-
-This template is released under the Unlicense. Enjoy!
