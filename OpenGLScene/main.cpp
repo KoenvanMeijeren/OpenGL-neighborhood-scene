@@ -31,6 +31,7 @@ GLuint position_id;
 GLuint color_id;
 GLuint vbo_vertices;
 GLuint vbo_colors;
+GLuint vbo_triangle;
 GLuint vao;
 
 
@@ -49,6 +50,26 @@ constexpr GLfloat colors[]
     1.0f, 0.0f, 0.0f, 1.0f,
     0.0f, 1.0f, 0.0f, 1.0f,
     0.0f, 0.0f, 1.0f, 1.0f,
+};
+
+struct vertex_format
+{
+    glm::vec4 position;
+    glm::vec4 color;
+    vertex_format(const glm::vec4 pos, const glm::vec4 col)
+    {
+        position = pos;
+        color = col;
+    }
+};
+
+vertex_format triangle[] = {
+   vertex_format(glm::vec4(0.5, -0.5, 0.0, 1.0),
+                glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)),
+   vertex_format(glm::vec4(-0.5, -0.5, 0.0, 1.0),
+                glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)),
+   vertex_format(glm::vec4(0.0, 0.5, 0.0, 1.0),
+                glm::vec4(0.0f, 0.0f, 1.0f, 1.0f))
 };
 
 
@@ -165,32 +186,32 @@ void init_buffers()
     // --------------------------------------------------------------------------------
     // Generate buffers for vertices
     // --------------------------------------------------------------------------------
-    // Generate buffer object (in this case 1)
-    glGenBuffers(1, &vbo_vertices);
-
-    // Bind named buffer object
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
-
-    // Create and initialize buffer object's data store
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    // Unbind and free buffer for others
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    // --------------------------------------------------------------------------------
-    // Generate buffers for colors
-    // --------------------------------------------------------------------------------
-    // Generate buffer object (in this case 1)
-    glGenBuffers(1, &vbo_colors);
-
-    // Bind named buffer object
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_colors);
-
-    // Create and initialize buffer object's data store
-    glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
-
-    // Unbind and free buffer for others
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    // // Generate buffer object (in this case 1)
+    // glGenBuffers(1, &vbo_vertices);
+    //
+    // // Bind named buffer object
+    // glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
+    //
+    // // Create and initialize buffer object's data store
+    // glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    //
+    // // Unbind and free buffer for others
+    // glBindBuffer(GL_ARRAY_BUFFER, 0);
+    //
+    // // --------------------------------------------------------------------------------
+    // // Generate buffers for colors
+    // // --------------------------------------------------------------------------------
+    // // Generate buffer object (in this case 1)
+    // glGenBuffers(1, &vbo_colors);
+    //
+    // // Bind named buffer object
+    // glBindBuffer(GL_ARRAY_BUFFER, vbo_colors);
+    //
+    // // Create and initialize buffer object's data store
+    // glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
+    //
+    // // Unbind and free buffer for others
+    // glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     // --------------------------------------------------------------------------------
     // Location of attribute values
@@ -198,20 +219,46 @@ void init_buffers()
     position_id = glGetAttribLocation(program_id, "position");
     color_id = glGetAttribLocation(program_id, "color");
 
+    // --------------------------------------------------------------------------------
+    // VAO generation
+    // --------------------------------------------------------------------------------
+    // glGenVertexArrays(1, &vao);
+    // glBindVertexArray(vao);
+    // glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
+    // glVertexAttribPointer(position_id, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    // glEnableVertexAttribArray(position_id);
+    // glBindBuffer(GL_ARRAY_BUFFER, 0);
+    //
+    // glBindVertexArray(vao);
+    // glBindBuffer(GL_ARRAY_BUFFER, vbo_colors);
+    // glVertexAttribPointer(color_id, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    // glEnableVertexAttribArray(color_id);
+    // glBindBuffer(GL_ARRAY_BUFFER, 0);
+    //
+    // glBindVertexArray(0);
+
+    // --------------------------------------------------------------------------------
+    // VBO triangle generation
+    // --------------------------------------------------------------------------------
+    glGenBuffers(1, &vbo_triangle);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_triangle);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(triangle), triangle, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
     glGenVertexArrays(1, &vao);
+
     glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
-    glVertexAttribPointer(position_id, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_triangle);
+
+    glVertexAttribPointer(position_id, 4, GL_FLOAT, GL_FALSE, sizeof(vertex_format), 0);
     glEnableVertexAttribArray(position_id);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_colors);
-    glVertexAttribPointer(color_id, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer(color_id, 4, GL_FLOAT, GL_FALSE, sizeof(vertex_format), reinterpret_cast<void*>(sizeof(glm::vec4)));
     glEnableVertexAttribArray(color_id);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+
 }
 
 int main(const int argc, char** argv)
