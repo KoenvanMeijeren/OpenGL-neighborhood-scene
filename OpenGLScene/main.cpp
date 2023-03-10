@@ -78,41 +78,48 @@ void render()
     glUseProgram(program_id);
 
     // --------------------------------------------------------------------------------
+    // VAO generation, replaces the manual VBO creation
+    // --------------------------------------------------------------------------------
+    glBindVertexArray(vao);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glBindVertexArray(0);
+
+    // --------------------------------------------------------------------------------
     // VBO for vertices
     // --------------------------------------------------------------------------------
-    // Bind buffer
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
-
-    // Define an array of generic vertex attribute data
-    // ID, size, type, normalized, stride, offset first component
-    glVertexAttribPointer(position_id, 4, GL_FLOAT, GL_FALSE, 0, 0);
-
-    // Enable array
-    glEnableVertexAttribArray(position_id);
-
-    // Stop binding
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    // // Bind buffer
+    // glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
+    //
+    // // Define an array of generic vertex attribute data
+    // // ID, size, type, normalized, stride, offset first component
+    // glVertexAttribPointer(position_id, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    //
+    // // Enable array
+    // glEnableVertexAttribArray(position_id);
+    //
+    // // Stop binding
+    // glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     // --------------------------------------------------------------------------------
     // VBO for colors
     // --------------------------------------------------------------------------------
-    // Bind buffer
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_colors);
-
-    // Define an array of generic vertex attribute data
-    // ID, size, type, normalized, stride, offset first component
-    glVertexAttribPointer(color_id, 4, GL_FLOAT, GL_FALSE, 0, 0);
-
-    // Enable array
-    glEnableVertexAttribArray(color_id);
-
-    // Stop binding
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    // // Bind buffer
+    // glBindBuffer(GL_ARRAY_BUFFER, vbo_colors);
+    //
+    // // Define an array of generic vertex attribute data
+    // // ID, size, type, normalized, stride, offset first component
+    // glVertexAttribPointer(color_id, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    //
+    // // Enable array
+    // glEnableVertexAttribArray(color_id);
+    //
+    // // Stop binding
+    // glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     // --------------------------------------------------------------------------------
     // Draw
     // --------------------------------------------------------------------------------
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    // glDrawArrays(GL_TRIANGLES, 0, 3);
 
     // Swap buffers
     glutSwapBuffers();
@@ -190,6 +197,21 @@ void init_buffers()
     // --------------------------------------------------------------------------------
     position_id = glGetAttribLocation(program_id, "position");
     color_id = glGetAttribLocation(program_id, "color");
+
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
+    glVertexAttribPointer(position_id, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(position_id);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_colors);
+    glVertexAttribPointer(color_id, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(color_id);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glBindVertexArray(0);
 }
 
 int main(const int argc, char** argv)
