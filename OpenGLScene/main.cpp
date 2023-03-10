@@ -1,10 +1,13 @@
 #include <iostream>
+
 #include <GL/glew.h>
 #include <GL/freeglut.h>
+
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include "glsl.h"
-
 GLuint program_id;
-
 
 using namespace std;
 
@@ -38,11 +41,12 @@ void render()
     static constexpr GLfloat blue[] = { 0.0, 0.0, 0.4, 1.0 };
     glClearBufferfv(GL_COLOR, 0, blue);
 
+    // Define the first triangle
     glBegin(GL_TRIANGLES);
     
     // lower left corner
-    glColor3f(1.0, 1.0, 0.0); 
-    glVertex2f(-0.5, -0.5); 
+    glColor3f(1.0, 1.0, 0.0);
+    glVertex2f(-0.5, -0.5);
     
     // lower right corner
     glColor3f(1.0, 0.0, 0.0);
@@ -52,7 +56,8 @@ void render()
     glColor3f(0.0, 0.0, 1.0);
     glVertex2f(0.5, 0.5);
     glEnd();
-    
+
+    // Define second triangle
     glBegin(GL_TRIANGLES);
     
     // upper left corner
@@ -107,13 +112,23 @@ int main(int argc, char** argv)
     // Main loop
     glutMainLoop();
 
+    // Add shaders
     const char* vertex_shader = glsl::readFile("vertexshader.vert");
     const GLuint vsh_id = glsl::makeVertexShader(vertex_shader);
 
-    const char* frag_shader = glsl::readFile("fragmentshader.frag");
+    const char* frag_shader = glsl::readFile("fragshader.frag");
     const GLuint fsh_id = glsl::makeFragmentShader(frag_shader);
-
     program_id = glsl::makeShaderProgram(vsh_id, fsh_id);
+
+    // Create vector
+    auto position = glm::vec4(0.3f, 0.4f, 0.0f, 1.0f);
+    // Get location of uniform variable (create if new)
+    const GLuint position_id = glGetUniformLocation(program_id, "position");
+    // Attach to program (needed to fill uniform vars)
+    glUseProgram(program_id);
+    // Specify the value of the uniform variable
+    // Args: location, count, value
+    glUniform4fv(position_id, 1, glm::value_ptr(position));
 
     return 0;
 }
