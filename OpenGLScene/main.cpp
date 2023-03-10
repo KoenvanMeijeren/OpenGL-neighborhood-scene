@@ -155,18 +155,40 @@ void init_shaders()
 
 void init_buffers()
 {
-	// Generate buffer for vertices
+    // --------------------------------------------------------------------------------
+    // Generate buffers for vertices
+    // --------------------------------------------------------------------------------
+    // Generate buffer object (in this case 1)
     glGenBuffers(1, &vbo_vertices);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    position_id = glGetAttribLocation(program_id, "position");
 
-    // Generate buffers for colors
-    glGenBuffers(1, &vbo_colors);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_colors);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
+    // Bind named buffer object
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
+
+    // Create and initialize buffer object's data store
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    // Unbind and free buffer for others
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    // --------------------------------------------------------------------------------
+    // Generate buffers for colors
+    // --------------------------------------------------------------------------------
+    // Generate buffer object (in this case 1)
+    glGenBuffers(1, &vbo_colors);
+
+    // Bind named buffer object
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_colors);
+
+    // Create and initialize buffer object's data store
+    glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
+
+    // Unbind and free buffer for others
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    // --------------------------------------------------------------------------------
+    // Location of attribute values
+    // --------------------------------------------------------------------------------
+    position_id = glGetAttribLocation(program_id, "position");
     color_id = glGetAttribLocation(program_id, "color");
 }
 
