@@ -5,6 +5,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "glsl.h"
 
@@ -12,13 +13,15 @@ using namespace std;
 
 
 //--------------------------------------------------------------------------------
-// Constants
+// Consts
 //--------------------------------------------------------------------------------
 
-constexpr int width = 800, height = 600;
+const int WIDTH = 800, HEIGHT = 600;
 
-const char* frag_shader_name = "fragmentshader.frag";
-const char* vertex_shader_name = "vertexshader.vert";
+const char* fragshader_name = "fragmentshader.frag";
+const char* vertexshader_name = "vertexshader.vert";
+
+unsigned const int DELTA_TIME = 10;
 
 
 //--------------------------------------------------------------------------------
@@ -27,63 +30,89 @@ const char* vertex_shader_name = "vertexshader.vert";
 
 // ID's
 GLuint program_id;
-GLuint position_id;
-GLuint color_id;
-GLuint vbo_vertices;
-GLuint vbo_colors;
-GLuint vbo_triangle;
 GLuint vao;
-float f = 0.5f;
-unsigned const int TIME_DELTA = 10;
 
+// Uniform
+GLuint uniform_mvp; // n
+
+//------------------------------------------------------------
+// Variables for object
+//
+//           7----------6
+//          /|         /|
+//         / |        / |
+//        /  4-------/--5               y
+//       /  /       /  /                |
+//      3----------2  /                 ----x
+//      | /        | /                 /
+//      |/         |/                  z
+//      0----------1
+//------------------------------------------------------------
+
+// GLfloat vertices[] = {
+//     // front
+//     -1.0, -1.0, 1.0,
+//     1.0, -1.0, 1.0,
+//     1.0, 1.0, 1.0,
+//     -1.0, 1.0, 1.0,
+//     // back
+//     -1.0, -1.0, -1.0,
+//     1.0, -1.0, -1.0,
+//     1.0, 1.0, -1.0,
+//     -1.0, 1.0, -1.0
+// };
+//
+// GLfloat colors[] = {
+//     // front colors
+//     1.0, 1.0, 0.0,
+//     0.0, 1.0, 0.0,
+//     0.0, 0.0, 1.0,
+//     1.0, 1.0, 1.0,
+//     // back colors
+//     0.0, 1.0, 1.0,
+//     1.0, 0.0, 1.0,
+//     1.0, 0.0, 0.0,
+//     1.0, 1.0, 0.0
+// };
+//
+// GLushort cube_elements[] = {
+//     0,1,1,2,2,3,3,0,  // front
+//     0,4,1,5,3,7,2,6,  // front to back
+//     4,5,5,6,6,7,7,4   //back
+// };
+
+// Vertices
+const GLfloat vertices[]
+{
+    0.5, -0.5, 0.0,
+    -0.5, -0.5, 0.0,
+    0.0, 0.5, 0.0
+};
+
+// Colors
+const GLfloat colors[]
+{
+    1.0f, 0.0f, 0.0f,
+    0.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 1.0f
+};
 
 //--------------------------------------------------------------------------------
-// Mesh variables
+// Matrix transformations
 //--------------------------------------------------------------------------------
-constexpr GLfloat vertices[]
-{
-    0.5, -0.5, 0.0, 1.0,
-    -0.5, -0.5, 0.0, 1.0,
-    0.0, 0.5, 0.0, 1.0,
-};
-
-constexpr GLfloat colors[]
-{
-    1.0f, 0.0f, 0.0f, 1.0f,
-    0.0f, 1.0f, 0.0f, 1.0f,
-    0.0f, 0.0f, 1.0f, 1.0f,
-};
-
-struct vertex_format
-{
-    glm::vec4 position;
-    glm::vec4 color;
-    vertex_format(const glm::vec4 pos, const glm::vec4 col)
-    {
-        position = pos;
-        color = col;
-    }
-};
-
-vertex_format triangle[] = {
-   vertex_format(glm::vec4(0.5, -0.5, 0.0, 1.0),
-                glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)),
-   vertex_format(glm::vec4(-0.5, -0.5, 0.0, 1.0),
-                glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)),
-   vertex_format(glm::vec4(0.0, 0.5, 0.0, 1.0),
-                glm::vec4(0.0f, 0.0f, 1.0f, 1.0f))
-};
-
+glm::mat4 model;
+glm::mat4 view;
+glm::mat4 projection;
+glm::mat4 mvp;
 
 //--------------------------------------------------------------------------------
 // Keyboard handling
 //--------------------------------------------------------------------------------
 
-void keyboard_handler(const unsigned char key, int a, int b)
+void keyboardHandler(unsigned char key, int a, int b)
 {
-    if (key == 27) {
+    if (key == 27)
         glutExit();
-    }
 }
 
 
@@ -91,93 +120,58 @@ void keyboard_handler(const unsigned char key, int a, int b)
 // Rendering
 //--------------------------------------------------------------------------------
 
-void render()
+void Render()
 {
     // Define background
-    const auto blue = glm::vec4(0.0f, 0.0f, 0.4f, 1.0f);
-    glClearBufferfv(GL_COLOR, 0, glm::value_ptr(blue));
+    glClearColor(0.0, 0.0, 0.0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // Animation preparations
+    model = glm::rotate(model, 0.01f, glm::vec3(0.0, 1.0, 0.0));
+    mvp = projection * view * model;
 
     // Attach to program_id
     glUseProgram(program_id);
 
-    // Change value of var f
-    glm::vec4 v = glm::vec4(0.0, f, 0.0, 1.0);
+    // Set this command in the render method when creating an animation.
+    glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(mvp));
 
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_triangle);
-    glBufferSubData(GL_ARRAY_BUFFER,  // target
-        4 * sizeof(glm::vec4),         // offset
-        sizeof(glm::vec4),             // size
-        &v);                           // data
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_triangle);
-
-    // --------------------------------------------------------------------------------
-    // VAO generation, replaces the manual VBO creation
-    // --------------------------------------------------------------------------------
+    // Send vao
     glBindVertexArray(vao);
     glDrawArrays(GL_TRIANGLES, 0, 3);
     glBindVertexArray(0);
-
-    // --------------------------------------------------------------------------------
-    // VBO for vertices
-    // --------------------------------------------------------------------------------
-    // // Bind buffer
-    // glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
-    //
-    // // Define an array of generic vertex attribute data
-    // // ID, size, type, normalized, stride, offset first component
-    // glVertexAttribPointer(position_id, 4, GL_FLOAT, GL_FALSE, 0, 0);
-    //
-    // // Enable array
-    // glEnableVertexAttribArray(position_id);
-    //
-    // // Stop binding
-    // glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    // --------------------------------------------------------------------------------
-    // VBO for colors
-    // --------------------------------------------------------------------------------
-    // // Bind buffer
-    // glBindBuffer(GL_ARRAY_BUFFER, vbo_colors);
-    //
-    // // Define an array of generic vertex attribute data
-    // // ID, size, type, normalized, stride, offset first component
-    // glVertexAttribPointer(color_id, 4, GL_FLOAT, GL_FALSE, 0, 0);
-    //
-    // // Enable array
-    // glEnableVertexAttribArray(color_id);
-    //
-    // // Stop binding
-    // glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    // --------------------------------------------------------------------------------
-    // Draw
-    // --------------------------------------------------------------------------------
-    // glDrawArrays(GL_TRIANGLES, 0, 3);
 
     // Swap buffers
     glutSwapBuffers();
 }
 
-void render(int n)
+
+//------------------------------------------------------------
+// void Render(int n)
+// Render method that is called by the timer function
+//------------------------------------------------------------
+
+void Render(int n)
 {
-    render();
-    glutTimerFunc(TIME_DELTA, render, 0);
+    Render();
+    glutTimerFunc(DELTA_TIME, Render, 0);
 }
+
 
 //------------------------------------------------------------
 // void InitGlutGlew(int argc, char **argv)
 // Initializes Glut and Glew
 //------------------------------------------------------------
 
-void init_glut_glew(int argc, char** argv)
+void InitGlutGlew(int argc, char** argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-    glutInitWindowSize(width, height);
-    glutCreateWindow("OpenGL");
-    glutDisplayFunc(render);
-    glutKeyboardFunc(keyboard_handler);
-    glutTimerFunc(TIME_DELTA, render, 0);
+    glutInitWindowSize(WIDTH, HEIGHT);
+    glutCreateWindow("Hello OpenGL");
+    glutDisplayFunc(Render);
+    glutKeyboardFunc(keyboardHandler);
+    glutTimerFunc(DELTA_TIME, Render, 0);
 
     glewInit();
 }
@@ -188,105 +182,106 @@ void init_glut_glew(int argc, char** argv)
 // Initializes the fragmentshader and vertexshader
 //------------------------------------------------------------
 
-void init_shaders()
+void InitShaders()
 {
-	const char* vertex_shader = glsl::readFile(vertex_shader_name);
-    GLuint vsh_id = glsl::makeVertexShader(vertex_shader);
+    char* vertexshader = glsl::readFile(vertexshader_name);
+    GLuint vsh_id = glsl::makeVertexShader(vertexshader);
 
-	const char* frag_shader = glsl::readFile(frag_shader_name);
-	const GLuint fsh_id = glsl::makeFragmentShader(frag_shader);
+    char* fragshader = glsl::readFile(fragshader_name);
+    GLuint fsh_id = glsl::makeFragmentShader(fragshader);
 
     program_id = glsl::makeShaderProgram(vsh_id, fsh_id);
 }
 
-void init_buffers()
-{
-    // --------------------------------------------------------------------------------
-    // Generate buffers for vertices
-    // --------------------------------------------------------------------------------
-    // // Generate buffer object (in this case 1)
-    // glGenBuffers(1, &vbo_vertices);
-    //
-    // // Bind named buffer object
-    // glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
-    //
-    // // Create and initialize buffer object's data store
-    // glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    //
-    // // Unbind and free buffer for others
-    // glBindBuffer(GL_ARRAY_BUFFER, 0);
-    //
-    // // --------------------------------------------------------------------------------
-    // // Generate buffers for colors
-    // // --------------------------------------------------------------------------------
-    // // Generate buffer object (in this case 1)
-    // glGenBuffers(1, &vbo_colors);
-    //
-    // // Bind named buffer object
-    // glBindBuffer(GL_ARRAY_BUFFER, vbo_colors);
-    //
-    // // Create and initialize buffer object's data store
-    // glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
-    //
-    // // Unbind and free buffer for others
-    // glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    // --------------------------------------------------------------------------------
-    // Location of attribute values
-    // --------------------------------------------------------------------------------
+//------------------------------------------------------------
+// void InitBuffers()
+// Allocates and fills buffers
+//------------------------------------------------------------
+
+void InitBuffers()
+{
+    GLuint position_id;
+    GLuint color_id;
+    GLuint vbo_vertices;
+    GLuint vbo_colors;
+
+    // vbo for vertices
+    glGenBuffers(1, &vbo_vertices);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    // vbo for colors
+    glGenBuffers(1, &vbo_colors);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_colors);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    // Get vertex attributes
     position_id = glGetAttribLocation(program_id, "position");
     color_id = glGetAttribLocation(program_id, "color");
 
-    // --------------------------------------------------------------------------------
-    // VAO generation
-    // --------------------------------------------------------------------------------
-    // glGenVertexArrays(1, &vao);
-    // glBindVertexArray(vao);
-    // glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
-    // glVertexAttribPointer(position_id, 4, GL_FLOAT, GL_FALSE, 0, 0);
-    // glEnableVertexAttribArray(position_id);
-    // glBindBuffer(GL_ARRAY_BUFFER, 0);
-    //
-    // glBindVertexArray(vao);
-    // glBindBuffer(GL_ARRAY_BUFFER, vbo_colors);
-    // glVertexAttribPointer(color_id, 4, GL_FLOAT, GL_FALSE, 0, 0);
-    // glEnableVertexAttribArray(color_id);
-    // glBindBuffer(GL_ARRAY_BUFFER, 0);
-    //
-    // glBindVertexArray(0);
-
-    // --------------------------------------------------------------------------------
-    // VBO triangle generation
-    // --------------------------------------------------------------------------------
-    glGenBuffers(1, &vbo_triangle);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_triangle);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(triangle), triangle, GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
+    // Allocate memory for vao
     glGenVertexArrays(1, &vao);
 
+    // Bind to vao
     glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_triangle);
 
-    glVertexAttribPointer(position_id, 4, GL_FLOAT, GL_FALSE, sizeof(vertex_format), 0);
+    // Bind vertices to vao
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
+    glVertexAttribPointer(position_id, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(position_id);
-
-    glVertexAttribPointer(color_id, 4, GL_FLOAT, GL_FALSE, sizeof(vertex_format), reinterpret_cast<void*>(sizeof(glm::vec4)));
-    glEnableVertexAttribArray(color_id);
-
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    // Bind colors to vao
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_colors);
+    glVertexAttribPointer(color_id, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(color_id);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    // Stop bind to vao
     glBindVertexArray(0);
+
+    // Get and fill uniform variables
+    uniform_mvp = glGetUniformLocation(program_id, "mvp");
+    // Uncomment when not using an animation 
+    // glUseProgram(program_id);
+    // glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(mvp));
 }
 
-int main(const int argc, char** argv)
+void InitMatrices()
 {
-    init_glut_glew(argc, argv);
-    init_shaders();
-    init_buffers();
+    // Identity matrix
+    model = glm::mat4();
+
+    view = glm::lookAt(
+        glm::vec3(0.0, 0.0, 2.0),
+        // glm::vec3(2.0, 0.5, 2.0),
+        glm::vec3(0.0, 0.0, 0.0),
+        glm::vec3(0.0, 1.0, 0.0)
+    );
+
+    projection = glm::perspective(
+		glm::radians(45.0f),
+        1.0f * 800.0f / 600.0f,
+        0.1f,
+        20.0f
+    );
+
+    mvp = projection * view * model;
+}
+
+int main(int argc, char** argv)
+{
+    InitGlutGlew(argc, argv);
+    InitShaders();
+    InitBuffers();
+    InitMatrices();
 
     // Hide console window
-    const HWND h_wnd = GetConsoleWindow();
-    ShowWindow(h_wnd, SW_HIDE);
+    HWND hWnd = GetConsoleWindow();
+    ShowWindow(hWnd, SW_HIDE);
 
     // Main loop
     glutMainLoop();
