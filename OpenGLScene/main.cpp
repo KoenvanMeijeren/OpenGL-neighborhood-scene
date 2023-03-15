@@ -33,6 +33,8 @@ GLuint vbo_vertices;
 GLuint vbo_colors;
 GLuint vbo_triangle;
 GLuint vao;
+float f = 0.5f;
+unsigned const int TIME_DELTA = 10;
 
 
 //--------------------------------------------------------------------------------
@@ -98,6 +100,16 @@ void render()
     // Attach to program_id
     glUseProgram(program_id);
 
+    // Change value of var f
+    glm::vec4 v = glm::vec4(0.0, f, 0.0, 1.0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_triangle);
+    glBufferSubData(GL_ARRAY_BUFFER,  // target
+        4 * sizeof(glm::vec4),         // offset
+        sizeof(glm::vec4),             // size
+        &v);                           // data
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_triangle);
+
     // --------------------------------------------------------------------------------
     // VAO generation, replaces the manual VBO creation
     // --------------------------------------------------------------------------------
@@ -146,6 +158,11 @@ void render()
     glutSwapBuffers();
 }
 
+void render(int n)
+{
+    render();
+    glutTimerFunc(TIME_DELTA, render, 0);
+}
 
 //------------------------------------------------------------
 // void InitGlutGlew(int argc, char **argv)
@@ -160,6 +177,7 @@ void init_glut_glew(int argc, char** argv)
     glutCreateWindow("OpenGL");
     glutDisplayFunc(render);
     glutKeyboardFunc(keyboard_handler);
+    glutTimerFunc(TIME_DELTA, render, 0);
 
     glewInit();
 }
@@ -258,7 +276,6 @@ void init_buffers()
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
-
 }
 
 int main(const int argc, char** argv)
