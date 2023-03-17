@@ -4,8 +4,8 @@
 #include <GL/freeglut.h>
 
 #include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "glsl.h"
 
@@ -31,17 +31,20 @@ unsigned const int DELTA_TIME = 10;
 // ID's
 GLuint program_id;
 GLuint vao;
-GLuint ibo_cube_elements;
-GLuint position_id;
-GLuint color_id;
-GLuint vbo_vertices;
-GLuint vbo_colors;
 
-// Uniform
-GLuint uniform_mvp; // n
+// Uniform ID's
+GLuint uniform_mvp;
+
+// Matrices
+glm::mat4 model, view, projection;
+glm::mat4 mvp;
+
+
+//--------------------------------------------------------------------------------
+// Mesh variables
+//--------------------------------------------------------------------------------
 
 //------------------------------------------------------------
-// Variables for object
 //
 //           7----------6
 //          /|         /|
@@ -54,7 +57,8 @@ GLuint uniform_mvp; // n
 //      0----------1
 //------------------------------------------------------------
 
-GLfloat vertices[] = {
+// Vertices
+const GLfloat vertices[] = {
     // front
     -1.0, -1.0, 1.0,
     1.0, -1.0, 1.0,
@@ -64,10 +68,11 @@ GLfloat vertices[] = {
     -1.0, -1.0, -1.0,
     1.0, -1.0, -1.0,
     1.0, 1.0, -1.0,
-    -1.0, 1.0, -1.0
+    -1.0, 1.0, -1.0,
 };
 
-GLfloat colors[] = {
+// Colors
+const GLfloat colors[] = {
     // front colors
     1.0, 1.0, 0.0,
     0.0, 1.0, 0.0,
@@ -77,32 +82,16 @@ GLfloat colors[] = {
     0.0, 1.0, 1.0,
     1.0, 0.0, 1.0,
     1.0, 0.0, 0.0,
-    1.0, 1.0, 0.0
+    1.0, 1.0, 0.0,
 };
 
+// Elements
 GLushort cube_elements[] = {
     0,1,1,2,2,3,3,0,  // front
     0,4,1,5,3,7,2,6,  // front to back
-    4,5,5,6,6,7,7,4   //back
+    4,5,5,6,6,7,7,4   // back
 };
 
-//--------------------------------------------------------------------------------
-// Matrix transformations
-//--------------------------------------------------------------------------------
-glm::mat4 model = glm::mat4(); // identity matrix
-glm::mat4 view = glm::lookAt(
-    // glm::vec3(0.0, 0.0, 2.0),
-    glm::vec3(2.0, 0.5, 5.0),
-    glm::vec3(0.0, 0.0, 0.0),
-    glm::vec3(0.0, 1.0, 0.0)
-);
-glm::mat4 projection = glm::perspective(
-    glm::radians(45.0f),
-    1.0f * 800.0f / 600.0f,
-    0.1f,
-    20.0f
-);
-glm::mat4 mvp;
 
 //--------------------------------------------------------------------------------
 // Keyboard handling
@@ -125,29 +114,21 @@ void Render()
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // Animation preparations
-    model = glm::rotate(model, 0.01f, glm::vec3(0.0, 1.0, 0.0));
+    // Do transformation
+    model = glm::rotate(model, 0.01f, glm::vec3(0.0f, 1.0f, 0.0f));
     mvp = projection * view * model;
-
-    // Send vao
-    glBindVertexArray(vao);
 
     // Attach to program_id
     glUseProgram(program_id);
 
-    uniform_mvp = glGetUniformLocation(program_id, "mvp");
-
-    // glDrawArrays(GL_LINES, 0, vertices.size());
-    glDrawElements(
-        GL_LINES,
-        sizeof(cube_elements) / sizeof(GLushort),
-        GL_UNSIGNED_SHORT,
-        0);
-
-    glBindVertexArray(0);
-
-    // Set this command in the render method when creating an animation.
+    // Send mvp
     glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(mvp));
+
+    // Send vao
+    glBindVertexArray(vao);
+    glDrawElements(GL_LINES, sizeof(cube_elements) / sizeof(GLushort),
+        GL_UNSIGNED_SHORT, 0);
+    glBindVertexArray(0);
 
     // Swap buffers
     glutSwapBuffers();
@@ -181,6 +162,9 @@ void InitGlutGlew(int argc, char** argv)
     glutKeyboardFunc(keyboardHandler);
     glutTimerFunc(DELTA_TIME, Render, 0);
 
+    glEnable(GL_DEPTH_TEST);
+    glDisable(GL_CULL_FACE);
+
     glewInit();
 }
 
@@ -203,12 +187,37 @@ void InitShaders()
 
 
 //------------------------------------------------------------
+// void InitMatrices()
+//------------------------------------------------------------
+
+void InitMatrices()
+{
+    model = glm::mat4();
+    view = glm::lookAt(
+        glm::vec3(2.0, 2.0, 7.0),
+        glm::vec3(0.0, 0.0, 0.0),
+        glm::vec3(0.0, 1.0, 0.0));
+    projection = glm::perspective(
+        glm::radians(45.0f),
+        1.0f * WIDTH / HEIGHT, 0.1f,
+        20.0f);
+    mvp = projection * view * model;
+}
+
+
+//------------------------------------------------------------
 // void InitBuffers()
 // Allocates and fills buffers
 //------------------------------------------------------------
 
 void InitBuffers()
 {
+    GLuint position_id;
+    GLuint color_id;
+    GLuint vbo_vertices;
+    GLuint vbo_colors;
+    GLuint ibo_elements;
+
     // vbo for vertices
     glGenBuffers(1, &vbo_vertices);
     glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
@@ -220,6 +229,13 @@ void InitBuffers()
     glBindBuffer(GL_ARRAY_BUFFER, vbo_colors);
     glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    // vbo for elements
+    glGenBuffers(1, &ibo_elements);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo_elements);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cube_elements),
+        cube_elements, GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     // Get vertex attributes
     position_id = glGetAttribLocation(program_id, "position");
@@ -243,24 +259,29 @@ void InitBuffers()
     glEnableVertexAttribArray(color_id);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    glGenBuffers(1, &ibo_cube_elements);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo_cube_elements);
-    glBufferData(
-        GL_ELEMENT_ARRAY_BUFFER, sizeof(cube_elements),
-        cube_elements, GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-    // Add to VAO
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo_cube_elements);
+    // Bind elements to vao
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo_elements);
 
     // Stop bind to vao
     glBindVertexArray(0);
+
+    // Make uniform vars
+    uniform_mvp = glGetUniformLocation(program_id, "mvp");
+
+    // Define model
+    mvp = projection * view * model;
+
+    // Send mvp
+    glUseProgram(program_id);
+    glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(mvp));
 }
+
 
 int main(int argc, char** argv)
 {
     InitGlutGlew(argc, argv);
     InitShaders();
+    InitMatrices();
     InitBuffers();
 
     // Hide console window
