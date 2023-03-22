@@ -33,13 +33,16 @@ unsigned const int DELTA_TIME = 10;
 // ID's
 GLuint program_id;
 GLuint vao;
+GLuint vbo_normals;
 
 // Uniform ID's
 GLuint uniform_mvp;
+GLuint uniform_mv;
 
 // Matrices
 glm::mat4 model, view, projection;
 glm::mat4 mvp;
+glm::mat4 mv;
 
 
 vector<glm::vec3> normals;
@@ -236,6 +239,14 @@ void InitBuffers()
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+    // vbo for normals
+    glGenBuffers(1, &vbo_normals);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_normals);
+    glBufferData(GL_ARRAY_BUFFER,
+        normals.size() * sizeof(glm::vec3),
+        &normals[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
     // vbo for colors
     //glGenBuffers(1, &vbo_colors);
     //glBindBuffer(GL_ARRAY_BUFFER, vbo_colors);
@@ -251,6 +262,7 @@ void InitBuffers()
 
     // Get vertex attributes
     position_id = glGetAttribLocation(program_id, "position");
+    GLuint normal_id = glGetAttribLocation(program_id, "normal");
     //color_id = glGetAttribLocation(program_id, "5color");
 
     // Allocate memory for vao
@@ -264,6 +276,30 @@ void InitBuffers()
     glVertexAttribPointer(position_id, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(position_id);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    // Bind normals to vao
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_normals);
+    glVertexAttribPointer(normal_id, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(normal_id);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glm::vec3 light_position, ambient_color, diffuse_color;
+
+    // Make uniform vars
+    uniform_mv = glGetUniformLocation(program_id, "mv");
+    GLuint uniform_proj = glGetUniformLocation(program_id, "projection");
+    GLuint uniform_light_pos = glGetUniformLocation(program_id, "light_pos");
+    GLuint uniform_material_ambient = glGetUniformLocation(program_id,
+        "mat_ambient");
+    GLuint uniform_material_diffuse = glGetUniformLocation(program_id,
+        "mat_diffuse");
+
+    // Fill uniform vars
+    glUniformMatrix4fv(uniform_mv, 1, GL_FALSE, glm::value_ptr(mv));
+    glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, glm::value_ptr(projection));
+    glUniform3fv(uniform_light_pos, 1, glm::value_ptr(light_position));
+    glUniform3fv(uniform_material_ambient, 1, glm::value_ptr(ambient_color));
+    glUniform3fv(uniform_material_diffuse, 1, glm::value_ptr(diffuse_color));
 
     // Bind colors to vao
     //glBindBuffer(GL_ARRAY_BUFFER, vbo_colors);
