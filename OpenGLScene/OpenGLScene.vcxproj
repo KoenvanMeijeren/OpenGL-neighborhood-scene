@@ -132,6 +132,7 @@
     <ClCompile Include="glsl.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="objloader.cpp" />
+    <ClCompile Include="texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="fragmentshader.frag" />
@@ -140,6 +141,7 @@
   <ItemGroup>
     <ClInclude Include="glsl.h" />
     <ClInclude Include="objloader.h" />
+    <ClInclude Include="texture.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

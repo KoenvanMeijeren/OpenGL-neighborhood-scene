@@ -10,6 +10,7 @@
 
 #include "glsl.h"
 #include "objloader.h"
+#include "texture.h"
 
 using namespace std;
 
@@ -49,6 +50,7 @@ unsigned const int DELTA_TIME = 10;
 // ID's
 GLuint program_id;
 GLuint vao;
+GLuint texture_id;
 
 // Uniform ID's
 GLuint uniform_mv;
@@ -99,6 +101,9 @@ void Render()
     // Send mvp
     glUniformMatrix4fv(uniform_mv, 1, GL_FALSE, glm::value_ptr(mv));
 
+    // Bind textures
+    glBindTexture(GL_TEXTURE_2D, texture_id);
+
     // Send vao
     glBindVertexArray(vao);
     glDrawArrays(GL_TRIANGLES, 0, vertices.size());
@@ -116,6 +121,7 @@ void Render()
 
 void Render(int n)
 {
+    glEnable(GL_MULTISAMPLE);
     Render();
     glutTimerFunc(DELTA_TIME, Render, 0);
 }
@@ -129,7 +135,8 @@ void Render(int n)
 void InitGlutGlew(int argc, char** argv)
 {
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+    glutSetOption(GLUT_MULTISAMPLE, 8);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE);
     glutInitWindowSize(WIDTH, HEIGHT);
     glutCreateWindow("Hello OpenGL");
     glutDisplayFunc(Render);
@@ -179,26 +186,31 @@ void InitMatrices()
 }
 
 //------------------------------------------------------------
-// void InitMaterialsLight()
-//------------------------------------------------------------
-
-void InitMaterialsLight()
-{
-    light.position = glm::vec3(4.0, 4.0, 4.0);
-    material.ambient_color = glm::vec3(0.2, 0.2, 0.1);
-    material.diffuse_color = glm::vec3(0.5, 0.5, 0.3);
-    material.specular_color = glm::vec3(0.7, 0.7, 0.7);
-    material.power = 1024;
-}
-
-//------------------------------------------------------------
 // void InitObjects()
 //------------------------------------------------------------
 
 void InitObjects()
 {
     bool res;
+
+    // Objects
     res = loadOBJ("Objects/teapot.obj", vertices, uvs, normals);
+
+    // Textures
+    texture_id = loadBMP("Textures/Yellobrk.bmp");
+}
+
+//------------------------------------------------------------
+// void InitMaterialsLight()
+//------------------------------------------------------------
+
+void InitMaterialsLight()
+{
+    light.position = glm::vec3(4.0, 4.0, 4.0);
+    material.ambient_color = glm::vec3(0.0, 0.0, 0.0);
+    material.diffuse_color = glm::vec3(0.0, 0.0, 0.0);
+    material.specular_color = glm::vec3(1);
+    material.power = 1024;
 }
 
 
@@ -211,8 +223,10 @@ void InitBuffers()
 {
     GLuint position_id;
     GLuint normal_id;
+    GLuint uv_id;
     GLuint vbo_vertices;
     GLuint vbo_normals;
+    GLuint vbo_uvs;
 
     // vbo for vertices
     glGenBuffers(1, &vbo_vertices);
@@ -226,9 +240,16 @@ void InitBuffers()
     glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+    // vbo for uv
+    glGenBuffers(1, &vbo_uvs);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_uvs);
+    glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(glm::vec2), &uvs[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
     // Get vertex attributes
     position_id = glGetAttribLocation(program_id, "position");
     normal_id = glGetAttribLocation(program_id, "normal");
+    uv_id = glGetAttribLocation(program_id, "uv");
 
     // Allocate memory for vao
     glGenVertexArrays(1, &vao);
@@ -246,6 +267,12 @@ void InitBuffers()
     glBindBuffer(GL_ARRAY_BUFFER, vbo_normals);
     glVertexAttribPointer(normal_id, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(normal_id);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    // Bind uv to vao
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_uvs);
+    glVertexAttribPointer(uv_id, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(uv_id);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     // Stop bind to vao
