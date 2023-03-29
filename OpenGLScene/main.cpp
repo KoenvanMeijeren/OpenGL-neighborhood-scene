@@ -35,7 +35,7 @@ struct Material
 // Consts
 //--------------------------------------------------------------------------------
 
-const int WIDTH = 800, HEIGHT = 600;
+const int WIDTH = 800, HEIGHT = 600, objects_amount = 3;
 
 const char* fragshader_name = "fragmentshader.frag";
 const char* vertexshader_name = "vertexshader.vert";
@@ -49,26 +49,33 @@ unsigned const int DELTA_TIME = 10;
 
 // ID's
 GLuint program_id;
-GLuint vao;
-GLuint texture_id;
+GLuint vao[objects_amount];
+GLuint texture_id[objects_amount];
+
+GLuint uniform_material_ambient;
+GLuint uniform_material_diffuse;
+GLuint uniform_material_specular;
+GLuint uniform_material_power;
+GLuint uniform_apply_texture;
 
 // Uniform ID's
 GLuint uniform_mv;
 
 // Matrices
-glm::mat4 model, view, projection;
-glm::mat4 mv;
+glm::mat4 model[objects_amount], view, projection;
+glm::mat4 mv[objects_amount];
 
 // Light & materials
 LightSource light;
-Material material;
+Material material[objects_amount];
+bool apply_texture[objects_amount];
 
 //--------------------------------------------------------------------------------
 // Mesh variables
 //--------------------------------------------------------------------------------
-vector<glm::vec3> vertices;
-vector<glm::vec3> normals;
-vector<glm::vec2> uvs;
+vector<glm::vec3> vertices[objects_amount];
+vector<glm::vec3> normals[objects_amount];
+vector<glm::vec2> uvs[objects_amount];
 
 //--------------------------------------------------------------------------------
 // Keyboard handling
@@ -77,7 +84,9 @@ vector<glm::vec2> uvs;
 void keyboardHandler(unsigned char key, int a, int b)
 {
     if (key == 27)
-        glutExit();
+    {
+	    glutExit();
+    }
 }
 
 
@@ -92,22 +101,41 @@ void Render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Do transformation
-    model = glm::rotate(model, 0.01f, glm::vec3(0.5f, 1.0f, 0.2f));
-    mv = view * model;
+    model[0] = glm::rotate(model[0], 0.01f, glm::vec3(0.5f, 1.0f, 0.2f));
+    model[1] = glm::rotate(model[1], 0.05f, glm::vec3(1.0f, 0.5f, 0.3f));
+    model[2] = glm::rotate(model[2], 0.05f, glm::vec3(1.0f, 0.1f, 0.3f));
 
     // Attach to program_id
     glUseProgram(program_id);
 
-    // Send mvp
-    glUniformMatrix4fv(uniform_mv, 1, GL_FALSE, glm::value_ptr(mv));
+    for (int index = 0; index < objects_amount; index++)
+    {
+        // Do transformation
+        mv[index] = view * model[index];
 
-    // Bind textures
-    glBindTexture(GL_TEXTURE_2D, texture_id);
+        // Send mvp
+        glUniformMatrix4fv(uniform_mv, 1, GL_FALSE, glm::value_ptr(mv[index]));
 
-    // Send vao
-    glBindVertexArray(vao);
-    glDrawArrays(GL_TRIANGLES, 0, vertices.size());
-    glBindVertexArray(0);
+        // Bind textures
+        // glBindTexture(GL_TEXTURE_2D, texture_id[index]);
+        glUniform1i(uniform_apply_texture, 0);
+        if (apply_texture[index])
+        {
+            glUniform1i(uniform_apply_texture, 1);
+            glBindTexture(GL_TEXTURE_2D, texture_id[index]);
+        }
+
+        // Fill uniform vars
+    	glUniform3fv(uniform_material_ambient, 1, glm::value_ptr(material[index].ambient_color));
+        glUniform3fv(uniform_material_diffuse, 1, glm::value_ptr(material[index].diffuse_color));
+        glUniform3fv(uniform_material_specular, 1, glm::value_ptr(material[index].specular_color));
+        glUniform1f(uniform_material_power, material[index].power);
+
+        // Send vao
+        glBindVertexArray(vao[index]);
+        glDrawArrays(GL_TRIANGLES, 0, vertices[index].size());
+        glBindVertexArray(0);
+    }
 
     // Swap buffers
     glutSwapBuffers();
@@ -173,16 +201,20 @@ void InitShaders()
 
 void InitMatrices()
 {
-    model = glm::mat4();
+    model[0] = glm::mat4();
+    model[1] = glm::translate(glm::mat4(), glm::vec3(3.0, 0.5, 0.0));
+    model[2] = glm::translate(glm::mat4(), glm::vec3(-3.0, 0.5, 0.0));
     view = glm::lookAt(
-        glm::vec3(0.0, 2.0, 4.0),
+        glm::vec3(0.0, 2.0, 8.0),
         glm::vec3(0.0, 0.5, 0.0),
         glm::vec3(0.0, 1.0, 0.0));
     projection = glm::perspective(
         glm::radians(45.0f),
         1.0f * WIDTH / HEIGHT, 0.1f,
         20.0f);
-    mv = view * model;
+    mv[0] = view * model[0];
+    mv[1] = view * model[1];
+    mv[2] = view * model[2];
 }
 
 //------------------------------------------------------------
@@ -194,10 +226,13 @@ void InitObjects()
     bool res;
 
     // Objects
-    res = loadOBJ("Objects/teapot.obj", vertices, uvs, normals);
+    res = loadOBJ("Objects/teapot.obj", vertices[0], uvs[0], normals[0]);
+    res = loadOBJ("Objects/torus.obj", vertices[1], uvs[1], normals[1]);
+    res = loadOBJ("Objects/torus.obj", vertices[2], uvs[2], normals[2]);
 
     // Textures
-    texture_id = loadBMP("Textures/Yellobrk.bmp");
+    texture_id[0] = loadBMP("Textures/Yellobrk.bmp");
+    texture_id[1] = loadBMP("Textures/uvtemplate.bmp");
 }
 
 //------------------------------------------------------------
@@ -207,10 +242,27 @@ void InitObjects()
 void InitMaterialsLight()
 {
     light.position = glm::vec3(4.0, 4.0, 4.0);
-    material.ambient_color = glm::vec3(0.0, 0.0, 0.0);
-    material.diffuse_color = glm::vec3(0.0, 0.0, 0.0);
-    material.specular_color = glm::vec3(1);
-    material.power = 1024;
+
+    // Teapot
+    material[0].ambient_color = glm::vec3(0.0, 0.0, 0.0);
+    material[0].diffuse_color = glm::vec3(0.0, 0.0, 0.0);
+    material[0].specular_color = glm::vec3(1);
+    material[0].power = 1024;
+    apply_texture[0] = true;
+
+    // Torus, A.K.A. donut
+    material[1].ambient_color = glm::vec3(0.0, 0.0, 0.0);
+    material[1].diffuse_color = glm::vec3(0.0, 0.0, 0.0);
+    material[1].specular_color = glm::vec3(1);
+    material[1].power = 4;
+    apply_texture[1] = true;
+
+    // Box
+    material[2].ambient_color = glm::vec3(0.3, 0.3, 0.0);
+    material[2].diffuse_color = glm::vec3(0.5, 0.0, 0.5);
+    material[2].specular_color = glm::vec3(1);
+    material[2].power = 1024;
+    apply_texture[2] = false;
 }
 
 
@@ -228,76 +280,75 @@ void InitBuffers()
     GLuint vbo_normals;
     GLuint vbo_uvs;
 
-    // vbo for vertices
-    glGenBuffers(1, &vbo_vertices);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    // vbo for normals
-    glGenBuffers(1, &vbo_normals);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_normals);
-    glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    // vbo for uv
-    glGenBuffers(1, &vbo_uvs);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_uvs);
-    glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(glm::vec2), &uvs[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
     // Get vertex attributes
     position_id = glGetAttribLocation(program_id, "position");
     normal_id = glGetAttribLocation(program_id, "normal");
     uv_id = glGetAttribLocation(program_id, "uv");
 
-    // Allocate memory for vao
-    glGenVertexArrays(1, &vao);
+    for (int index = 0; index < objects_amount; ++index)
+    {
+        // vbo for vertices
+        glGenBuffers(1, &vbo_vertices);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
+        glBufferData(GL_ARRAY_BUFFER, vertices[index].size() * sizeof(glm::vec3), &vertices[index][0], GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    // Bind to vao
-    glBindVertexArray(vao);
+        // vbo for normals
+        glGenBuffers(1, &vbo_normals);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo_normals);
+        glBufferData(GL_ARRAY_BUFFER, normals[index].size() * sizeof(glm::vec3), &normals[index][0], GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    // Bind vertices to vao
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
-    glVertexAttribPointer(position_id, 3, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(position_id);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+        // vbo for uv
+        glGenBuffers(1, &vbo_uvs);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo_uvs);
+        glBufferData(GL_ARRAY_BUFFER, uvs[index].size() * sizeof(glm::vec2), &uvs[index][0], GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    // Bind normals to vao
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_normals);
-    glVertexAttribPointer(normal_id, 3, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(normal_id);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+        // Allocate memory for vao
+        glGenVertexArrays(1, &vao[index]);
 
-    // Bind uv to vao
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_uvs);
-    glVertexAttribPointer(uv_id, 2, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(uv_id);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+        // Bind to vao
+        glBindVertexArray(vao[index]);
 
-    // Stop bind to vao
-    glBindVertexArray(0);
+        // Bind vertices to vao
+        glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
+        glVertexAttribPointer(position_id, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(position_id);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        // Bind normals to vao
+        glBindBuffer(GL_ARRAY_BUFFER, vbo_normals);
+        glVertexAttribPointer(normal_id, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(normal_id);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        // Bind uv to vao
+        glBindBuffer(GL_ARRAY_BUFFER, vbo_uvs);
+        glVertexAttribPointer(uv_id, 2, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(uv_id);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        // Stop bind to vao
+        glBindVertexArray(0);
+    }
 
     // Make uniform vars
     uniform_mv = glGetUniformLocation(program_id, "mv");
     GLuint uniform_projection = glGetUniformLocation(program_id, "projection");
     GLuint uniform_light_pos = glGetUniformLocation(program_id, "light_pos");
-    GLuint uniform_material_ambient = glGetUniformLocation(program_id, "mat_ambient");
-    GLuint uniform_material_diffuse = glGetUniformLocation(program_id, "mat_diffuse");
-    GLuint uniform_material_specular = glGetUniformLocation(program_id, "mat_specular");
-    GLuint uniform_material_power = glGetUniformLocation(program_id, "mat_power");
+    uniform_material_ambient = glGetUniformLocation(program_id, "mat_ambient");
+    uniform_material_diffuse = glGetUniformLocation(program_id, "mat_diffuse");
+    uniform_material_specular = glGetUniformLocation(program_id, "mat_specular");
+    uniform_material_power = glGetUniformLocation(program_id, "mat_power");
+    uniform_apply_texture = glGetUniformLocation(program_id, "apply_texture");
 
-    // Attach to program
+    // Attach to program (needed to fill uniform vars)
     glUseProgram(program_id);
 
     // Fill uniform vars
-    glUniformMatrix4fv(uniform_mv, 1, GL_FALSE, glm::value_ptr(mv));
     glUniformMatrix4fv(uniform_projection, 1, GL_FALSE, glm::value_ptr(projection));
     glUniform3fv(uniform_light_pos, 1, glm::value_ptr(light.position));
-    glUniform3fv(uniform_material_ambient, 1, glm::value_ptr(material.ambient_color));
-    glUniform3fv(uniform_material_diffuse, 1, glm::value_ptr(material.diffuse_color));
-    glUniform3fv(uniform_material_specular, 1, glm::value_ptr(material.specular_color));
-    glUniform1f(uniform_material_power, material.power);
 }
 
 
