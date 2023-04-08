@@ -29,11 +29,11 @@ struct material
     glm::vec3 ambient_color;
     glm::vec3 diffuse_color;
     glm::vec3 specular_color;
-    float power;
+    float power{};
 };
 
 //--------------------------------------------------------------------------------
-// Consts
+// Constant settings.
 //--------------------------------------------------------------------------------
 
 constexpr int width = 800, height = 600, objects_amount = 3;
@@ -57,14 +57,14 @@ GLuint program_id;
 GLuint vao[objects_amount];
 GLuint texture_id[objects_amount];
 
-GLuint uniform_material_ambient;
-GLuint uniform_material_diffuse;
-GLuint uniform_material_specular;
-GLuint uniform_material_power;
-GLuint uniform_apply_texture;
+GLint uniform_material_ambient;
+GLint uniform_material_diffuse;
+GLint uniform_material_specular;
+GLint uniform_material_power;
+GLint uniform_apply_texture;
 
 // Uniform ID's
-GLuint uniform_mv;
+GLint uniform_mv;
 
 // Matrices
 glm::mat4 model[objects_amount];
@@ -220,7 +220,7 @@ void init_matrices()
 // void InitObjects()
 //------------------------------------------------------------
 
-void InitObjects()
+void init_objects()
 {
 	// Objects
 	loadOBJ("Objects/teapot.obj", vertices[0], uvs[0], normals[0]);
@@ -284,19 +284,19 @@ void init_buffers()
         // vbo for vertices
         glGenBuffers(1, &vbo_vertices);
         glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
-        glBufferData(GL_ARRAY_BUFFER, vertices[index].size() * sizeof(glm::vec3), &vertices[index][0], GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertices[index].size() * sizeof(glm::vec3), vertices[index].data(), GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
         // vbo for normals
         glGenBuffers(1, &vbo_normals);
         glBindBuffer(GL_ARRAY_BUFFER, vbo_normals);
-        glBufferData(GL_ARRAY_BUFFER, normals[index].size() * sizeof(glm::vec3), &normals[index][0], GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, normals[index].size() * sizeof(glm::vec3), normals[index].data(), GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
         // vbo for uv
         glGenBuffers(1, &vbo_uvs);
         glBindBuffer(GL_ARRAY_BUFFER, vbo_uvs);
-        glBufferData(GL_ARRAY_BUFFER, uvs[index].size() * sizeof(glm::vec2), &uvs[index][0], GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, uvs[index].size() * sizeof(glm::vec2), uvs[index].data(), GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
         // Allocate memory for vao
@@ -329,8 +329,8 @@ void init_buffers()
 
     // Make uniform vars
     uniform_mv = glGetUniformLocation(program_id, "mv");
-	const GLuint uniform_projection = glGetUniformLocation(program_id, "projection");
-	const GLuint uniform_light_pos = glGetUniformLocation(program_id, "light_pos");
+	const GLint uniform_projection = glGetUniformLocation(program_id, "projection");
+	const GLint uniform_light_pos = glGetUniformLocation(program_id, "light_pos");
     uniform_material_ambient = glGetUniformLocation(program_id, "mat_ambient");
     uniform_material_diffuse = glGetUniformLocation(program_id, "mat_diffuse");
     uniform_material_specular = glGetUniformLocation(program_id, "mat_specular");
@@ -351,7 +351,7 @@ int main(const int argc, char** argv)
     init_glut_glew(argc, argv);
     init_shaders();
     init_matrices();
-    InitObjects();
+    init_objects();
     init_materials_light();
     init_buffers();
 
