@@ -9,6 +9,7 @@
 #include "glsl.h"
 #include "objloader.h"
 #include "texture.h"
+#include "KeyBoardHandler.h"
 
 //--------------------------------------------------------------------------------
 // Typedefs
@@ -73,17 +74,6 @@ bool apply_texture[objects_amount];
 vector<glm::vec3> vertices[objects_amount];
 vector<glm::vec3> normals[objects_amount];
 vector<glm::vec2> uvs[objects_amount];
-
-//--------------------------------------------------------------------------------
-// Keyboard handling
-//--------------------------------------------------------------------------------
-void keyboard_handler(const unsigned char key, int a, int b)
-{
-    if (key == 27)
-    {
-        glutExit();
-    }
-}
 
 //--------------------------------------------------------------------------------
 // Rendering
@@ -343,5 +333,5 @@ int main(const int argc, char** argv)
     hide_console_window();
     glutMainLoop();
 
-    return 0;
+    return EXIT_SUCCESS;
 }
