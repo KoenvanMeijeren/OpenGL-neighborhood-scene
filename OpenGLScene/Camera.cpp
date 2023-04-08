@@ -4,20 +4,18 @@
 
 camera::camera(const float width, const float height)
 {
-	const auto temporary_mat4_value = new glm::mat4();
-	this->view = temporary_mat4_value;
+	this->view = new glm::mat4();
 	*this->view = glm::lookAt(
 		this->lookAtPosition,
 		this->lookAtPosition + this->pointAtPosition,
 		this->upDirection
 	);
-	this->projection = temporary_mat4_value;
+	this->projection = new glm::mat4();
 	*this->projection = glm::perspective(
 		glm::radians(45.0f),
 		1.0f * width / height, 0.1f,
 		20.0f
 	);
-	delete temporary_mat4_value;
 }
 ;
 

@@ -90,7 +90,7 @@ void keyboardHandler(unsigned char key, int a, int b)
 {
     if (key == 27)
     {
-	    glutExit();
+        glutExit();
     }
 }
 
@@ -131,7 +131,7 @@ void Render()
         }
 
         // Fill uniform vars
-    	glUniform3fv(uniform_material_ambient, 1, glm::value_ptr(material[index].ambient_color));
+        glUniform3fv(uniform_material_ambient, 1, glm::value_ptr(material[index].ambient_color));
         glUniform3fv(uniform_material_diffuse, 1, glm::value_ptr(material[index].diffuse_color));
         glUniform3fv(uniform_material_specular, 1, glm::value_ptr(material[index].specular_color));
         glUniform1f(uniform_material_power, material[index].power);
