@@ -100,10 +100,10 @@ void Render()
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // Do transformation
+    // Do transformation (x, y, z)
     model[0] = glm::rotate(model[0], 0.01f, glm::vec3(0.5f, 1.0f, 0.2f));
-    model[1] = glm::rotate(model[1], 0.05f, glm::vec3(1.0f, 0.5f, 0.3f));
-    model[2] = glm::rotate(model[2], 0.05f, glm::vec3(1.0f, 0.1f, 0.3f));
+    model[1] = glm::rotate(model[1], 0.05f, glm::vec3(1.0f, 0.5f, 0.5f));
+    model[2] = glm::rotate(model[2], 0.05f, glm::vec3(1.0f, 0.3f, 0.1f));
 
     // Attach to program_id
     glUseProgram(program_id);
@@ -166,7 +166,7 @@ void InitGlutGlew(int argc, char** argv)
     glutSetOption(GLUT_MULTISAMPLE, 8);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE);
     glutInitWindowSize(WIDTH, HEIGHT);
-    glutCreateWindow("Hello OpenGL");
+    glutCreateWindow("OpenGL");
     glutDisplayFunc(Render);
     glutKeyboardFunc(keyboardHandler);
     glutTimerFunc(DELTA_TIME, Render, 0);
