@@ -8,6 +8,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Camera.h"
 #include "glsl.h"
 #include "objloader.h"
 #include "texture.h"
@@ -35,13 +36,17 @@ struct Material
 // Consts
 //--------------------------------------------------------------------------------
 
-const int WIDTH = 800, HEIGHT = 600, objects_amount = 3;
+constexpr int width = 800, height = 600, objects_amount = 3;
 
 const char* fragshader_name = "fragmentshader.frag";
 const char* vertexshader_name = "vertexshader.vert";
 
 unsigned const int DELTA_TIME = 10;
 
+//--------------------------------------------------------------------------------
+// Camera
+//--------------------------------------------------------------------------------
+camera camera(width, height);
 
 //--------------------------------------------------------------------------------
 // Variables
@@ -62,7 +67,7 @@ GLuint uniform_apply_texture;
 GLuint uniform_mv;
 
 // Matrices
-glm::mat4 model[objects_amount], view, projection;
+glm::mat4 model[objects_amount];
 glm::mat4 mv[objects_amount];
 
 // Light & materials
@@ -111,7 +116,7 @@ void Render()
     for (int index = 0; index < objects_amount; index++)
     {
         // Do transformation
-        mv[index] = view * model[index];
+        mv[index] = camera.get_view() * model[index];
 
         // Send mvp
         glUniformMatrix4fv(uniform_mv, 1, GL_FALSE, glm::value_ptr(mv[index]));
@@ -165,7 +170,7 @@ void InitGlutGlew(int argc, char** argv)
     glutInit(&argc, argv);
     glutSetOption(GLUT_MULTISAMPLE, 8);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE);
-    glutInitWindowSize(WIDTH, HEIGHT);
+    glutInitWindowSize(width, height);
     glutCreateWindow("OpenGL");
     glutDisplayFunc(Render);
     glutKeyboardFunc(keyboardHandler);
@@ -204,17 +209,11 @@ void InitMatrices()
     model[0] = glm::mat4();
     model[1] = glm::translate(glm::mat4(), glm::vec3(3.0, 0.5, 0.0));
     model[2] = glm::translate(glm::mat4(), glm::vec3(-3.0, 0.5, 0.0));
-    view = glm::lookAt(
-        glm::vec3(0.0, 2.0, 8.0),
-        glm::vec3(0.0, 0.5, 0.0),
-        glm::vec3(0.0, 1.0, 0.0));
-    projection = glm::perspective(
-        glm::radians(45.0f),
-        1.0f * WIDTH / HEIGHT, 0.1f,
-        20.0f);
-    mv[0] = view * model[0];
-    mv[1] = view * model[1];
-    mv[2] = view * model[2];
+
+    for (int index = 0; index < objects_amount; ++index)
+    {
+        mv[index] = camera.get_view() * model[index];
+    }
 }
 
 //------------------------------------------------------------
@@ -347,7 +346,7 @@ void InitBuffers()
     glUseProgram(program_id);
 
     // Fill uniform vars
-    glUniformMatrix4fv(uniform_projection, 1, GL_FALSE, glm::value_ptr(projection));
+    glUniformMatrix4fv(uniform_projection, 1, GL_FALSE, glm::value_ptr(camera.get_projection()));
     glUniform3fv(uniform_light_pos, 1, glm::value_ptr(light.position));
 }
 
