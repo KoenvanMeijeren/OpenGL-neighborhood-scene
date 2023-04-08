@@ -19,12 +19,12 @@ using namespace std;
 //--------------------------------------------------------------------------------
 // Typedefs
 //--------------------------------------------------------------------------------
-struct LightSource
+struct light_source
 {
     glm::vec3 position;
 };
 
-struct Material
+struct material
 {
     glm::vec3 ambient_color;
     glm::vec3 diffuse_color;
@@ -41,7 +41,7 @@ constexpr int width = 800, height = 600, objects_amount = 3;
 const char* fragshader_name = "fragmentshader.frag";
 const char* vertexshader_name = "vertexshader.vert";
 
-unsigned const int DELTA_TIME = 10;
+unsigned constexpr int delta_time = 10;
 
 //--------------------------------------------------------------------------------
 // Camera
@@ -71,8 +71,8 @@ glm::mat4 model[objects_amount];
 glm::mat4 mv[objects_amount];
 
 // Light & materials
-LightSource light;
-Material material[objects_amount];
+light_source light;
+material material[objects_amount];
 bool apply_texture[objects_amount];
 
 //--------------------------------------------------------------------------------
@@ -86,7 +86,7 @@ vector<glm::vec2> uvs[objects_amount];
 // Keyboard handling
 //--------------------------------------------------------------------------------
 
-void keyboardHandler(unsigned char key, int a, int b)
+void keyboard_handler(const unsigned char key, int a, int b)
 {
     if (key == 27)
     {
@@ -99,7 +99,7 @@ void keyboardHandler(unsigned char key, int a, int b)
 // Rendering
 //--------------------------------------------------------------------------------
 
-void Render()
+void render()
 {
     // Define background
     glClearColor(0.0, 0.0, 0.0, 1.0);
@@ -152,11 +152,11 @@ void Render()
 // Render method that is called by the timer function
 //------------------------------------------------------------
 
-void Render(int n)
+void render(int n)
 {
     glEnable(GL_MULTISAMPLE);
-    Render();
-    glutTimerFunc(DELTA_TIME, Render, 0);
+    render();
+    glutTimerFunc(delta_time, render, 0);
 }
 
 
@@ -165,16 +165,16 @@ void Render(int n)
 // Initializes Glut and Glew
 //------------------------------------------------------------
 
-void InitGlutGlew(int argc, char** argv)
+void init_glut_glew(int argc, char** argv)
 {
     glutInit(&argc, argv);
     glutSetOption(GLUT_MULTISAMPLE, 8);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE);
     glutInitWindowSize(width, height);
     glutCreateWindow("OpenGL");
-    glutDisplayFunc(Render);
-    glutKeyboardFunc(keyboardHandler);
-    glutTimerFunc(DELTA_TIME, Render, 0);
+    glutDisplayFunc(render);
+    glutKeyboardFunc(keyboard_handler);
+    glutTimerFunc(delta_time, render, 0);
 
     glEnable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
@@ -189,13 +189,13 @@ void InitGlutGlew(int argc, char** argv)
 // Initializes the fragmentshader and vertexshader
 //------------------------------------------------------------
 
-void InitShaders()
+void init_shaders()
 {
-    char* vertexshader = glsl::readFile(vertexshader_name);
-    GLuint vsh_id = glsl::makeVertexShader(vertexshader);
+	const char* vertexshader = glsl::readFile(vertexshader_name);
+	const GLuint vsh_id = glsl::makeVertexShader(vertexshader);
 
-    char* fragshader = glsl::readFile(fragshader_name);
-    GLuint fsh_id = glsl::makeFragmentShader(fragshader);
+	const char* fragshader = glsl::readFile(fragshader_name);
+	const GLuint fsh_id = glsl::makeFragmentShader(fragshader);
 
     program_id = glsl::makeShaderProgram(vsh_id, fsh_id);
 }
@@ -204,7 +204,7 @@ void InitShaders()
 // void InitMatrices()
 //------------------------------------------------------------
 
-void InitMatrices()
+void init_matrices()
 {
     model[0] = glm::mat4();
     model[1] = glm::translate(glm::mat4(), glm::vec3(3.0, 0.5, 0.0));
@@ -222,12 +222,10 @@ void InitMatrices()
 
 void InitObjects()
 {
-    bool res;
-
-    // Objects
-    res = loadOBJ("Objects/teapot.obj", vertices[0], uvs[0], normals[0]);
-    res = loadOBJ("Objects/torus.obj", vertices[1], uvs[1], normals[1]);
-    res = loadOBJ("Objects/torus.obj", vertices[2], uvs[2], normals[2]);
+	// Objects
+	loadOBJ("Objects/teapot.obj", vertices[0], uvs[0], normals[0]);
+    loadOBJ("Objects/torus.obj", vertices[1], uvs[1], normals[1]);
+    loadOBJ("Objects/torus.obj", vertices[2], uvs[2], normals[2]);
 
     // Textures
     texture_id[0] = loadBMP("Textures/Yellobrk.bmp");
@@ -238,7 +236,7 @@ void InitObjects()
 // void InitMaterialsLight()
 //------------------------------------------------------------
 
-void InitMaterialsLight()
+void init_materials_light()
 {
     light.position = glm::vec3(4.0, 4.0, 4.0);
 
@@ -270,19 +268,16 @@ void InitMaterialsLight()
 // Allocates and fills buffers
 //------------------------------------------------------------
 
-void InitBuffers()
+void init_buffers()
 {
-    GLuint position_id;
-    GLuint normal_id;
-    GLuint uv_id;
-    GLuint vbo_vertices;
+	GLuint vbo_vertices;
     GLuint vbo_normals;
     GLuint vbo_uvs;
 
     // Get vertex attributes
-    position_id = glGetAttribLocation(program_id, "position");
-    normal_id = glGetAttribLocation(program_id, "normal");
-    uv_id = glGetAttribLocation(program_id, "uv");
+	const GLuint position_id = glGetAttribLocation(program_id, "position");
+	const GLuint normal_id = glGetAttribLocation(program_id, "normal");
+	const GLuint uv_id = glGetAttribLocation(program_id, "uv");
 
     for (int index = 0; index < objects_amount; ++index)
     {
@@ -334,8 +329,8 @@ void InitBuffers()
 
     // Make uniform vars
     uniform_mv = glGetUniformLocation(program_id, "mv");
-    GLuint uniform_projection = glGetUniformLocation(program_id, "projection");
-    GLuint uniform_light_pos = glGetUniformLocation(program_id, "light_pos");
+	const GLuint uniform_projection = glGetUniformLocation(program_id, "projection");
+	const GLuint uniform_light_pos = glGetUniformLocation(program_id, "light_pos");
     uniform_material_ambient = glGetUniformLocation(program_id, "mat_ambient");
     uniform_material_diffuse = glGetUniformLocation(program_id, "mat_diffuse");
     uniform_material_specular = glGetUniformLocation(program_id, "mat_specular");
@@ -351,18 +346,18 @@ void InitBuffers()
 }
 
 
-int main(int argc, char** argv)
+int main(const int argc, char** argv)
 {
-    InitGlutGlew(argc, argv);
-    InitShaders();
-    InitMatrices();
+    init_glut_glew(argc, argv);
+    init_shaders();
+    init_matrices();
     InitObjects();
-    InitMaterialsLight();
-    InitBuffers();
+    init_materials_light();
+    init_buffers();
 
     // Hide console window
-    HWND hWnd = GetConsoleWindow();
-    ShowWindow(hWnd, SW_HIDE);
+    const HWND h_wnd = GetConsoleWindow();
+    ShowWindow(h_wnd, SW_HIDE);
 
     // Main loop
     glutMainLoop();
