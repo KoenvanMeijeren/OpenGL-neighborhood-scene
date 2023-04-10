@@ -1,20 +1,16 @@
 #include <iostream>
 #include <vector>
-
 #include <GL/glew.h>
 #include <GL/freeglut.h>
-
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
 #include "Camera.h"
+#include "configuration.h"
 #include "glsl.h"
 #include "objloader.h"
 #include "texture.h"
-
-using namespace std;
-
+#include "KeyBoardHandler.h"
 
 //--------------------------------------------------------------------------------
 // Typedefs
@@ -33,24 +29,16 @@ struct material
 };
 
 //--------------------------------------------------------------------------------
-// Constant settings.
-//--------------------------------------------------------------------------------
-
-constexpr int width = 800, height = 600, objects_amount = 3;
-
-const char* fragshader_name = "fragmentshader.frag";
-const char* vertexshader_name = "vertexshader.vert";
-
-unsigned constexpr int delta_time = 10;
-
-//--------------------------------------------------------------------------------
 // Camera
 //--------------------------------------------------------------------------------
-camera camera(width, height);
+camera camera = *camera::get_instance();
 
 //--------------------------------------------------------------------------------
 // Variables
 //--------------------------------------------------------------------------------
+// Fragment shader names.
+const char* fragshader_name = "fragmentshader.frag";
+const char* vertexshader_name = "vertexshader.vert";
 
 // ID's
 GLuint program_id;
@@ -83,24 +71,13 @@ vector<glm::vec3> normals[objects_amount];
 vector<glm::vec2> uvs[objects_amount];
 
 //--------------------------------------------------------------------------------
-// Keyboard handling
-//--------------------------------------------------------------------------------
-
-void keyboard_handler(const unsigned char key, int a, int b)
-{
-    if (key == 27)
-    {
-        glutExit();
-    }
-}
-
-
-//--------------------------------------------------------------------------------
 // Rendering
 //--------------------------------------------------------------------------------
-
 void render()
 {
+    // Before doing anything, update the camera.
+    camera.update();
+
     // Define background
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -146,12 +123,9 @@ void render()
     glutSwapBuffers();
 }
 
-
 //------------------------------------------------------------
-// void Render(int n)
 // Render method that is called by the timer function
 //------------------------------------------------------------
-
 void render(int n)
 {
     glEnable(GL_MULTISAMPLE);
@@ -161,10 +135,8 @@ void render(int n)
 
 
 //------------------------------------------------------------
-// void InitGlutGlew(int argc, char **argv)
 // Initializes Glut and Glew
 //------------------------------------------------------------
-
 void init_glut_glew(int argc, char** argv)
 {
     glutInit(&argc, argv);
@@ -173,7 +145,10 @@ void init_glut_glew(int argc, char** argv)
     glutInitWindowSize(width, height);
     glutCreateWindow("OpenGL");
     glutDisplayFunc(render);
+    glutSetCursor(GLUT_CURSOR_NONE);
     glutKeyboardFunc(keyboard_handler);
+    glutPassiveMotionFunc(mouse_handler);
+    glutMouseWheelFunc(mouse_wheel_handler);
     glutTimerFunc(delta_time, render, 0);
 
     glEnable(GL_DEPTH_TEST);
@@ -183,12 +158,9 @@ void init_glut_glew(int argc, char** argv)
     glewInit();
 }
 
-
 //------------------------------------------------------------
-// void InitShaders()
 // Initializes the fragmentshader and vertexshader
 //------------------------------------------------------------
-
 void init_shaders()
 {
 	const char* vertexshader = glsl::readFile(vertexshader_name);
@@ -201,14 +173,13 @@ void init_shaders()
 }
 
 //------------------------------------------------------------
-// void InitMatrices()
+// Initializes the matrices.
 //------------------------------------------------------------
-
 void init_matrices()
 {
     model[0] = glm::mat4();
-    model[1] = glm::translate(glm::mat4(), glm::vec3(3.0, 0.5, 0.0));
-    model[2] = glm::translate(glm::mat4(), glm::vec3(-3.0, 0.5, 0.0));
+    model[1] = glm::translate(glm::mat4(), glm::vec3(3.0, 2.5, 0.0));
+    model[2] = glm::translate(glm::mat4(), glm::vec3(-3.0, -2.5, 0.0));
 
     for (int index = 0; index < objects_amount; ++index)
     {
@@ -217,9 +188,8 @@ void init_matrices()
 }
 
 //------------------------------------------------------------
-// void InitObjects()
+// Initializes the objects and textures which will be used.
 //------------------------------------------------------------
-
 void init_objects()
 {
 	// Objects
@@ -233,9 +203,8 @@ void init_objects()
 }
 
 //------------------------------------------------------------
-// void InitMaterialsLight()
+// Initializes the materials and lightning.
 //------------------------------------------------------------
-
 void init_materials_light()
 {
     light.position = glm::vec3(4.0, 4.0, 4.0);
@@ -262,12 +231,9 @@ void init_materials_light()
     apply_texture[2] = false;
 }
 
-
 //------------------------------------------------------------
-// void InitBuffers()
-// Allocates and fills buffers
+// Allocates and fills buffers.
 //------------------------------------------------------------
-
 void init_buffers()
 {
 	GLuint vbo_vertices;
@@ -345,7 +311,29 @@ void init_buffers()
     glUniform3fv(uniform_light_pos, 1, glm::value_ptr(light.position));
 }
 
+//------------------------------------------------------------
+// General behaviors before running the program.
+//------------------------------------------------------------
+void hide_console_window()
+{
+    const HWND h_wnd = GetConsoleWindow();
+    ShowWindow(h_wnd, SW_HIDE);
+}
 
+void force_mouse_to_enter_screen_in_center()
+{
+	// Set the mouse to center of screen, in order to prevent jumping into the scene.
+    glutWarpPointer(width / 2, height / 2);
+}
+
+void glut_pre_main_loop_actions()
+{
+    force_mouse_to_enter_screen_in_center();
+}
+
+//------------------------------------------------------------
+// Initializes the program and runs it.
+//------------------------------------------------------------
 int main(const int argc, char** argv)
 {
     init_glut_glew(argc, argv);
@@ -354,13 +342,9 @@ int main(const int argc, char** argv)
     init_objects();
     init_materials_light();
     init_buffers();
-
-    // Hide console window
-    const HWND h_wnd = GetConsoleWindow();
-    ShowWindow(h_wnd, SW_HIDE);
-
-    // Main loop
+    hide_console_window();
+    glut_pre_main_loop_actions();
     glutMainLoop();
 
-    return 0;
+    return EXIT_SUCCESS;
 }

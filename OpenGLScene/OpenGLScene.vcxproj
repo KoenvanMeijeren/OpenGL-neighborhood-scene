@@ -138,6 +138,7 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="glsl.cpp" />
+    <ClCompile Include="KeyBoardHandler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="objloader.cpp" />
     <ClCompile Include="texture.cpp" />
@@ -148,7 +149,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="configuration.h" />
     <ClInclude Include="glsl.h" />
+    <ClInclude Include="KeyBoardHandler.h" />
     <ClInclude Include="objloader.h" />
     <ClInclude Include="texture.h" />
   </ItemGroup>
