@@ -75,26 +75,116 @@ void camera::update() const
 	);
 }
 
-void camera::handle_keyboard_input(const unsigned char key) const
+void camera::update_after_yaw_or_pitch_change() const
+{
+	// Update the camera position, front and view.
+	glm::vec3 new_target_direction;
+	new_target_direction.x = cos(glm::radians(this->yaw)) * cos(glm::radians(this->pitch));
+	new_target_direction.y = sin(glm::radians(this->pitch));
+	new_target_direction.z = sin(glm::radians(this->yaw)) * cos(glm::radians(this->pitch));
+	*this->front = glm::normalize(new_target_direction);
+}
+
+void camera::handle_keyboard_input(const unsigned char key)
 {
 	constexpr float camera_speed = 0.5f;
 	switch (key)
 	{
 	case key_w_lower:
 	case key_w_upper:
+		// Move frontwards.
 		*this->position += *this->front * camera_speed;
 		break;
 	case key_s_lower:
 	case key_s_upper:
+		// Move backwards.
 		*this->position -= *this->front * camera_speed;
 		break;
 	case key_a_lower:
 	case key_a_upper:
-		*this->position -= glm::normalize(glm::cross(*this->front, *this->up)) * camera_speed;
+		// Move rightwards.
+		*this->position += glm::normalize(glm::cross(*this->front, *this->up)) * camera_speed;
 		break;
 	case key_d_lower:
 	case key_d_upper:
-		*this->position += glm::normalize(glm::cross(*this->front, *this->up)) * camera_speed;
+		// Move leftwards.
+		*this->position -= glm::normalize(glm::cross(*this->front, *this->up)) * camera_speed;
+		break;
+	case key_i_lower:
+	case key_i_upper:
+		// Look more upwards.
+		this->pitch -= camera_speed;
+		this->update_after_yaw_or_pitch_change();
+		break;
+	case key_k_lower:
+	case key_k_upper:
+		// Look more downwards. 
+		this->pitch += camera_speed;
+		this->update_after_yaw_or_pitch_change();
+		break;
+	case key_j_lower:
+	case key_j_upper:
+		// Look more leftwards.
+		this->yaw -= camera_speed;
+		this->update_after_yaw_or_pitch_change();
+		break;
+	case key_l_lower:
+	case key_l_upper:
+		// Look more rightwards.
+		this->yaw += camera_speed;
+		this->update_after_yaw_or_pitch_change();
+		break;
+	case key_e_lower:
+	case key_e_upper:
+		// Move upwards.
+		if (!this->is_drone_mode_enabled)
+		{
+			return;
+		}
+
+		this->position->y += camera_speed;
+		break;
+	case key_q_lower:
+	case key_q_upper:
+		// Move downwards.
+		if (!this->is_drone_mode_enabled)
+		{
+			return;
+		}
+
+		this->position->y -= camera_speed;
+		break;
+	case key_v_lower:
+	case key_v_upper:
+		this->is_drone_mode_enabled = !this->is_drone_mode_enabled;
+
+		this->yaw = default_drone_yaw;
+		this->pitch = default_drone_pitch;
+		*this->position = default_drone_position;
+		*this->front = default_drone_front_position;
+		*this->up = default_drone_up_position;
+		if (!this->is_drone_mode_enabled)
+		{
+			this->yaw = default_walk_yaw;
+			this->pitch = default_walk_pitch;
+			*this->position = default_walk_position;
+			*this->front = default_walk_front_position;
+			*this->up = default_walk_up_position;
+		}
+
+		if (!this->is_drone_mode_enabled)
+		{
+			this->front->y = 0;
+		}
+
+		// Prevent falling through the floor when not in drone mode.
+		if (!this->is_drone_mode_enabled && this->position->y < minimum_walk_mode_position_y)
+		{
+			this->position->y = minimum_walk_mode_position_y;
+		}
+
+		this->update_after_yaw_or_pitch_change();
+		this->update();
 		break;
 	case key_b_lower:
 	case key_b_upper:
@@ -103,6 +193,7 @@ void camera::handle_keyboard_input(const unsigned char key) const
 		std::cout << " YAW: " << this->yaw;
 		std::cout << " PITCH: " << this->pitch;
 		std::cout << " FOV: " << this->fov;
+		std::cout << " Drone mode enabled: " << (this->is_drone_mode_enabled ? "Yes" : "No");
 		std::cout << "\n";
 		break;
 	}
@@ -132,13 +223,7 @@ void camera::handle_mouse_input(const int position_x, const int position_y, cons
 		this->pitch = -maximum_pitch_right_direction;
 	}
 
-	// Update the camera position, front and view.
-	glm::vec3 new_target_direction;
-	new_target_direction.x = cos(glm::radians(this->yaw)) * cos(glm::radians(this->pitch));
-	new_target_direction.y = sin(glm::radians(this->pitch));
-	new_target_direction.z = sin(glm::radians(this->yaw)) * cos(glm::radians(this->pitch));
-	*this->front = glm::normalize(new_target_direction);
-
+	this->update_after_yaw_or_pitch_change();
 	this->update();
 
 	// Prevent exiting the center of the screen.
@@ -148,28 +233,26 @@ void camera::handle_mouse_input(const int position_x, const int position_y, cons
 	}
 }
 
-// TODO: Find out how to make this working with uniform variables
-// TODO: Find out why the scene is not updated after scrolling
 void camera::handle_mouse_wheel_input(const int button, const int direction, const int position_x, const int position_y)
 {
 	if (direction > 0)
     {
         // Zoom in
-		this->fov += 1.0f;
+		this->fov -= 1.0f;
     }
     else
     {
         // Zoom out
-		this->fov -= 1.0f;
+		this->fov += 1.0f;
     }
 
     if (fov < min_fov)
     {
-	    fov = 1.0f;
+	    fov = min_fov;
     }
 
     if (fov > max_fov)
     {
-	    fov = 45.0f;
+	    fov = max_fov;
     }
 }
