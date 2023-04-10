@@ -6,6 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "Camera.h"
+#include "configuration.h"
 #include "glsl.h"
 #include "objloader.h"
 #include "texture.h"
@@ -28,23 +29,17 @@ struct material
 };
 
 //--------------------------------------------------------------------------------
-// Constant settings.
-//--------------------------------------------------------------------------------
-constexpr int width = 800, height = 600, objects_amount = 3;
-
-const char* fragshader_name = "fragmentshader.frag";
-const char* vertexshader_name = "vertexshader.vert";
-
-unsigned constexpr int delta_time = 10;
-
-//--------------------------------------------------------------------------------
 // Camera
 //--------------------------------------------------------------------------------
-camera camera(width, height);
+camera camera = *camera::get_instance();
 
 //--------------------------------------------------------------------------------
 // Variables
 //--------------------------------------------------------------------------------
+// Fragment shader names.
+const char* fragshader_name = "fragmentshader.frag";
+const char* vertexshader_name = "vertexshader.vert";
+
 // ID's
 GLuint program_id;
 GLuint vao[objects_amount];
@@ -80,6 +75,9 @@ vector<glm::vec2> uvs[objects_amount];
 //--------------------------------------------------------------------------------
 void render()
 {
+    // Before doing anything, update the camera.
+    camera.update();
+
     // Define background
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -147,7 +145,10 @@ void init_glut_glew(int argc, char** argv)
     glutInitWindowSize(width, height);
     glutCreateWindow("OpenGL");
     glutDisplayFunc(render);
+    glutSetCursor(GLUT_CURSOR_NONE);
     glutKeyboardFunc(keyboard_handler);
+    glutPassiveMotionFunc(mouse_handler);
+    glutMouseWheelFunc(mouse_wheel_handler);
     glutTimerFunc(delta_time, render, 0);
 
     glEnable(GL_DEPTH_TEST);
@@ -177,8 +178,8 @@ void init_shaders()
 void init_matrices()
 {
     model[0] = glm::mat4();
-    model[1] = glm::translate(glm::mat4(), glm::vec3(3.0, 0.5, 0.0));
-    model[2] = glm::translate(glm::mat4(), glm::vec3(-3.0, 0.5, 0.0));
+    model[1] = glm::translate(glm::mat4(), glm::vec3(3.0, 2.5, 0.0));
+    model[2] = glm::translate(glm::mat4(), glm::vec3(-3.0, -2.5, 0.0));
 
     for (int index = 0; index < objects_amount; ++index)
     {
@@ -319,6 +320,17 @@ void hide_console_window()
     ShowWindow(h_wnd, SW_HIDE);
 }
 
+void force_mouse_to_enter_screen_in_center()
+{
+	// Set the mouse to center of screen, in order to prevent jumping into the scene.
+    glutWarpPointer(width / 2, height / 2);
+}
+
+void glut_pre_main_loop_actions()
+{
+    force_mouse_to_enter_screen_in_center();
+}
+
 //------------------------------------------------------------
 // Initializes the program and runs it.
 //------------------------------------------------------------
@@ -331,6 +343,7 @@ int main(const int argc, char** argv)
     init_materials_light();
     init_buffers();
     hide_console_window();
+    glut_pre_main_loop_actions();
     glutMainLoop();
 
     return EXIT_SUCCESS;
