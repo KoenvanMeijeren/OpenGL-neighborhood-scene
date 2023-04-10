@@ -36,7 +36,7 @@ camera camera = *camera::get_instance();
 //--------------------------------------------------------------------------------
 // Variables
 //--------------------------------------------------------------------------------
-// Fragment shader names.
+// Fragment shader names
 const char* fragshader_name = "fragmentshader.frag";
 const char* vertexshader_name = "vertexshader.vert";
 
@@ -45,14 +45,15 @@ GLuint program_id;
 GLuint vao[objects_amount];
 GLuint texture_id[objects_amount];
 
+// Uniform ID's
 GLint uniform_material_ambient;
 GLint uniform_material_diffuse;
 GLint uniform_material_specular;
 GLint uniform_material_power;
 GLint uniform_apply_texture;
-
-// Uniform ID's
 GLint uniform_mv;
+GLint uniform_projection;
+GLint uniform_light_pos;
 
 // Matrices
 glm::mat4 model[objects_amount];
@@ -75,20 +76,21 @@ vector<glm::vec2> uvs[objects_amount];
 //--------------------------------------------------------------------------------
 void render()
 {
-    // Before doing anything, update the camera.
-    camera.update();
-
     // Define background
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // Attach to program_id
+    glUseProgram(program_id);
+
+    // Before doing anything, update the camera.
+    camera.update();
+	glUniformMatrix4fv(uniform_projection, 1, GL_FALSE, glm::value_ptr(camera.get_projection()));
 
     // Do transformation (x, y, z)
     model[0] = glm::rotate(model[0], 0.01f, glm::vec3(0.5f, 1.0f, 0.2f));
     model[1] = glm::rotate(model[1], 0.05f, glm::vec3(1.0f, 0.5f, 0.5f));
     model[2] = glm::rotate(model[2], 0.05f, glm::vec3(1.0f, 0.3f, 0.1f));
-
-    // Attach to program_id
-    glUseProgram(program_id);
 
     for (int index = 0; index < objects_amount; index++)
     {
@@ -99,7 +101,6 @@ void render()
         glUniformMatrix4fv(uniform_mv, 1, GL_FALSE, glm::value_ptr(mv[index]));
 
         // Bind textures
-        // glBindTexture(GL_TEXTURE_2D, texture_id[index]);
         glUniform1i(uniform_apply_texture, 0);
         if (apply_texture[index])
         {
@@ -295,8 +296,8 @@ void init_buffers()
 
     // Make uniform vars
     uniform_mv = glGetUniformLocation(program_id, "mv");
-	const GLint uniform_projection = glGetUniformLocation(program_id, "projection");
-	const GLint uniform_light_pos = glGetUniformLocation(program_id, "light_pos");
+	uniform_projection = glGetUniformLocation(program_id, "projection");
+	uniform_light_pos = glGetUniformLocation(program_id, "light_pos");
     uniform_material_ambient = glGetUniformLocation(program_id, "mat_ambient");
     uniform_material_diffuse = glGetUniformLocation(program_id, "mat_diffuse");
     uniform_material_specular = glGetUniformLocation(program_id, "mat_specular");
@@ -320,9 +321,9 @@ void hide_console_window()
     ShowWindow(h_wnd, SW_HIDE);
 }
 
+// Prevents jumping into the scene.
 void force_mouse_to_enter_screen_in_center()
 {
-	// Set the mouse to center of screen, in order to prevent jumping into the scene.
     glutWarpPointer(width / 2, height / 2);
 }
 
