@@ -31,7 +31,7 @@ struct material
 //--------------------------------------------------------------------------------
 // Camera
 //--------------------------------------------------------------------------------
-camera camera = *camera::get_instance();
+camera *camera = camera::get_instance();
 
 //--------------------------------------------------------------------------------
 // Variables
@@ -78,14 +78,18 @@ void render()
 {
     // Define background
     glClearColor(0.0, 0.0, 0.0, 1.0);
+    if (camera->is_drone_mode_enabled)
+    {
+	    glClearColor(0.0, 0.0, 1.0, 1.0);
+    }
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Attach to program_id
     glUseProgram(program_id);
 
     // Before doing anything, update the camera.
-    camera.update();
-	glUniformMatrix4fv(uniform_projection, 1, GL_FALSE, glm::value_ptr(camera.get_projection()));
+    camera->update();
+	glUniformMatrix4fv(uniform_projection, 1, GL_FALSE, glm::value_ptr(camera->get_projection()));
 
     // Do transformation (x, y, z)
     model[0] = glm::rotate(model[0], 0.01f, glm::vec3(0.5f, 1.0f, 0.2f));
@@ -95,7 +99,7 @@ void render()
     for (int index = 0; index < objects_amount; index++)
     {
         // Do transformation
-        mv[index] = camera.get_view() * model[index];
+        mv[index] = camera->get_view() * model[index];
 
         // Send mvp
         glUniformMatrix4fv(uniform_mv, 1, GL_FALSE, glm::value_ptr(mv[index]));
@@ -184,7 +188,7 @@ void init_matrices()
 
     for (int index = 0; index < objects_amount; ++index)
     {
-        mv[index] = camera.get_view() * model[index];
+        mv[index] = camera->get_view() * model[index];
     }
 }
 
@@ -308,7 +312,7 @@ void init_buffers()
     glUseProgram(program_id);
 
     // Fill uniform vars
-    glUniformMatrix4fv(uniform_projection, 1, GL_FALSE, glm::value_ptr(camera.get_projection()));
+    glUniformMatrix4fv(uniform_projection, 1, GL_FALSE, glm::value_ptr(camera->get_projection()));
     glUniform3fv(uniform_light_pos, 1, glm::value_ptr(light.position));
 }
 
