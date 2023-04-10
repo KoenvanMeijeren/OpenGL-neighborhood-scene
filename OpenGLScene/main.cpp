@@ -31,7 +31,7 @@ struct material
 //--------------------------------------------------------------------------------
 // Camera
 //--------------------------------------------------------------------------------
-camera *camera = camera::get_instance();
+camera *p_camera = camera::get_instance();
 
 //--------------------------------------------------------------------------------
 // Variables
@@ -61,7 +61,7 @@ glm::mat4 mv[objects_amount];
 
 // Light & materials
 light_source light;
-material material[objects_amount];
+material materials[objects_amount];
 bool apply_texture[objects_amount];
 
 //--------------------------------------------------------------------------------
@@ -78,7 +78,7 @@ void render()
 {
     // Define background
     glClearColor(0.0, 0.0, 0.0, 1.0);
-    if (camera->is_drone_mode_enabled)
+    if (p_camera->is_drone_mode_enabled)
     {
 	    glClearColor(0.0, 0.0, 1.0, 1.0);
     }
@@ -88,8 +88,8 @@ void render()
     glUseProgram(program_id);
 
     // Before doing anything, update the camera.
-    camera->update();
-	glUniformMatrix4fv(uniform_projection, 1, GL_FALSE, glm::value_ptr(camera->get_projection()));
+    p_camera->update();
+	glUniformMatrix4fv(uniform_projection, 1, GL_FALSE, glm::value_ptr(p_camera->get_projection()));
 
     // Do transformation (x, y, z)
     model[0] = glm::rotate(model[0], 0.01f, glm::vec3(0.5f, 1.0f, 0.2f));
@@ -99,7 +99,7 @@ void render()
     for (int index = 0; index < objects_amount; index++)
     {
         // Do transformation
-        mv[index] = camera->get_view() * model[index];
+        mv[index] = p_camera->get_view() * model[index];
 
         // Send mvp
         glUniformMatrix4fv(uniform_mv, 1, GL_FALSE, glm::value_ptr(mv[index]));
@@ -113,10 +113,10 @@ void render()
         }
 
         // Fill uniform vars
-        glUniform3fv(uniform_material_ambient, 1, glm::value_ptr(material[index].ambient_color));
-        glUniform3fv(uniform_material_diffuse, 1, glm::value_ptr(material[index].diffuse_color));
-        glUniform3fv(uniform_material_specular, 1, glm::value_ptr(material[index].specular_color));
-        glUniform1f(uniform_material_power, material[index].power);
+        glUniform3fv(uniform_material_ambient, 1, glm::value_ptr(materials[index].ambient_color));
+        glUniform3fv(uniform_material_diffuse, 1, glm::value_ptr(materials[index].diffuse_color));
+        glUniform3fv(uniform_material_specular, 1, glm::value_ptr(materials[index].specular_color));
+        glUniform1f(uniform_material_power, materials[index].power);
 
         // Send vao
         glBindVertexArray(vao[index]);
@@ -188,7 +188,7 @@ void init_matrices()
 
     for (int index = 0; index < objects_amount; ++index)
     {
-        mv[index] = camera->get_view() * model[index];
+        mv[index] = p_camera->get_view() * model[index];
     }
 }
 
@@ -215,24 +215,24 @@ void init_materials_light()
     light.position = glm::vec3(4.0, 4.0, 4.0);
 
     // Teapot
-    material[0].ambient_color = glm::vec3(0.0, 0.0, 0.0);
-    material[0].diffuse_color = glm::vec3(0.0, 0.0, 0.0);
-    material[0].specular_color = glm::vec3(1);
-    material[0].power = 1024;
+    materials[0].ambient_color = glm::vec3(0.0, 0.0, 0.0);
+    materials[0].diffuse_color = glm::vec3(0.0, 0.0, 0.0);
+    materials[0].specular_color = glm::vec3(1);
+    materials[0].power = 1024;
     apply_texture[0] = true;
 
     // Torus, A.K.A. donut
-    material[1].ambient_color = glm::vec3(0.0, 0.0, 0.0);
-    material[1].diffuse_color = glm::vec3(0.0, 0.0, 0.0);
-    material[1].specular_color = glm::vec3(1);
-    material[1].power = 4;
+    materials[1].ambient_color = glm::vec3(0.0, 0.0, 0.0);
+    materials[1].diffuse_color = glm::vec3(0.0, 0.0, 0.0);
+    materials[1].specular_color = glm::vec3(1);
+    materials[1].power = 4;
     apply_texture[1] = true;
 
     // Box
-    material[2].ambient_color = glm::vec3(0.3, 0.3, 0.0);
-    material[2].diffuse_color = glm::vec3(0.5, 0.0, 0.5);
-    material[2].specular_color = glm::vec3(1);
-    material[2].power = 1024;
+    materials[2].ambient_color = glm::vec3(0.3, 0.3, 0.0);
+    materials[2].diffuse_color = glm::vec3(0.5, 0.0, 0.5);
+    materials[2].specular_color = glm::vec3(1);
+    materials[2].power = 1024;
     apply_texture[2] = false;
 }
 
@@ -312,7 +312,7 @@ void init_buffers()
     glUseProgram(program_id);
 
     // Fill uniform vars
-    glUniformMatrix4fv(uniform_projection, 1, GL_FALSE, glm::value_ptr(camera->get_projection()));
+    glUniformMatrix4fv(uniform_projection, 1, GL_FALSE, glm::value_ptr(p_camera->get_projection()));
     glUniform3fv(uniform_light_pos, 1, glm::value_ptr(light.position));
 }
 

@@ -12,13 +12,13 @@ camera* camera::instance_ { nullptr };
 
 camera::camera()
 {
-	this->view = new glm::mat4();
+	this->view = static_cast<glm::mat4*>(_aligned_malloc(sizeof(glm::mat4), 16));
 	*this->view = glm::lookAt(
 		*this->position,
 		*this->position + *this->front,
 		*this->up
 	);
-	this->projection = new glm::mat4();
+	this->projection = static_cast<glm::mat4*>(_aligned_malloc(sizeof(glm::mat4), 16));
 	*this->projection = glm::perspective(
 		glm::radians(this->fov),
 		1.0f * width / height, 
