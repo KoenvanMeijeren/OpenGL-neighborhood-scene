@@ -138,7 +138,7 @@ void camera::handle_keyboard_input(const unsigned char key)
 		break;
 	case key_e_lower:
 	case key_e_upper:
-		// Move upwards.
+		// Move upwards on the Y-axis if we are in drone mode.
 		if (!this->is_drone_mode_enabled)
 		{
 			return;
@@ -148,7 +148,7 @@ void camera::handle_keyboard_input(const unsigned char key)
 		break;
 	case key_q_lower:
 	case key_q_upper:
-		// Move downwards.
+		// Move downwards on the Y-axis if we are in drone mode.
 		if (!this->is_drone_mode_enabled)
 		{
 			return;
