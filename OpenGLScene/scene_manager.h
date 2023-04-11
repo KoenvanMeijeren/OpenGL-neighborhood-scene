@@ -32,8 +32,8 @@ private:
 	GLint uniform_light_pos{};
 
 	// Matrices
-	glm::mat4 models[objects_amount];
-	glm::mat4 mvs[objects_amount];
+	glm::mat4 model[objects_amount];
+	glm::mat4 mv[objects_amount];
 
 	// Light & materials
 	light_source light;

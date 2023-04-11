@@ -10,63 +10,9 @@
 #include "Camera.h"
 #include "glsl.h"
 
-void scene_manager::create_mesh_objects()
-{
- //    models.push_back(glm::mat4());
- //    models.push_back(glm::translate(glm::mat4(), glm::vec3(3.0, 2.5, 0.0)));
- //    models.push_back(glm::translate(glm::mat4(), glm::vec3(-3.0, -2.5, 0.0)));
- //
- //    std::cout << "Created the models...\n";
- //
- //    for (const glm::mat4& current_model : models)
- //    {
-	//     mvs.push_back(p_camera->get_view() * current_model);
- //    }
- //
-	// // Objects
-	// loadOBJ("Objects/teapot.obj", vertices, uvs, normals);
- //    loadOBJ("Objects/torus.obj", vertices, uvs, normals);
- //    loadOBJ("Objects/torus.obj", vertices, uvs, normals);
- //
- //    // Textures
- //    texture_id.push_back(loadBMP("Textures/Yellobrk.bmp"));
- //    texture_id.push_back(loadBMP("Textures/uvtemplate.bmp"));
- //
- //    light.position = glm::vec3(4.0, 4.0, 4.0);
- //
- //    // Teapot
- //    materials.push_back({
- //        glm::vec3(0.0, 0.0, 0.0),
- //        glm::vec3(0.0, 0.0, 0.0),
- //        glm::vec3(1),
- //        1024
- //    });
- //    apply_texture.push_back(true);
- //
- //    // Torus, A.K.A. donut
- //    materials.push_back({
- //        glm::vec3(0.0, 0.0, 0.0),
- //        glm::vec3(0.0, 0.0, 0.0),
- //        glm::vec3(1),
- //        4
- //    });
- //    apply_texture.push_back(true);
- //
- //    // Box
- //    materials.push_back({
- //        glm::vec3(0.3, 0.3, 0.0),
- //        glm::vec3(0.5, 0.0, 0.5),
- //        glm::vec3(1),
- //        1024
- //    });
- //    apply_texture.push_back(false);
-}
-
 scene_manager::scene_manager(camera *camera)
 {
     this->camera_ = camera;
-
-	create_mesh_objects();
 }
 
 //------------------------------------------------------------
@@ -88,13 +34,13 @@ void scene_manager::init_shaders()
 //------------------------------------------------------------
 void scene_manager::init_matrices()
 {
-    models[0] = glm::mat4();
-    models[1] = glm::translate(glm::mat4(), glm::vec3(3.0, 2.5, 0.0));
-    models[2] = glm::translate(glm::mat4(), glm::vec3(-3.0, -2.5, 0.0));
+    model[0] = glm::mat4();
+    model[1] = glm::translate(glm::mat4(), glm::vec3(3.0, 2.5, 0.0));
+    model[2] = glm::translate(glm::mat4(), glm::vec3(-3.0, -2.5, 0.0));
 
     for (int index = 0; index < objects_amount; ++index)
     {
-        mvs[index] = camera_->get_view() * models[index];
+        mv[index] = camera_->get_view() * model[index];
     }
 }
 
@@ -205,7 +151,7 @@ void scene_manager::init_buffers()
     }
 
     // Make uniform vars
-    uniform_mv = glGetUniformLocation(program_id, "mvs");
+    uniform_mv = glGetUniformLocation(program_id, "mv");
 	uniform_projection = glGetUniformLocation(program_id, "projection");
 	uniform_light_pos = glGetUniformLocation(program_id, "light_pos");
     uniform_material_ambient = glGetUniformLocation(program_id, "mat_ambient");
@@ -249,17 +195,17 @@ void scene_manager::render()
 	glUniformMatrix4fv(uniform_projection, 1, GL_FALSE, glm::value_ptr(camera_->get_projection()));
 
     // Do transformation (x, y, z)
-    models[0] = glm::rotate(models[0], 0.01f, glm::vec3(0.5f, 1.0f, 0.2f));
-    models[1] = glm::rotate(models[1], 0.05f, glm::vec3(1.0f, 0.5f, 0.5f));
-    models[2] = glm::rotate(models[2], 0.05f, glm::vec3(1.0f, 0.3f, 0.1f));
+    model[0] = glm::rotate(model[0], 0.01f, glm::vec3(0.5f, 1.0f, 0.2f));
+    model[1] = glm::rotate(model[1], 0.05f, glm::vec3(1.0f, 0.5f, 0.5f));
+    model[2] = glm::rotate(model[2], 0.05f, glm::vec3(1.0f, 0.3f, 0.1f));
 
     for (int index = 0; index < objects_amount; index++)
     {
         // Do transformation
-        mvs[index] = camera_->get_view() * models[index];
+        mv[index] = camera_->get_view() * model[index];
 
         // Send mvp
-        glUniformMatrix4fv(uniform_mv, 1, GL_FALSE, glm::value_ptr(mvs[index]));
+        glUniformMatrix4fv(uniform_mv, 1, GL_FALSE, glm::value_ptr(mv[index]));
 
         // Bind textures
         glUniform1i(uniform_apply_texture, 0);
