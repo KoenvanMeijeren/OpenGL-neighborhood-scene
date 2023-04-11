@@ -100,7 +100,7 @@ void camera::handle_keyboard_input(const unsigned char key)
 	case key_s_lower:
 	case key_s_upper:
 		// Move backwards.
-		*this->position += glm::vec3(-this->front->x, 0, -this->front->z) * camera_speed;
+		*this->position -= glm::vec3(this->front->x, 0, this->front->z) * camera_speed;
 		break;
 	case key_a_lower:
 	case key_a_upper:
@@ -110,7 +110,7 @@ void camera::handle_keyboard_input(const unsigned char key)
 	case key_d_lower:
 	case key_d_upper:
 		// Move leftwards.
-		*this->position -= glm::vec3(-front_offset_from_center.x, 0, -front_offset_from_center.z) * camera_speed;
+		*this->position += glm::vec3(front_offset_from_center.x, 0, front_offset_from_center.z) * camera_speed;
 		break;
 	case key_i_lower:
 	case key_i_upper:
