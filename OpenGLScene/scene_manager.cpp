@@ -1,6 +1,5 @@
 ﻿#include "scene_manager.h"
 
-#include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "objloader.h"

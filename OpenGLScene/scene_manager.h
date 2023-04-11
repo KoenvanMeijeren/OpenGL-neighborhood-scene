@@ -39,9 +39,6 @@ private:
 	light_source light;
 	material materials[objects_amount];
 	bool apply_texture[objects_amount]{};
-
-	// Initializes the objects and textures which will be used.
-	void create_mesh_objects();
 public:
 	// Creates the objects and fills the needed variables.
 	explicit scene_manager(camera *camera);
