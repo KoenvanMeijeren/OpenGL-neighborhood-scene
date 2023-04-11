@@ -140,6 +140,7 @@
     <ClCompile Include="glsl.cpp" />
     <ClCompile Include="KeyBoardHandler.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="scene_manager.cpp" />
     <ClCompile Include="objloader.cpp" />
     <ClCompile Include="texture.cpp" />
   </ItemGroup>
@@ -152,6 +153,7 @@
     <ClInclude Include="configuration.h" />
     <ClInclude Include="glsl.h" />
     <ClInclude Include="KeyBoardHandler.h" />
+    <ClInclude Include="scene_manager.h" />
     <ClInclude Include="objloader.h" />
     <ClInclude Include="texture.h" />
   </ItemGroup>
