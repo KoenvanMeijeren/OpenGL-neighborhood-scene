@@ -15,8 +15,6 @@ public:
 	glm::mat4 *projection;
 	glm::mat4 *view;
 
-	// Position: x:-0.606339, y: 5.17326, z: 23.0642 Target: x:0.0554048, y: -0.12187, z: -0.990999 YAW: -86.8 PITCH: -7.00004 FOV: 45
-	// Position: x:0, y: 3.2, z: 13.8 Target: x:0.0681292, y: -0.214735, z: -0.974293 YAW: -86 PITCH: -12.4 FOV: 45
 	glm::vec3 default_drone_position = glm::vec3(0, 5.2, 23.0);
 	glm::vec3 default_drone_front_position = glm::vec3(0, 0, 0);
 	glm::vec3 default_drone_up_position = glm::vec3(0, 1, 0);
@@ -37,7 +35,7 @@ public:
 	const float default_walk_pitch = -7.4f;
 	float pitch = default_drone_pitch;
 
-	// Field of view or fov largely defines how much we can see of the scene.
+	// Field of view (fov) largely defines how much we can see of the scene.
 	const float default_fov = 45.0f;
 	const float min_fov = 1.0f;
 	const float max_fov = 90.0f;

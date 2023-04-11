@@ -92,7 +92,7 @@ void camera::handle_keyboard_input(const unsigned char key)
 	{
 	case key_w_lower:
 	case key_w_upper:
-		// Move frontwards.
+		// Move forwards.
 		*this->position += *this->front * camera_speed;
 		break;
 	case key_s_lower:
@@ -113,13 +113,13 @@ void camera::handle_keyboard_input(const unsigned char key)
 	case key_i_lower:
 	case key_i_upper:
 		// Look more upwards.
-		this->pitch -= camera_speed;
+		this->pitch += camera_speed;
 		this->update_after_yaw_or_pitch_change();
 		break;
 	case key_k_lower:
 	case key_k_upper:
 		// Look more downwards. 
-		this->pitch += camera_speed;
+		this->pitch -= camera_speed;
 		this->update_after_yaw_or_pitch_change();
 		break;
 	case key_j_lower:
