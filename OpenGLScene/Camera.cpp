@@ -87,28 +87,30 @@ void camera::update_after_yaw_or_pitch_change() const
 
 void camera::handle_keyboard_input(const unsigned char key)
 {
+	const glm::vec3 front_offset_from_center = glm::normalize(glm::cross(*this->front, glm::vec3(0, 1, 0)));
+
 	constexpr float camera_speed = 0.5f;
 	switch (key)
 	{
 	case key_w_lower:
 	case key_w_upper:
 		// Move forwards.
-		*this->position += *this->front * camera_speed;
+		*this->position += glm::vec3(this->front->x, 0, this->front->z) * camera_speed;
 		break;
 	case key_s_lower:
 	case key_s_upper:
 		// Move backwards.
-		*this->position -= *this->front * camera_speed;
+		*this->position += glm::vec3(-this->front->x, 0, -this->front->z) * camera_speed;
 		break;
 	case key_a_lower:
 	case key_a_upper:
 		// Move rightwards.
-		*this->position += glm::normalize(glm::cross(*this->front, *this->up)) * camera_speed;
+		*this->position -= glm::vec3(front_offset_from_center.x, 0, front_offset_from_center.z) * camera_speed;
 		break;
 	case key_d_lower:
 	case key_d_upper:
 		// Move leftwards.
-		*this->position -= glm::normalize(glm::cross(*this->front, *this->up)) * camera_speed;
+		*this->position -= glm::vec3(-front_offset_from_center.x, 0, -front_offset_from_center.z) * camera_speed;
 		break;
 	case key_i_lower:
 	case key_i_upper:
@@ -246,6 +248,7 @@ void camera::handle_mouse_wheel_input(const int button, const int direction, con
 		this->fov += 1.0f;
     }
 
+	// Only allow zoom in/out within a certain range.
     if (fov < min_fov)
     {
 	    fov = min_fov;
