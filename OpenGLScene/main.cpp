@@ -19,7 +19,7 @@ scene_manager scene_manager(p_camera);
 //--------------------------------------------------------------------------------
 void render()
 {
-	scene_manager.render();
+    scene_manager.render();
 }
 
 //------------------------------------------------------------
@@ -72,7 +72,7 @@ void force_mouse_to_enter_screen_in_center()
 
 void glut_pre_main_loop_actions()
 {
-    hide_console_window();
+	hide_console_window();
     force_mouse_to_enter_screen_in_center();
 }
 
@@ -83,7 +83,7 @@ int main(const int argc, char** argv)
 {
     init_glut_glew(argc, argv);
     scene_manager.init();
-    glut_pre_main_loop_actions();
+	glut_pre_main_loop_actions();
     glutMainLoop();
 
     return EXIT_SUCCESS;
