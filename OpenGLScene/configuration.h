@@ -3,7 +3,7 @@
 //--------------------------------------------------------------------------------
 // General settings.
 //--------------------------------------------------------------------------------
-constexpr int width = 800, height = 600, objects_amount = 3;
+constexpr int width = 800, height = 600;
 
 unsigned constexpr int delta_time = 10;
 
