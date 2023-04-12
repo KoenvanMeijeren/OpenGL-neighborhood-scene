@@ -136,9 +136,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="camera.cpp" />
     <ClCompile Include="glsl.cpp" />
-    <ClCompile Include="KeyBoardHandler.cpp" />
+    <ClCompile Include="keyboard_handler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="object.cpp" />
     <ClCompile Include="scene_manager.cpp" />
@@ -151,10 +151,10 @@
     <None Include="vertexshader.vert" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h" />
+    <ClInclude Include="camera.h" />
     <ClInclude Include="configuration.h" />
     <ClInclude Include="glsl.h" />
-    <ClInclude Include="KeyBoardHandler.h" />
+    <ClInclude Include="keyboard_handler.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="scene_manager.h" />
     <ClInclude Include="objloader.h" />

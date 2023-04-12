@@ -3,7 +3,7 @@
 #include <GL/glew.h>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "Camera.h"
+#include "camera.h"
 #include "configuration.h"
 #include "shader_manager.h"
 

@@ -1,7 +1,7 @@
 ﻿#include "scene_manager.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include "objloader.h"
-#include "Camera.h"
+#include "camera.h"
 #include "glsl.h"
 
 scene_manager::scene_manager()

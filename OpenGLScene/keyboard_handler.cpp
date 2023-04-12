@@ -1,7 +1,7 @@
-﻿#include "KeyBoardHandler.h"
+﻿#include "keyboard_handler.h"
 #include <GL/freeglut.h>
 
-#include "Camera.h"
+#include "camera.h"
 #include "configuration.h"
 
 void keyboard_handler(const unsigned char key, int a, int b)
