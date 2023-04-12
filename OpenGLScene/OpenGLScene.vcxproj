@@ -140,8 +140,10 @@
     <ClCompile Include="glsl.cpp" />
     <ClCompile Include="KeyBoardHandler.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="object.cpp" />
     <ClCompile Include="scene_manager.cpp" />
     <ClCompile Include="objloader.cpp" />
+    <ClCompile Include="shader_manager.cpp" />
     <ClCompile Include="texture.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -153,8 +155,10 @@
     <ClInclude Include="configuration.h" />
     <ClInclude Include="glsl.h" />
     <ClInclude Include="KeyBoardHandler.h" />
+    <ClInclude Include="object.h" />
     <ClInclude Include="scene_manager.h" />
     <ClInclude Include="objloader.h" />
+    <ClInclude Include="shader_manager.h" />
     <ClInclude Include="texture.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

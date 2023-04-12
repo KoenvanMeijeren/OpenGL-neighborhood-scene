@@ -11,8 +11,8 @@
 //--------------------------------------------------------------------------------
 // Prepares the scene and creates the necessary objects.
 //--------------------------------------------------------------------------------
-camera *p_camera = camera::get_instance();
-scene_manager scene_manager(p_camera);
+camera *camera = camera::get_instance();
+scene_manager scene_manager;
 
 //--------------------------------------------------------------------------------
 // Rendering
