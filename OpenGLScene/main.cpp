@@ -2,17 +2,17 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 #include <glm/glm.hpp>
-#include "Camera.h"
+#include "camera.h"
 #include "configuration.h"
 #include "glsl.h"
-#include "KeyBoardHandler.h"
+#include "keyboard_handler.h"
 #include "scene_manager.h"
 
 //--------------------------------------------------------------------------------
-// Prepares the scene and creates the necessary objects.
+// Prepares the scene and constructs the necessary objects.
 //--------------------------------------------------------------------------------
-camera *p_camera = camera::get_instance();
-scene_manager scene_manager(p_camera);
+camera *camera = camera::get_instance();
+scene_manager scene_manager;
 
 //--------------------------------------------------------------------------------
 // Rendering

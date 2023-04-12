@@ -1,4 +1,4 @@
-﻿#include "Camera.h"
+﻿#include "camera.h"
 
 #include <iostream>
 #include <GL/freeglut_std.h>
@@ -6,7 +6,7 @@
 #include "configuration.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "KeyBoardHandler.h"
+#include "keyboard_handler.h"
 
 camera* camera::instance_ { nullptr };
 
