@@ -9,7 +9,7 @@
 #include "scene_manager.h"
 
 //--------------------------------------------------------------------------------
-// Prepares the scene and creates the necessary objects.
+// Prepares the scene and constructs the necessary objects.
 //--------------------------------------------------------------------------------
 camera *camera = camera::get_instance();
 scene_manager scene_manager;
