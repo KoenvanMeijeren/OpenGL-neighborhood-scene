@@ -6,19 +6,25 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "objloader.h"
+#include "shader_factory.h"
 #include "texture.h"
 
 object::object(const float x, const float y, const float z)
 {
-	this->camera_ = camera::get_instance();
-	this->model_ = glm::translate(glm::mat4(), glm::vec3(x, y, z));
-	this->mv_ = model_ * camera_->get_view();
-	this->shader_ = shader_manager("vertexshader.vert", "fragmentshader.frag");
+	camera_ = camera::get_instance();
+	model_ = glm::translate(glm::mat4(), glm::vec3(x, y, z));
+	mv_ = model_ * camera_->get_view();
+    set_shader(create_texture_shader());
 }
 
 object::~object()
 {
     delete camera_;
+}
+
+void object::set_shader(const shader_manager shader)
+{
+    shader_ = shader;
 }
 
 void object::set_object(const char* object_path)
@@ -151,8 +157,7 @@ void object::init_buffers()
 
 void object::render()
 {
-    // Attach to program_id
-    glUseProgram(shader_.program_id);
+    shader_.enable();
 
     // Before doing anything, update the camera.
     camera_->update();
@@ -165,10 +170,8 @@ void object::render()
 
     rotate(0.01f, 0.5f, 1.0f, 0.2f);
 
-    // Do transformation
+    // Update model view and send it
     mv_ = camera_->get_view() * model_;
-
-    // Send mvp
     glUniformMatrix4fv(uniform_mv_, 1, GL_FALSE, glm::value_ptr(mv_));
 
     // Bind textures

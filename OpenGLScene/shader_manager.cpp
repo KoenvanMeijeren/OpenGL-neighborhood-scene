@@ -14,3 +14,8 @@ shader_manager::shader_manager(const char* vertex_shader_filename, const char* f
 
     program_id = glsl::makeShaderProgram(vsh_id, fsh_id);
 }
+
+void shader_manager::enable() const
+{
+	glUseProgram(program_id);
+}

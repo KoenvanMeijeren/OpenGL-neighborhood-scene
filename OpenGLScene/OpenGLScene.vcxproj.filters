@@ -72,10 +72,13 @@
     <ClCompile Include="texture.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
+    <ClCompile Include="shader_factory.cpp">
+      <Filter>Source Files\shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="fragmentshader.frag" />
-    <None Include="vertexshader.vert" />
+    <None Include="fragmentshader_texture.frag" />
+    <None Include="vertexshader_texture.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h">
@@ -104,6 +107,9 @@
     </ClInclude>
     <ClInclude Include="object.h">
       <Filter>Header Files\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="shader_factory.h">
+      <Filter>Header Files\shader</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
