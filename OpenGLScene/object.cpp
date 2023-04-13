@@ -15,7 +15,7 @@ object::object(const float x, const float y, const float z)
 	camera_ = camera::get_instance();
 	model_ = glm::translate(glm::mat4(), glm::vec3(x, y, z));
 	mv_ = model_ * camera_->get_view();
-    set_shader(create_texture_shader());
+    set_shader(create_default_shader());
 }
 
 object::~object()
@@ -32,7 +32,7 @@ glm::mat4 object::model()
     return model_;
 }
 
-void object::set_shader(const shader_manager shader)
+void object::set_shader(const shader shader)
 {
     shader_ = shader;
 }
@@ -46,6 +46,7 @@ void object::set_texture(const char* texture_image_path)
 {
 	texture_id_ = loadBMP(texture_image_path);
 	apply_texture_ = true;
+    set_shader(create_texture_shader());
 }
 
 void object::set_light(const glm::vec3& light_position)
@@ -103,9 +104,9 @@ void object::init_buffers()
     GLuint vbo_uvs;
 
     // Get vertex attributes
-	const GLuint position_id = glGetAttribLocation(shader_.program_id, "position");
-	const GLuint normal_id = glGetAttribLocation(shader_.program_id, "normal");
-	const GLuint uv_id = glGetAttribLocation(shader_.program_id, "uv");
+	const GLuint position_id = glGetAttribLocation(shader_.program_id_, "position");
+	const GLuint normal_id = glGetAttribLocation(shader_.program_id_, "normal");
+	const GLuint uv_id = glGetAttribLocation(shader_.program_id_, "uv");
 
     // vbo for vertices
     glGenBuffers(1, &vbo_vertices);
@@ -153,14 +154,14 @@ void object::init_buffers()
     glBindVertexArray(0);
 
     // Make uniform vars
-    uniform_mv_ = glGetUniformLocation(shader_.program_id, "mv");
-	uniform_projection_ = glGetUniformLocation(shader_.program_id, "projection");
-	uniform_light_pos_ = glGetUniformLocation(shader_.program_id, "light_pos");
-    uniform_material_ambient_ = glGetUniformLocation(shader_.program_id, "mat_ambient");
-    uniform_material_diffuse_ = glGetUniformLocation(shader_.program_id, "mat_diffuse");
-    uniform_material_specular_ = glGetUniformLocation(shader_.program_id, "mat_specular");
-    uniform_material_power_ = glGetUniformLocation(shader_.program_id, "mat_power");
-    uniform_apply_texture_ = glGetUniformLocation(shader_.program_id, "apply_texture");
+    uniform_mv_ = glGetUniformLocation(shader_.program_id_, "mv");
+	uniform_projection_ = glGetUniformLocation(shader_.program_id_, "projection");
+	uniform_light_pos_ = glGetUniformLocation(shader_.program_id_, "light_pos");
+    uniform_material_ambient_ = glGetUniformLocation(shader_.program_id_, "mat_ambient");
+    uniform_material_diffuse_ = glGetUniformLocation(shader_.program_id_, "mat_diffuse");
+    uniform_material_specular_ = glGetUniformLocation(shader_.program_id_, "mat_specular");
+    uniform_material_power_ = glGetUniformLocation(shader_.program_id_, "mat_power");
+    uniform_apply_texture_ = glGetUniformLocation(shader_.program_id_, "apply_texture");
 
     shader_.enable();
 }

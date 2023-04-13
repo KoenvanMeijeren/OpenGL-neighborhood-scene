@@ -6,13 +6,13 @@
 #include "animation.h"
 #include "camera.h"
 #include "configuration.h"
-#include "shader_manager.h"
+#include "shader.h"
 
 __declspec(align(16)) class object final
 {
 private:
 	camera *camera_;
-	shader_manager shader_;
+	shader shader_;
 
 	std::vector<animation *> animations_ = {};
 
@@ -57,7 +57,7 @@ public:
 	glm::mat4 model();
 
 	// Constructor methods.
-	void set_shader(shader_manager shader);
+	void set_shader(shader shader);
 	void set_object(const char* object_path);
 	void set_texture(const char* texture_image_path);
 	void set_light(const glm::vec3& light_position);
