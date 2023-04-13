@@ -21,6 +21,15 @@ object::object(const float x, const float y, const float z)
 object::~object()
 {
     delete camera_;
+    for (const auto animation : animations_)
+    {
+	    delete animation;
+    }
+}
+
+glm::mat4 object::model()
+{
+    return model_;
 }
 
 void object::set_shader(const shader_manager shader)
@@ -50,6 +59,11 @@ void object::set_material(const glm::vec3& ambient_color, const glm::vec3& diffu
     material_.diffuse_color = diffuse_color;
     material_.specular_color = specular_color;
     material_.power = power;
+}
+
+void object::add_animation(animation* animation)
+{
+    animations_.push_back(animation);
 }
 
 void object::scale(const float x, const float y, const float z)
@@ -148,12 +162,7 @@ void object::init_buffers()
     uniform_material_power_ = glGetUniformLocation(shader_.program_id, "mat_power");
     uniform_apply_texture_ = glGetUniformLocation(shader_.program_id, "apply_texture");
 
-    // Attach to program (needed to fill uniform vars)
-    glUseProgram(shader_.program_id);
-
-    // Fill uniform vars (needed in fragment shaders)
-    glUniformMatrix4fv(uniform_projection_, 1, GL_FALSE, glm::value_ptr(camera_->get_projection()));
-    glUniform3fv(uniform_light_pos_, 1, glm::value_ptr(light_.position));
+    shader_.enable();
 }
 
 void object::render()
@@ -163,13 +172,13 @@ void object::render()
     // Before doing anything, update the camera.
     camera_->update();
 	glUniformMatrix4fv(uniform_projection_, 1, GL_FALSE, glm::value_ptr(camera_->get_projection()));
+    glUniform3fv(uniform_light_pos_, 1, glm::value_ptr(light_.position));
 
-    // Do transformation (x, y, z)
-    // model[0] = glm::rotate(model[0], 0.01f, glm::vec3(0.5f, 1.0f, 0.2f));
-    // model[1] = glm::rotate(model[1], 0.05f, glm::vec3(1.0f, 0.5f, 0.5f));
-    // model[2] = glm::rotate(model[2], 0.05f, glm::vec3(1.0f, 0.3f, 0.1f));
-
-    rotate(0.01f, 0.5f, 1.0f, 0.2f);
+    // Perform the configured animations.
+    for (const auto animation : animations_)
+    {
+	    model_ = animation->execute(model_);
+    }
 
     // Update model view and send it
     mv_ = camera_->get_view() * model_;

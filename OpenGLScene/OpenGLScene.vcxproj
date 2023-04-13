@@ -136,6 +136,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="animation.cpp" />
+    <ClCompile Include="animation_rotate.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="glsl.cpp" />
     <ClCompile Include="keyboard_handler.cpp" />
@@ -153,6 +155,8 @@
     <None Include="vertexshader_texture.vert" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="animation.h" />
+    <ClInclude Include="animation_rotate.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="configuration.h" />
     <ClInclude Include="glsl.h" />
