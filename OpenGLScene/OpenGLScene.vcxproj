@@ -143,6 +143,8 @@
     <ClCompile Include="keyboard_handler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="material.cpp" />
+    <ClCompile Include="material_default.cpp" />
+    <ClCompile Include="material_lambert.cpp" />
     <ClCompile Include="matrix_transformations.cpp" />
     <ClCompile Include="object.cpp" />
     <ClCompile Include="scene_manager.cpp" />
@@ -165,6 +167,8 @@
     <ClInclude Include="glsl.h" />
     <ClInclude Include="keyboard_handler.h" />
     <ClInclude Include="material.h" />
+    <ClInclude Include="material_default.h" />
+    <ClInclude Include="material_lambert.h" />
     <ClInclude Include="matrix_transformations.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="scene_manager.h" />

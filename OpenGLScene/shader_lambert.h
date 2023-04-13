@@ -19,6 +19,6 @@ public:
 
 	void set_texture_id(const GLuint texture_id) override;
 	void init_buffers(const std::vector<glm::vec3>& vertices, const std::vector<glm::vec3>& normals, const std::vector<glm::vec2>& uvs) override;
-	void fill_uniform_vars(const glm::mat4& model_view, const glm::mat4& projection, const light_source& light, const material& material) override;
-	void update(const glm::mat4& model_view, const glm::mat4& projection, const light_source& light, const material& material, const std::vector<glm::vec3>& vertices) override;
+	void fill_uniform_vars(const glm::mat4& model_view, const glm::mat4& projection, const light_source& light, const material_struct& material) override;
+	void update(const glm::mat4& model_view, const glm::mat4& projection, const light_source& light, const material_struct& material, const std::vector<glm::vec3>& vertices) override;
 };

@@ -6,21 +6,21 @@
 
 #include "matrix_transformations.h"
 #include "objloader.h"
-#include "shader_default.h"
 #include "texture.h"
 
-object::object(const float x, const float y, const float z)
+object::object(const glm::vec3& position, const glm::vec3& light_position, material* material)
 {
 	camera_ = camera::get_instance();
-	model_ = glm::translate(glm::mat4(), glm::vec3(x, y, z));
+	model_ = glm::translate(glm::mat4(), position);
 	model_view_ = model_ * camera_->get_view();
-    shader_ = new shader_default();
+    light_.position = light_position;
+    material_ = material;
 }
 
 object::~object()
 {
     delete camera_;
-    delete shader_;
+    delete material_;
     for (const auto animation : animations_)
     {
 	    delete animation;
@@ -40,20 +40,7 @@ void object::set_object(const char* object_path)
 void object::set_texture(const char* texture_image_path) const
 {
 	const GLuint texture_id = loadBMP(texture_image_path);
-    shader_->set_texture_id(texture_id);
-}
-
-void object::set_light(const glm::vec3& light_position)
-{
-	light_.position = light_position;
-}
-
-void object::set_material(const glm::vec3& ambient_color, const glm::vec3& diffuse_color, const glm::vec3& specular_color, const float power)
-{
-	material_.ambient_color = ambient_color;
-    material_.diffuse_color = diffuse_color;
-    material_.specular_color = specular_color;
-    material_.power = power;
+    material_->set_texture_id(texture_id);
 }
 
 void object::add_animation(animation* animation)
@@ -93,8 +80,7 @@ void object::translate(const float translate_value)
 
 void object::init_buffers() const
 {
-    shader_->init_buffers(vertices_, normals_, uvs_);
-    shader_->enable();
+    material_->init_buffers(vertices_, normals_, uvs_);
 }
 
 void object::render()
@@ -113,5 +99,5 @@ void object::render()
     model_view_ = camera_->get_view() * model_;
 
     // Before ending the rendering of the object, the shader needs to be updated.
-    shader_->update(model_view_, camera_->get_projection(), light_, material_, vertices_);
+    material_->render(model_view_, camera_->get_projection(), light_, vertices_);
 }

@@ -5,14 +5,12 @@
 #include "animation.h"
 #include "camera.h"
 #include "configuration.h"
-#include "shader.h"
-#include "shader_default.h"
+#include "material.h"
 
 __declspec(align(16)) class object final
 {
 private:
 	camera *camera_;
-	shader* shader_;
 
 	std::vector<animation *> animations_ = {};
 
@@ -24,9 +22,9 @@ private:
 	std::vector<glm::vec2> uvs_;
 
 	light_source light_;
-	material material_;
+	material* material_;
 public:
-	explicit object(const float x, const float y, const float z);
+	explicit object(const glm::vec3& position, const glm::vec3& light_position, material* material);
 	~object();
 
 	void* operator new(const size_t size)
@@ -45,8 +43,6 @@ public:
 	// Constructor methods.
 	void set_object(const char* object_path);
 	void set_texture(const char* texture_image_path) const;
-	void set_light(const glm::vec3& light_position);
-	void set_material(const glm::vec3& ambient_color, const glm::vec3& diffuse_color, const glm::vec3& specular_color, float power);
 	void add_animation(animation* animation);
 
 	// Transformation methods

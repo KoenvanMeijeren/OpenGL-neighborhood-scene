@@ -22,11 +22,11 @@ public:
 	virtual void enable();
 
 	// Fill uniform vars (needed in fragment shaders (abstract method)
-	virtual void fill_uniform_vars(const glm::mat4& model_view, const glm::mat4& projection, const light_source& light, const material& material) = 0;
+	virtual void fill_uniform_vars(const glm::mat4& model_view, const glm::mat4& projection, const light_source& light, const material_struct& material) = 0;
 
 	// Update the vao and send it
 	virtual void send_vao(const std::vector<glm::vec3>& vertices);
 
 	// Write the updated values back to the shader (abstract method)
-	virtual void update(const glm::mat4& model_view, const glm::mat4& projection, const light_source& light, const material& material, const std::vector<glm::vec3>& vertices) = 0;
+	virtual void update(const glm::mat4& model_view, const glm::mat4& projection, const light_source& light, const material_struct& material, const std::vector<glm::vec3>& vertices) = 0;
 };

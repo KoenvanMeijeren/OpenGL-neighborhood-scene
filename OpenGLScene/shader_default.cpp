@@ -28,7 +28,7 @@ void shader_default::init_buffers(const std::vector<glm::vec3>& vertices, const 
 }
 
 void shader_default::fill_uniform_vars(const glm::mat4& model_view, const glm::mat4& projection,
-	const light_source& light, const material& material)
+	const light_source& light, const material_struct& material)
 {
 	glUniformMatrix4fv(uniform_model_view_, 1, GL_FALSE, glm::value_ptr(model_view));
     glUniformMatrix4fv(uniform_projection_, 1, GL_FALSE, glm::value_ptr(projection));
@@ -48,7 +48,7 @@ void shader_default::fill_uniform_vars(const glm::mat4& model_view, const glm::m
 }
 
 void shader_default::update(const glm::mat4& model_view, const glm::mat4& projection, const light_source& light,
-	const material& material, const std::vector<glm::vec3>& vertices)
+	const material_struct& material, const std::vector<glm::vec3>& vertices)
 {
     shader::enable();
     shader_default::fill_uniform_vars(model_view, projection, light, material);
