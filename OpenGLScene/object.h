@@ -1,23 +1,23 @@
 ﻿#pragma once
 #include <vector>
-#include <GL/glew.h>
 #include <glm/gtc/type_ptr.hpp>
 
 #include "animation.h"
 #include "camera.h"
 #include "configuration.h"
 #include "shader.h"
+#include "shader_default.h"
 
 __declspec(align(16)) class object final
 {
 private:
 	camera *camera_;
-	shader shader_;
+	shader* shader_;
 
 	std::vector<animation *> animations_ = {};
 
 	glm::mat4 model_;
-	glm::mat4 mv_;
+	glm::mat4 model_view_;
 
 	std::vector<glm::vec3> vertices_;
 	std::vector<glm::vec3> normals_;
@@ -25,20 +25,6 @@ private:
 
 	light_source light_;
 	material material_;
-	bool apply_texture_ = false;
-
-	GLuint vao_{};
-	GLuint texture_id_{};
-
-	// Uniform ID's
-	GLint uniform_material_ambient_{};
-	GLint uniform_material_diffuse_{};
-	GLint uniform_material_specular_{};
-	GLint uniform_material_power_{};
-	GLint uniform_apply_texture_{};
-	GLint uniform_mv_{};
-	GLint uniform_projection_{};
-	GLint uniform_light_pos_{};
 public:
 	explicit object(const float x, const float y, const float z);
 	~object();
@@ -57,7 +43,6 @@ public:
 	glm::mat4 model();
 
 	// Constructor methods.
-	void set_shader(shader shader);
 	void set_object(const char* object_path);
 	void set_texture(const char* texture_image_path);
 	void set_light(const glm::vec3& light_position);
@@ -73,6 +58,6 @@ public:
 	void translate(const float translate_value);
 
 	// Required methods for rendering
-	void init_buffers();
+	void init_buffers() const;
 	void render();
 };

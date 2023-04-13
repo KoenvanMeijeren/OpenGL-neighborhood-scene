@@ -72,9 +72,6 @@
     <ClCompile Include="texture.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
-    <ClCompile Include="shader_factory.cpp">
-      <Filter>Source Files\shader</Filter>
-    </ClCompile>
     <ClCompile Include="matrix_transformations.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
@@ -85,7 +82,10 @@
       <Filter>Source Files\animation</Filter>
     </ClCompile>
     <ClCompile Include="shader_texture.cpp">
-      <Filter>Header Files\shader</Filter>
+      <Filter>Source Files\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="shader_default.cpp">
+      <Filter>Source Files\shader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -127,9 +127,6 @@
     <ClInclude Include="object.h">
       <Filter>Header Files\scene</Filter>
     </ClInclude>
-    <ClInclude Include="shader_factory.h">
-      <Filter>Header Files\shader</Filter>
-    </ClInclude>
     <ClInclude Include="matrix_transformations.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
@@ -140,6 +137,9 @@
       <Filter>Header Files\animation</Filter>
     </ClInclude>
     <ClInclude Include="shader_texture.h">
+      <Filter>Header Files\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="shader_default.h">
       <Filter>Header Files\shader</Filter>
     </ClInclude>
   </ItemGroup>
