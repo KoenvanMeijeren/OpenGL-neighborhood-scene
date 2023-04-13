@@ -6,12 +6,13 @@
 #include "camera.h"
 #include "configuration.h"
 #include "shader.h"
+#include "shader_default.h"
 
 __declspec(align(16)) class object final
 {
 private:
 	camera *camera_;
-	shader shader_;
+	shader* shader_;
 
 	std::vector<animation *> animations_ = {};
 
@@ -57,6 +58,6 @@ public:
 	void translate(const float translate_value);
 
 	// Required methods for rendering
-	void init_buffers();
+	void init_buffers() const;
 	void render();
 };

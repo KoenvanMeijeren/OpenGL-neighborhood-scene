@@ -15,12 +15,13 @@ object::object(const float x, const float y, const float z)
 	camera_ = camera::get_instance();
 	model_ = glm::translate(glm::mat4(), glm::vec3(x, y, z));
 	model_view_ = model_ * camera_->get_view();
-    shader_ = shader_default();
+    shader_ = new shader_default();
 }
 
 object::~object()
 {
     delete camera_;
+    delete shader_;
     for (const auto animation : animations_)
     {
 	    delete animation;
@@ -40,7 +41,7 @@ void object::set_object(const char* object_path)
 void object::set_texture(const char* texture_image_path)
 {
 	const GLuint texture_id = loadBMP(texture_image_path);
-    shader_ = shader_texture(texture_id);
+    shader_ = new shader_texture(texture_id);
 }
 
 void object::set_light(const glm::vec3& light_position)
@@ -91,10 +92,10 @@ void object::translate(const float translate_value)
     model_ = matrix_translate(model_, translate_value);
 }
 
-void object::init_buffers()
+void object::init_buffers() const
 {
-    shader_.init_buffers(vertices_, normals_, uvs_);
-    shader_.enable();
+    shader_->init_buffers(vertices_, normals_, uvs_);
+    shader_->enable();
 }
 
 void object::render()
@@ -113,5 +114,5 @@ void object::render()
     model_view_ = camera_->get_view() * model_;
 
     // Before ending the rendering of the object, the shader needs to be updated.
-    shader_.update(model_view_, camera_->get_projection(), light_, material_, vertices_);
+    shader_->update(model_view_, camera_->get_projection(), light_, material_, vertices_);
 }

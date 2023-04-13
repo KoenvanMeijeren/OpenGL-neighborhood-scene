@@ -150,7 +150,6 @@
     <ClCompile Include="shader_default.cpp" />
     <ClCompile Include="shader_texture.cpp" />
     <ClCompile Include="texture.cpp" />
-    <ClCompile Include="shader_factory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="fragmentshader_default.frag" />
@@ -172,7 +171,6 @@
     <ClInclude Include="shader_default.h" />
     <ClInclude Include="shader_texture.h" />
     <ClInclude Include="texture.h" />
-    <ClInclude Include="shader_factory.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -32,7 +32,6 @@ void main()
     // Compute the diffuse and specular components for each fragment
     vec3 ambient = mat_ambient;
     vec3 diffuse = max(dot(N, L), 0.0) * mat_diffuse;
-
     vec3 specular = pow(max(dot(R, V), 0.0), mat_power) * mat_specular;
 
     // Write final color to the framebuffer
