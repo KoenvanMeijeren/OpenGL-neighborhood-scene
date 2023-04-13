@@ -1,5 +1,6 @@
 ﻿#include "object.h"
 
+#include <iostream>
 #include <GL/gl.h>
 #include <GL/glew.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -10,8 +11,7 @@
 object::object(const float x, const float y, const float z)
 {
 	this->camera_ = camera::get_instance();
-    this->original_model_ = glm::translate(glm::mat4(), glm::vec3(x, y, z));
-	this->model_ = original_model_;
+	this->model_ = glm::translate(glm::mat4(), glm::vec3(x, y, z));
 	this->mv_ = model_ * camera_->get_view();
 	this->shader_ = shader_manager("vertexshader.vert", "fragmentshader.frag");
 }
@@ -38,6 +38,36 @@ void object::set_material(const glm::vec3& ambient_color, const glm::vec3& diffu
     material_.diffuse_color = diffuse_color;
     material_.specular_color = specular_color;
     material_.power = power;
+}
+
+void object::scale(const float x, const float y, const float z)
+{
+    model_ = glm::scale(model_, glm::vec3(x, y, z));
+}
+
+void object::scale(const float scale)
+{
+    model_ = glm::scale(model_, glm::vec3(scale, scale, scale));
+}
+
+void object::rotate(const float rotate_speed, const float x, const float y, const float z)
+{
+     model_ = glm::rotate(model_, rotate_speed, glm::vec3(x, y, z));
+}
+
+void object::rotate(const float rotate_speed, const float rotate_value)
+{
+    model_ = glm::rotate(model_, rotate_speed, glm::vec3(rotate_value, rotate_value, rotate_value));
+}
+
+void object::translate(const float x, const float y, const float z)
+{
+    model_ = glm::translate(model_, glm::vec3(x, y, z));
+}
+
+void object::translate(const float translate)
+{
+    model_ = glm::translate(model_, glm::vec3(translate, translate, translate));
 }
 
 void object::init_buffers()
@@ -109,7 +139,7 @@ void object::init_buffers()
     // Attach to program (needed to fill uniform vars)
     glUseProgram(shader_.program_id);
 
-    // Fill uniform vars
+    // Fill uniform vars (needed in fragment shaders)
     glUniformMatrix4fv(uniform_projection_, 1, GL_FALSE, glm::value_ptr(camera_->get_projection()));
     glUniform3fv(uniform_light_pos_, 1, glm::value_ptr(light_.position));
 }
@@ -128,6 +158,8 @@ void object::render()
     // model[1] = glm::rotate(model[1], 0.05f, glm::vec3(1.0f, 0.5f, 0.5f));
     // model[2] = glm::rotate(model[2], 0.05f, glm::vec3(1.0f, 0.3f, 0.1f));
 
+    rotate(0.01f, 0.5f, 1.0f, 0.2f);
+
     // Do transformation
     mv_ = camera_->get_view() * model_;
 
@@ -142,7 +174,7 @@ void object::render()
         glBindTexture(GL_TEXTURE_2D, texture_id_);
     }
 
-    // Fill uniform vars
+    // Fill uniform vars (needed in fragment shaders
     glUniform3fv(uniform_material_ambient_, 1, glm::value_ptr(material_.ambient_color));
     glUniform3fv(uniform_material_diffuse_, 1, glm::value_ptr(material_.diffuse_color));
     glUniform3fv(uniform_material_specular_, 1, glm::value_ptr(material_.specular_color));
