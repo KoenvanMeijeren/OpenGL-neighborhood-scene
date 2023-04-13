@@ -147,6 +147,7 @@
     <ClCompile Include="scene_manager.cpp" />
     <ClCompile Include="objloader.cpp" />
     <ClCompile Include="shader.cpp" />
+    <ClCompile Include="shader_default.cpp" />
     <ClCompile Include="shader_texture.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="shader_factory.cpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="scene_manager.h" />
     <ClInclude Include="objloader.h" />
     <ClInclude Include="shader.h" />
+    <ClInclude Include="shader_default.h" />
     <ClInclude Include="shader_texture.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="shader_factory.h" />
