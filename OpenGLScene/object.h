@@ -38,6 +38,7 @@ private:
 	GLint uniform_light_pos_{};
 public:
 	explicit object(const float x, const float y, const float z);
+	~object();
 
 	// Constructor methods.
 	void set_object(const char* object_path);

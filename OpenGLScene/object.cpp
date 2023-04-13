@@ -16,6 +16,11 @@ object::object(const float x, const float y, const float z)
 	this->shader_ = shader_manager("vertexshader.vert", "fragmentshader.frag");
 }
 
+object::~object()
+{
+    delete camera_;
+}
+
 void object::set_object(const char* object_path)
 {
 	loadOBJ(object_path, vertices_, uvs_, normals_);
