@@ -41,6 +41,7 @@ public:
 	~object();
 
 	// Constructor methods.
+	void set_shader(shader_manager shader);
 	void set_object(const char* object_path);
 	void set_texture(const char* texture_image_path);
 	void set_light(const glm::vec3& light_position);

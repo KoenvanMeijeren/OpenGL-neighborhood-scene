@@ -8,4 +8,6 @@ public:
 
 	shader_manager();
 	shader_manager(const char* vertex_shader_filename, const char* fragment_shader_filename);
+
+	void enable() const;
 };
