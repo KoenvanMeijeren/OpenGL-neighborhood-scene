@@ -1,6 +1,11 @@
 ﻿#include "shader_factory.h"
 
-shader_manager create_texture_shader()
+shader create_default_shader()
 {
-	return {"vertexshader_texture.vert", "fragmentshader_texture.frag"};
+	return {"vertexshader_default.vert", "fragmentshader_default.frag"};
+}
+
+shader create_texture_shader()
+{
+	return {"vertexshader_default.vert", "fragmentshader_texture.frag"};
 }

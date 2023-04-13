@@ -146,13 +146,15 @@
     <ClCompile Include="object.cpp" />
     <ClCompile Include="scene_manager.cpp" />
     <ClCompile Include="objloader.cpp" />
-    <ClCompile Include="shader_manager.cpp" />
+    <ClCompile Include="shader.cpp" />
+    <ClCompile Include="shader_texture.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="shader_factory.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="fragmentshader_default.frag" />
     <None Include="fragmentshader_texture.frag" />
-    <None Include="vertexshader_texture.vert" />
+    <None Include="vertexshader_default.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h" />
@@ -165,7 +167,8 @@
     <ClInclude Include="object.h" />
     <ClInclude Include="scene_manager.h" />
     <ClInclude Include="objloader.h" />
-    <ClInclude Include="shader_manager.h" />
+    <ClInclude Include="shader.h" />
+    <ClInclude Include="shader_texture.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="shader_factory.h" />
   </ItemGroup>

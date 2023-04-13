@@ -2,9 +2,9 @@
 
 // Material properties
 uniform vec3 mat_ambient;
+uniform vec3 mat_diffuse;
 uniform vec3 mat_specular;
 uniform float mat_power;
-uniform sampler2D textSampler;
 
 // Input from vertex shader
 in VS_OUT
@@ -30,8 +30,9 @@ void main()
     vec3 R = reflect(-L, N);
 
     // Compute the diffuse and specular components for each fragment
-    vec3 ambient = vec3(0.0, 0.0, 0.0);
-    vec3 diffuse = max(dot(N, L), 0.0) * texture2D(textSampler, UV).rgb;
+    vec3 ambient = mat_ambient;
+    vec3 diffuse = max(dot(N, L), 0.0) * mat_diffuse;
+
     vec3 specular = pow(max(dot(R, V), 0.0), mat_power) * mat_specular;
 
     // Write final color to the framebuffer

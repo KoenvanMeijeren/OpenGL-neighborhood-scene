@@ -1,4 +1,5 @@
 ﻿#pragma once
-#include "shader_manager.h"
+#include "shader.h"
 
-shader_manager create_texture_shader();
+shader create_default_shader();
+shader create_texture_shader();
