@@ -15,7 +15,7 @@ struct light_source
     glm::vec3 position;
 };
 
-struct material
+struct material_struct
 {
     glm::vec3 ambient_color;
     glm::vec3 diffuse_color;
