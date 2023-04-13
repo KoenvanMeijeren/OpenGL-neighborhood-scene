@@ -8,7 +8,7 @@
 #include "configuration.h"
 #include "shader_manager.h"
 
-class object final
+__declspec(align(16)) class object final
 {
 private:
 	camera *camera_;
@@ -42,6 +42,16 @@ private:
 public:
 	explicit object(const float x, const float y, const float z);
 	~object();
+
+	void* operator new(const size_t size)
+	{
+	    return _mm_malloc(size, 16);
+	}
+
+	void operator delete(void* pointer)
+	{
+	    _mm_free(pointer);
+	}
 
 	// Getters
 	glm::mat4 model();

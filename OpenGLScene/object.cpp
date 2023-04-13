@@ -181,6 +181,8 @@ void object::render()
     }
 
     // Update model view and send it
+    // Note that this calculation is different from the initial calculation.
+    // This is done because it prevents the model to fly away out of the screen.
     mv_ = camera_->get_view() * model_;
     glUniformMatrix4fv(uniform_mv_, 1, GL_FALSE, glm::value_ptr(mv_));
 
