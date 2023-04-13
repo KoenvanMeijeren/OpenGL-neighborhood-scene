@@ -40,11 +40,6 @@ void object::set_material(const glm::vec3& ambient_color, const glm::vec3& diffu
     material_.power = power;
 }
 
-// void object::add_animation(animation animation)
-// {
-//     animations_.push_back(animation);
-// }
-
 void object::scale(const float x, const float y, const float z)
 {
     model_ = glm::scale(model_, glm::vec3(x, y, z));
