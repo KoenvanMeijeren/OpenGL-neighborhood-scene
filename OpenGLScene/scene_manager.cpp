@@ -10,6 +10,15 @@ scene_manager::scene_manager()
 	camera_ = camera::get_instance();
 }
 
+scene_manager::~scene_manager()
+{
+    delete camera_;
+    for (const auto object : objects_)
+    {
+	    delete object;
+    }
+}
+
 void scene_manager::init()
 {
     auto *teapot = new object(0, 0, 0);
