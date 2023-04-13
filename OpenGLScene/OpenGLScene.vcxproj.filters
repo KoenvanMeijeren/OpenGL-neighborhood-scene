@@ -75,6 +75,9 @@
     <ClCompile Include="shader_factory.cpp">
       <Filter>Source Files\shader</Filter>
     </ClCompile>
+    <ClCompile Include="matrix_transformations.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="fragmentshader_texture.frag" />
@@ -110,6 +113,9 @@
     </ClInclude>
     <ClInclude Include="shader_factory.h">
       <Filter>Header Files\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="matrix_transformations.h">
+      <Filter>Header Files\core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

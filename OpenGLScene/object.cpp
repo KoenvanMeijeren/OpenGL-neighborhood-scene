@@ -5,6 +5,7 @@
 #include <GL/glew.h>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "matrix_transformations.h"
 #include "objloader.h"
 #include "shader_factory.h"
 #include "texture.h"
@@ -53,32 +54,32 @@ void object::set_material(const glm::vec3& ambient_color, const glm::vec3& diffu
 
 void object::scale(const float x, const float y, const float z)
 {
-    model_ = glm::scale(model_, glm::vec3(x, y, z));
+    model_ = matrix_scale(model_, x, y, z);
 }
 
 void object::scale(const float scale)
 {
-    model_ = glm::scale(model_, glm::vec3(scale, scale, scale));
+    model_ = matrix_scale(model_, scale);
 }
 
 void object::rotate(const float rotate_speed, const float x, const float y, const float z)
 {
-     model_ = glm::rotate(model_, rotate_speed, glm::vec3(x, y, z));
+     model_ = matrix_rotate(model_, rotate_speed, x, y, z);
 }
 
 void object::rotate(const float rotate_speed, const float rotate_value)
 {
-    model_ = glm::rotate(model_, rotate_speed, glm::vec3(rotate_value, rotate_value, rotate_value));
+    model_ = matrix_rotate(model_, rotate_speed, rotate_value);
 }
 
 void object::translate(const float x, const float y, const float z)
 {
-    model_ = glm::translate(model_, glm::vec3(x, y, z));
+    model_ = matrix_translate(model_, x, y, z);
 }
 
-void object::translate(const float translate)
+void object::translate(const float translate_value)
 {
-    model_ = glm::translate(model_, glm::vec3(translate, translate, translate));
+    model_ = matrix_translate(model_, translate_value);
 }
 
 void object::init_buffers()

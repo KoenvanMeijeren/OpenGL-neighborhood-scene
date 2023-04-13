@@ -53,7 +53,7 @@ public:
 	void rotate(const float rotate_speed, const float x, const float y, const float z);
 	void rotate(const float rotate_speed, const float rotate_value);
 	void translate(const float x, const float y, const float z);
-	void translate(const float translate);
+	void translate(const float translate_value);
 
 	// Required methods for rendering
 	void init_buffers();
