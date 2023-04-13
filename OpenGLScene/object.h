@@ -13,7 +13,7 @@ private:
 	camera *camera_;
 	shader_manager shader_;
 
-	glm::mat4 model_, original_model_;
+	glm::mat4 model_;
 	glm::mat4 mv_;
 
 	std::vector<glm::vec3> vertices_;
@@ -39,10 +39,21 @@ private:
 public:
 	explicit object(const float x, const float y, const float z);
 
+	// Constructor methods.
 	void set_object(const char* object_path);
 	void set_texture(const char* texture_image_path);
 	void set_light(const glm::vec3& light_position);
 	void set_material(const glm::vec3& ambient_color, const glm::vec3& diffuse_color, const glm::vec3& specular_color, float power);
+
+	// Transformation methods
+	void scale(const float x, const float y, const float z);
+	void scale(const float scale);
+	void rotate(const float rotate_speed, const float x, const float y, const float z);
+	void rotate(const float rotate_speed, const float rotate_value);
+	void translate(const float x, const float y, const float z);
+	void translate(const float translate);
+
+	// Required methods for rendering
 	void init_buffers();
 	void render();
 };

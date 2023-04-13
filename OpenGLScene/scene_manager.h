@@ -7,12 +7,11 @@ class scene_manager
 private:
 	camera *camera_;
 
-	std::vector<object> objects_;
+	std::vector<object *> objects_;
 public:
-	// Creates the objects and fills the needed variables.
 	explicit scene_manager();
 
-	// Initializes the object manager and prepares it for rendering.
+	// Creates the objects and fills the needed variables.
 	void init();
 
 	// Renders the world.
