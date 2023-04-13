@@ -14,6 +14,7 @@ public:
 	shader(const char* vertex_shader_filename, const char* fragment_shader_filename);
 	virtual ~shader();
 
+	virtual void set_texture_id(const GLuint texture_id) = 0;
 	virtual void init_buffers(const std::vector<glm::vec3>& vertices, const std::vector<glm::vec3>& normals, const std::vector<glm::vec2>& uvs);
 
 	// Needs to be called every time we want to do something with the program id.

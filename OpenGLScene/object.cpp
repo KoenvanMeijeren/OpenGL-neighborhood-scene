@@ -7,7 +7,6 @@
 #include "matrix_transformations.h"
 #include "objloader.h"
 #include "shader_default.h"
-#include "shader_texture.h"
 #include "texture.h"
 
 object::object(const float x, const float y, const float z)
@@ -38,10 +37,10 @@ void object::set_object(const char* object_path)
 	loadOBJ(object_path, vertices_, uvs_, normals_);
 }
 
-void object::set_texture(const char* texture_image_path)
+void object::set_texture(const char* texture_image_path) const
 {
 	const GLuint texture_id = loadBMP(texture_image_path);
-    shader_ = new shader_texture(texture_id);
+    shader_->set_texture_id(texture_id);
 }
 
 void object::set_light(const glm::vec3& light_position)

@@ -1,13 +1,19 @@
-﻿#include "shader_texture.h"
+﻿#include "shader_lambert.h"
 
-shader_texture::shader_texture(const GLuint texture_id)
-: shader("vertexshader_default.vert", "fragmentshader_texture.frag")
+shader_lambert::shader_lambert()
+: shader("vertexshader_default.vert", "fragmentshader_lambert.frag")
 {
-	texture_id_ = texture_id;
+	
 }
 
-void shader_texture::init_buffers(const std::vector<glm::vec3>& vertices, const std::vector<glm::vec3>& normals,
-	const std::vector<glm::vec2>& uvs)
+void shader_lambert::set_texture_id(const GLuint texture_id)
+{
+    texture_id_ = texture_id;
+    has_texture_ = true;
+}
+
+void shader_lambert::init_buffers(const std::vector<glm::vec3>& vertices, const std::vector<glm::vec3>& normals,
+                                  const std::vector<glm::vec2>& uvs)
 {
 	shader::init_buffers(vertices, normals, uvs);
 
@@ -17,27 +23,31 @@ void shader_texture::init_buffers(const std::vector<glm::vec3>& vertices, const 
 	uniform_light_position_ = glGetUniformLocation(program_id_, "light_pos");
     uniform_material_ambient_ = glGetUniformLocation(program_id_, "mat_ambient");
     uniform_material_diffuse_ = glGetUniformLocation(program_id_, "mat_diffuse");
-    uniform_material_specular_ = glGetUniformLocation(program_id_, "mat_specular");
-    uniform_material_power_ = glGetUniformLocation(program_id_, "mat_power");
+    uniform_apply_texture_ = glGetUniformLocation(program_id_, "apply_texture");
 }
 
-void shader_texture::fill_uniform_vars(const glm::mat4& model_view, const glm::mat4& projection,
+void shader_lambert::fill_uniform_vars(const glm::mat4& model_view, const glm::mat4& projection,
 	const light_source& light, const material& material)
 {
 	glUniformMatrix4fv(uniform_model_view_, 1, GL_FALSE, glm::value_ptr(model_view));
     glUniformMatrix4fv(uniform_projection_, 1, GL_FALSE, glm::value_ptr(projection));
     glUniform3fv(uniform_light_position_, 1, glm::value_ptr(light.position));
-	glBindTexture(GL_TEXTURE_2D, texture_id_);
     glUniform3fv(uniform_material_ambient_, 1, glm::value_ptr(material.ambient_color));
     glUniform3fv(uniform_material_diffuse_, 1, glm::value_ptr(material.diffuse_color));
-    glUniform3fv(uniform_material_specular_, 1, glm::value_ptr(material.specular_color));
-    glUniform1f(uniform_material_power_, material.power);
+
+    // Bind textures
+    glUniform1i(uniform_apply_texture_, 0);
+    if (has_texture_)
+    {
+        glUniform1i(uniform_apply_texture_, 1);
+        glBindTexture(GL_TEXTURE_2D, texture_id_);
+    }
 }
 
-void shader_texture::update(const glm::mat4& model_view, const glm::mat4& projection, const light_source& light,
+void shader_lambert::update(const glm::mat4& model_view, const glm::mat4& projection, const light_source& light,
 	const material& material, const std::vector<glm::vec3>& vertices)
 {
     shader::enable();
-    shader_texture::fill_uniform_vars(model_view, projection, light, material);
+    shader_lambert::fill_uniform_vars(model_view, projection, light, material);
     shader::send_vao(vertices);
 }

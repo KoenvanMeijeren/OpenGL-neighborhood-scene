@@ -55,7 +55,7 @@ void scene_manager::init()
         glm::vec3(0.3, 0.3, 0.0), 
         glm::vec3(0.5, 0.0, 0.5), 
         glm::vec3(1), 
-        1024
+        2
     );
     box->init_buffers();
     box->add_animation(new animation_rotate(0.05f, 1.0f, 0, 0));

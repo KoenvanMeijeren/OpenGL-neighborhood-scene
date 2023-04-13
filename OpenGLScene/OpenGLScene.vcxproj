@@ -142,18 +142,19 @@
     <ClCompile Include="glsl.cpp" />
     <ClCompile Include="keyboard_handler.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="material.cpp" />
     <ClCompile Include="matrix_transformations.cpp" />
     <ClCompile Include="object.cpp" />
     <ClCompile Include="scene_manager.cpp" />
     <ClCompile Include="objloader.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="shader_default.cpp" />
-    <ClCompile Include="shader_texture.cpp" />
+    <ClCompile Include="shader_lambert.cpp" />
     <ClCompile Include="texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="fragmentshader_default.frag" />
-    <None Include="fragmentshader_texture.frag" />
+    <None Include="fragmentshader_lambert.frag" />
     <None Include="vertexshader_default.vert" />
   </ItemGroup>
   <ItemGroup>
@@ -163,13 +164,14 @@
     <ClInclude Include="configuration.h" />
     <ClInclude Include="glsl.h" />
     <ClInclude Include="keyboard_handler.h" />
+    <ClInclude Include="material.h" />
     <ClInclude Include="matrix_transformations.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="scene_manager.h" />
     <ClInclude Include="objloader.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="shader_default.h" />
-    <ClInclude Include="shader_texture.h" />
+    <ClInclude Include="shader_lambert.h" />
     <ClInclude Include="texture.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
