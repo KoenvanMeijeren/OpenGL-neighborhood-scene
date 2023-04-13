@@ -136,10 +136,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="animation.cpp" />
+    <ClCompile Include="animation_rotate.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="glsl.cpp" />
     <ClCompile Include="keyboard_handler.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="matrix_transformations.cpp" />
     <ClCompile Include="object.cpp" />
     <ClCompile Include="scene_manager.cpp" />
     <ClCompile Include="objloader.cpp" />
@@ -152,10 +155,13 @@
     <None Include="vertexshader_texture.vert" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="animation.h" />
+    <ClInclude Include="animation_rotate.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="configuration.h" />
     <ClInclude Include="glsl.h" />
     <ClInclude Include="keyboard_handler.h" />
+    <ClInclude Include="matrix_transformations.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="scene_manager.h" />
     <ClInclude Include="objloader.h" />

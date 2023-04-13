@@ -1,6 +1,7 @@
 ﻿#include "scene_manager.h"
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "animation_rotate.h"
 #include "objloader.h"
 #include "camera.h"
 #include "glsl.h"
@@ -32,6 +33,7 @@ void scene_manager::init()
         1024
     );
     teapot->init_buffers();
+    teapot->add_animation(new animation_rotate(0.01f, 0.5f, 1.0f, 0.2f));
 
     auto *torus = new object(3.0, 2.5, 0.0);
     torus->set_object("Objects/torus.obj");
@@ -44,6 +46,7 @@ void scene_manager::init()
         4
     );
     torus->init_buffers();
+    torus->add_animation(new animation_rotate(0.05f, 1.0f, 0.5f, 0.5f));
 
     auto *box = new object(-3.0, -2.5, 0.0);
     box->set_object("Objects/box.obj");
@@ -55,6 +58,7 @@ void scene_manager::init()
         1024
     );
     box->init_buffers();
+    box->add_animation(new animation_rotate(0.05f, 1.0f, 0, 0));
 
     objects_.push_back(teapot);
     objects_.push_back(torus);
