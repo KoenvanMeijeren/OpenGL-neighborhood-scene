@@ -9,7 +9,7 @@
 
 __declspec(align(16)) class object
 {
-private:
+protected:
 	camera *camera_;
 
 	std::vector<animation *> animations_ = {};
@@ -27,7 +27,7 @@ public:
 	explicit object(const glm::vec3& position, const glm::vec3& light_position, material* material);
 	explicit object(const glm::vec3& position, const glm::vec3& light_position, material* material, const char* object_path);
 	explicit object(const glm::vec3& position, const glm::vec3& light_position, material* material, const char* object_path, const char* texture_image_path);
-	~object();
+	virtual ~object();
 
 	void* operator new(const size_t size)
 	{
@@ -56,6 +56,6 @@ public:
 	void translate(const float translate_value);
 
 	// Required methods for rendering
-	void init_buffers() const;
-	void render();
+	virtual void init_buffers();
+	virtual void render();
 };

@@ -148,19 +148,23 @@
     <ClCompile Include="material_metal.cpp" />
     <ClCompile Include="matrix_transformations.cpp" />
     <ClCompile Include="object.cpp" />
+    <ClCompile Include="object_primitive.cpp" />
     <ClCompile Include="scene_manager.cpp" />
     <ClCompile Include="objloader.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="shader_default.cpp" />
     <ClCompile Include="shader_lambert.cpp" />
     <ClCompile Include="shader_metal.cpp" />
+    <ClCompile Include="shader_primitive.cpp" />
     <ClCompile Include="texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="fragmentshader_default.frag" />
     <None Include="fragmentshader_lambert.frag" />
     <None Include="fragmentshader_metal.frag" />
+    <None Include="fragmentshader_primitive.frag" />
     <None Include="vertexshader_default.vert" />
+    <None Include="vertexshader_primitive.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h" />
@@ -175,12 +179,14 @@
     <ClInclude Include="material_metal.h" />
     <ClInclude Include="matrix_transformations.h" />
     <ClInclude Include="object.h" />
+    <ClInclude Include="object_primitive.h" />
     <ClInclude Include="scene_manager.h" />
     <ClInclude Include="objloader.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="shader_default.h" />
     <ClInclude Include="shader_lambert.h" />
     <ClInclude Include="shader_metal.h" />
+    <ClInclude Include="shader_primitive.h" />
     <ClInclude Include="texture.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

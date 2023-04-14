@@ -8,6 +8,7 @@
 #include "material_default.h"
 #include "material_lambert.h"
 #include "material_metal.h"
+#include "object_primitive.h"
 
 scene_manager::scene_manager()
 {
@@ -20,6 +21,11 @@ scene_manager::~scene_manager()
     for (const auto object : objects_)
     {
 	    delete object;
+    }
+
+    for (const auto primitive_object : primitive_objects_)
+    {
+	    delete primitive_object;
     }
 }
 
@@ -129,6 +135,9 @@ void scene_manager::init()
     objects_.push_back(box);
     objects_.push_back(box2);
     objects_.push_back(box3);
+
+    auto *primitive_object = new object_primitive();
+    primitive_objects_.push_back(primitive_object);
 }
 
 void scene_manager::render() const
@@ -143,6 +152,11 @@ void scene_manager::render() const
     for (const auto object : objects_)
     {
 	    object->render();
+    }
+
+    for (const auto primitive_object : primitive_objects_)
+    {
+	    primitive_object->render();
     }
 
     glutSwapBuffers();
