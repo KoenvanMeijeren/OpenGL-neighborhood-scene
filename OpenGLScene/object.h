@@ -7,7 +7,7 @@
 #include "configuration.h"
 #include "material.h"
 
-__declspec(align(16)) class object final
+__declspec(align(16)) class object
 {
 private:
 	camera *camera_;
@@ -25,6 +25,8 @@ private:
 	material* material_;
 public:
 	explicit object(const glm::vec3& position, const glm::vec3& light_position, material* material);
+	explicit object(const glm::vec3& position, const glm::vec3& light_position, material* material, const char* object_path);
+	explicit object(const glm::vec3& position, const glm::vec3& light_position, material* material, const char* object_path, const char* texture_image_path);
 	~object();
 
 	void* operator new(const size_t size)

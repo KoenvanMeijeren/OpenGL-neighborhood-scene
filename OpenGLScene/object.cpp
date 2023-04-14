@@ -17,6 +17,21 @@ object::object(const glm::vec3& position, const glm::vec3& light_position, mater
     material_ = material;
 }
 
+object::object(const glm::vec3& position, const glm::vec3& light_position, material* material,
+	const char* object_path): object(position, light_position, material)
+{
+	set_object(object_path);
+	init_buffers();
+}
+
+object::object(const glm::vec3& position, const glm::vec3& light_position, material* material,
+	const char* object_path, const char* texture_image_path): object(position, light_position, material)
+{
+	set_object(object_path);
+	set_texture(texture_image_path);
+	init_buffers();
+}
+
 object::~object()
 {
     delete camera_;
