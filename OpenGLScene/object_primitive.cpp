@@ -2,13 +2,54 @@
 
 #include "matrix_transformations.h"
 
-object_primitive::object_primitive()
+object_primitive::object_primitive(const float x, const float y, const float z)
 {
     camera_ = camera::get_instance();
 	shader_ = new shader_primitive();
-    model_ = matrix_translate(glm::mat4(), 3, 3, 0);
-    mvp_ = camera_->get_projection() * camera_->get_view() * model_;
+    model_ = matrix_translate(glm::mat4(), x, y, z);
+    model_view_projection_ = camera_->get_projection() * camera_->get_view() * model_;
     init_buffers();
+}
+
+object_primitive::~object_primitive()
+{
+    delete camera_;
+    delete shader_;
+}
+
+void object_primitive::add_animation(animation* animation)
+{
+    animations_.push_back(animation);
+}
+
+void object_primitive::scale(const float x, const float y, const float z)
+{
+    model_ = matrix_scale(model_, x, y, z);
+}
+
+void object_primitive::scale(const float scale)
+{
+    model_ = matrix_scale(model_, scale);
+}
+
+void object_primitive::rotate(const float rotate_speed, const float x, const float y, const float z)
+{
+     model_ = matrix_rotate(model_, rotate_speed, x, y, z);
+}
+
+void object_primitive::rotate(const float rotate_speed, const float rotate_value)
+{
+    model_ = matrix_rotate(model_, rotate_speed, rotate_value);
+}
+
+void object_primitive::translate(const float x, const float y, const float z)
+{
+    model_ = matrix_translate(model_, x, y, z);
+}
+
+void object_primitive::translate(const float translate_value)
+{
+    model_ = matrix_translate(model_, translate_value);
 }
 
 void object_primitive::init_buffers() const
@@ -19,7 +60,7 @@ void object_primitive::init_buffers() const
         cube_elements_, sizeof(cube_elements_)
     );
     shader_->enable();
-    shader_->fill_uniform_vars(mvp_);
+    shader_->fill_uniform_vars(model_view_projection_);
 }
 
 void object_primitive::render()
@@ -28,9 +69,14 @@ void object_primitive::render()
     camera_->update();
 
     // Perform the configured animations.
-	model_ = glm::rotate(model_, 0.01f, glm::vec3(0.0f, 1.0f, 0.0f));
-    mvp_ = camera_->get_projection() * camera_->get_view() * model_;
+    for (const auto animation : animations_)
+    {
+	    model_ = animation->execute(model_);
+    }
+
+    // Update model view projection
+    model_view_projection_ = camera_->get_projection() * camera_->get_view() * model_;
 
     // Before ending the rendering of the object, the shader needs to be updated.
-    shader_->update(mvp_, cube_elements_, sizeof(cube_elements_) / sizeof(GLushort));
+    shader_->update(model_view_projection_, cube_elements_, sizeof(cube_elements_) / sizeof(GLushort));
 }

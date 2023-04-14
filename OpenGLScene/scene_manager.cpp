@@ -136,7 +136,8 @@ void scene_manager::init()
     objects_.push_back(box2);
     objects_.push_back(box3);
 
-    auto *primitive_object = new object_primitive();
+    auto *primitive_object = new object_primitive(3, -3, 0);
+    primitive_object->add_animation(new animation_rotate(0.01f, 0.0f, 1.0f, 0.0f));
     primitive_objects_.push_back(primitive_object);
 }
 

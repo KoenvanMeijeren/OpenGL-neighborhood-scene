@@ -7,7 +7,7 @@
 #include "configuration.h"
 #include "material.h"
 
-__declspec(align(16)) class object
+__declspec(align(16)) class object final
 {
 protected:
 	camera *camera_;
@@ -56,6 +56,6 @@ public:
 	void translate(const float translate_value);
 
 	// Required methods for rendering
-	virtual void init_buffers();
-	virtual void render();
+	void init_buffers() const;
+	void render();
 };

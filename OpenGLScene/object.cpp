@@ -93,7 +93,7 @@ void object::translate(const float translate_value)
     model_ = matrix_translate(model_, translate_value);
 }
 
-void object::init_buffers()
+void object::init_buffers() const
 {
     material_->init_buffers(vertices_, normals_, uvs_);
 }
