@@ -7,7 +7,7 @@
 #include "entity.h"
 #include "material.h"
 
-class object final: public entity
+class object: public entity
 {
 protected:
 	glm::mat4 model_view_;

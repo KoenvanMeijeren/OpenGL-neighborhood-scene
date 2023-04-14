@@ -20,7 +20,7 @@ object::object(const glm::vec3& position, const glm::vec3& light_position, mater
 	const char* object_path): object(position, light_position, material)
 {
 	set_object(object_path);
-	init_buffers();
+	object::init_buffers();
 }
 
 object::object(const glm::vec3& position, const glm::vec3& light_position, material* material,
@@ -28,7 +28,7 @@ object::object(const glm::vec3& position, const glm::vec3& light_position, mater
 {
 	set_object(object_path);
 	set_texture(texture_image_path);
-	init_buffers();
+	object::init_buffers();
 }
 
 object::~object()

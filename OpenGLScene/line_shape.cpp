@@ -1,23 +1,23 @@
-﻿#include "shape.h"
+﻿#include "line_shape.h"
 
 #include "matrix_transformations.h"
 
-shape::shape(const float x, const float y, const float z)
+line_shape::line_shape(const float x, const float y, const float z)
 {
-	shader_ = new shader_primitive();
+	shader_ = new shader_line_shape();
     model_ = matrix_translate(glm::mat4(), x, y, z);
     model_view_projection_ = camera_->get_projection() * camera_->get_view() * model_;
     init_buffers();
 }
 
-shape::~shape()
+line_shape::~line_shape()
 {
     entity::~entity();
 
     delete shader_;
 }
 
-void shape::init_buffers()
+void line_shape::init_buffers()
 {
 	shader_->init_buffers(
         vertices_, sizeof(vertices_), 
@@ -28,7 +28,7 @@ void shape::init_buffers()
     shader_->fill_uniform_vars(model_view_projection_);
 }
 
-void shape::render()
+void line_shape::render()
 {
     // Before doing anything, update the camera.
     camera_->update();

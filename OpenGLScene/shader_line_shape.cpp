@@ -1,13 +1,13 @@
-﻿#include "shader_primitive.h"
+﻿#include "shader_line_shape.h"
 
 #include "glsl.h"
 
-shader_primitive::shader_primitive()
-: shader_primitive("vertexshader_primitive.vert", "fragmentshader_primitive.frag")
+shader_line_shape::shader_line_shape()
+: shader_line_shape("vertexshader_basic.vert", "fragmentshader_basic.frag")
 {
 }
 
-shader_primitive::shader_primitive(const char* vertex_shader_filename, const char* fragment_shader_filename)
+shader_line_shape::shader_line_shape(const char* vertex_shader_filename, const char* fragment_shader_filename)
 {
 	const char* vertexshader = glsl::readFile(vertex_shader_filename);
 	const GLuint vsh_id = glsl::makeVertexShader(vertexshader);
@@ -18,7 +18,7 @@ shader_primitive::shader_primitive(const char* vertex_shader_filename, const cha
     program_id = glsl::makeShaderProgram(vsh_id, fsh_id);
 }
 
-void shader_primitive::init_buffers(const GLfloat vertices[], const GLsizeiptr vertices_size, const GLfloat colors[], const GLsizeiptr colors_size, const GLushort cube_elements[], const GLsizeiptr cube_elements_size)
+void shader_line_shape::init_buffers(const GLfloat vertices[], const GLsizeiptr vertices_size, const GLfloat colors[], const GLsizeiptr colors_size, const GLushort cube_elements[], const GLsizeiptr cube_elements_size)
 {
 	GLuint vbo_vertices;
     GLuint vbo_colors;
@@ -75,24 +75,24 @@ void shader_primitive::init_buffers(const GLfloat vertices[], const GLsizeiptr v
     uniform_mvp = glGetUniformLocation(program_id, "mvp");
 }
 
-void shader_primitive::enable() const
+void shader_line_shape::enable() const
 {
 	glUseProgram(program_id);
 }
 
-void shader_primitive::fill_uniform_vars(const glm::mat4& mvp) const
+void shader_line_shape::fill_uniform_vars(const glm::mat4& mvp) const
 {
 	glUniformMatrix4fv(uniform_mvp, 1, GL_FALSE, glm::value_ptr(mvp));
 }
 
-void shader_primitive::send_vao(const GLushort cube_elements[], const GLsizei cube_elements_count) const
+void shader_line_shape::send_vao(const GLushort cube_elements[], const GLsizei cube_elements_count) const
 {
     glBindVertexArray(vao);
     glDrawElements(GL_LINES, cube_elements_count, GL_UNSIGNED_SHORT, 0);
     glBindVertexArray(0);
 }
 
-void shader_primitive::update(const glm::mat4& mvp, const GLushort cube_elements[], const GLsizei cube_elements_count) const
+void shader_line_shape::update(const glm::mat4& mvp, const GLushort cube_elements[], const GLsizei cube_elements_count) const
 {
 	enable();
     fill_uniform_vars(mvp);
