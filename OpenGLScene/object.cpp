@@ -10,7 +10,6 @@
 
 object::object(const glm::vec3& position, const glm::vec3& light_position, material* material)
 {
-	camera_ = camera::get_instance();
 	model_ = glm::translate(glm::mat4(), position);
 	model_view_ = model_ * camera_->get_view();
     light_.position = light_position;
@@ -34,17 +33,9 @@ object::object(const glm::vec3& position, const glm::vec3& light_position, mater
 
 object::~object()
 {
-    delete camera_;
-    delete material_;
-    for (const auto animation : animations_)
-    {
-	    delete animation;
-    }
-}
+    entity::~entity();
 
-glm::mat4 object::model()
-{
-    return model_;
+    delete material_;
 }
 
 void object::set_object(const char* object_path)
@@ -58,42 +49,7 @@ void object::set_texture(const char* texture_image_path) const
     material_->set_texture_id(texture_id);
 }
 
-void object::add_animation(animation* animation)
-{
-    animations_.push_back(animation);
-}
-
-void object::scale(const float x, const float y, const float z)
-{
-    model_ = matrix_scale(model_, x, y, z);
-}
-
-void object::scale(const float scale)
-{
-    model_ = matrix_scale(model_, scale);
-}
-
-void object::rotate(const float rotate_speed, const float x, const float y, const float z)
-{
-     model_ = matrix_rotate(model_, rotate_speed, x, y, z);
-}
-
-void object::rotate(const float rotate_speed, const float rotate_value)
-{
-    model_ = matrix_rotate(model_, rotate_speed, rotate_value);
-}
-
-void object::translate(const float x, const float y, const float z)
-{
-    model_ = matrix_translate(model_, x, y, z);
-}
-
-void object::translate(const float translate_value)
-{
-    model_ = matrix_translate(model_, translate_value);
-}
-
-void object::init_buffers() const
+void object::init_buffers()
 {
     material_->init_buffers(vertices_, normals_, uvs_);
 }

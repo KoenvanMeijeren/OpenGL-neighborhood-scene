@@ -148,7 +148,8 @@
     <ClCompile Include="material_metal.cpp" />
     <ClCompile Include="matrix_transformations.cpp" />
     <ClCompile Include="object.cpp" />
-    <ClCompile Include="object_primitive.cpp" />
+    <ClCompile Include="entity.cpp" />
+    <ClCompile Include="shape.cpp" />
     <ClCompile Include="scene_manager.cpp" />
     <ClCompile Include="objloader.cpp" />
     <ClCompile Include="shader.cpp" />
@@ -179,7 +180,8 @@
     <ClInclude Include="material_metal.h" />
     <ClInclude Include="matrix_transformations.h" />
     <ClInclude Include="object.h" />
-    <ClInclude Include="object_primitive.h" />
+    <ClInclude Include="entity.h" />
+    <ClInclude Include="shape.h" />
     <ClInclude Include="scene_manager.h" />
     <ClInclude Include="objloader.h" />
     <ClInclude Include="shader.h" />

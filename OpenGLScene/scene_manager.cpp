@@ -8,7 +8,7 @@
 #include "material_default.h"
 #include "material_lambert.h"
 #include "material_metal.h"
-#include "object_primitive.h"
+#include "shape.h"
 
 scene_manager::scene_manager()
 {
@@ -136,7 +136,7 @@ void scene_manager::init()
     objects_.push_back(box2);
     objects_.push_back(box3);
 
-    auto *primitive_object = new object_primitive(3, -3, 0);
+    auto *primitive_object = new shape(3, -3, 0);
     primitive_object->add_animation(new animation_rotate(0.01f, 0.0f, 1.0f, 0.0f));
     primitive_objects_.push_back(primitive_object);
 }

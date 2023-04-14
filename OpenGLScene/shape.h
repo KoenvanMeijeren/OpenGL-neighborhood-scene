@@ -1,18 +1,15 @@
 ﻿#pragma once
 #include <glm/gtc/type_ptr.hpp>
 
-#include "animation.h"
 #include "camera.h"
+#include "entity.h"
 #include "shader_primitive.h"
 
-__declspec(align(16)) class object_primitive final
+class shape final: public entity
 {
 private:
-	camera *camera_;
 	shader_primitive *shader_;
-	std::vector<animation *> animations_ = {};
 
-	glm::mat4 model_;
 	glm::mat4 model_view_projection_;
 
 	//------------------------------------------------------------
@@ -63,31 +60,10 @@ private:
 	    4,5,5,6,6,7,7,4   // back
 	};
 public:
-	explicit object_primitive(const float x, const float y, const float z);
-	~object_primitive();
-
-	void* operator new(const size_t size)
-	{
-	    return _mm_malloc(size, 16);
-	}
-
-	void operator delete(void* pointer)
-	{
-	    _mm_free(pointer);
-	}
-
-	// Constructor methods
-	void add_animation(animation* animation);
-
-	// Transformation methods
-	void scale(const float x, const float y, const float z);
-	void scale(const float scale);
-	void rotate(const float rotate_speed, const float x, const float y, const float z);
-	void rotate(const float rotate_speed, const float rotate_value);
-	void translate(const float x, const float y, const float z);
-	void translate(const float translate_value);
+	explicit shape(const float x, const float y, const float z);
+	~shape() override;
 
 	// Required methods for rendering
-	void init_buffers() const;
-	void render();
+	void init_buffers() override;
+	void render() override;
 };
