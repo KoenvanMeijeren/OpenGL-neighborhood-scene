@@ -10,6 +10,7 @@
 #include "material_metal.h"
 #include "object_cube.h"
 #include "line_shape_cube.h"
+#include "line_shape_rectangle.h"
 #include "object_rectangle.h"
 
 scene_manager::scene_manager()
@@ -23,11 +24,6 @@ scene_manager::~scene_manager()
     for (const auto object : objects_)
     {
 	    delete object;
-    }
-
-    for (const auto line_shape_object : line_shape_objects_)
-    {
-	    delete line_shape_object;
     }
 }
 
@@ -137,9 +133,13 @@ void scene_manager::init()
     objects_.push_back(box2);
     objects_.push_back(box3);
 
-    auto *line_shape_object = new line_shape_cube(3, -3, 0);
-    line_shape_object->add_animation(new animation_rotate(0.01f, 0.0f, 1.0f, 0.0f));
-    line_shape_objects_.push_back(line_shape_object);
+    auto *line_cube = new line_shape_cube(3, -3, 0);
+    line_cube->add_animation(new animation_rotate(0.01f, 0.0f, 1.0f, 0.0f));
+    objects_.push_back(line_cube);
+
+    auto *line_rectangle = new line_shape_rectangle(5, -13, 0);
+    line_rectangle->add_animation(new animation_rotate(0.05f, 0.0f, 1.0f, 0.0f));
+    objects_.push_back(line_rectangle);
 
     const auto cube_position = glm::vec3(5, -5, 0);
 	const auto cube_light_position = glm::vec3(4.0, 4.0, 4.0);
@@ -202,11 +202,6 @@ void scene_manager::render() const
     for (const auto object : objects_)
     {
 	    object->render();
-    }
-
-    for (const auto line_shape_object : line_shape_objects_)
-    {
-	    line_shape_object->render();
     }
 
     glutSwapBuffers();
