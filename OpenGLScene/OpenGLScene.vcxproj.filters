@@ -43,6 +43,12 @@
     <Filter Include="Source Files\shader">
       <UniqueIdentifier>{52c1a4d8-4888-4122-be78-3b31fce4b390}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\material">
+      <UniqueIdentifier>{4b389d5d-c10b-42cf-81c9-e80974448fa4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\material">
+      <UniqueIdentifier>{ca7fa4ba-947d-4e4c-90ad-085c394824c3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -81,21 +87,30 @@
     <ClCompile Include="animation_rotate.cpp">
       <Filter>Source Files\animation</Filter>
     </ClCompile>
-    <ClCompile Include="shader_texture.cpp">
+    <ClCompile Include="shader_default.cpp">
       <Filter>Source Files\shader</Filter>
     </ClCompile>
-    <ClCompile Include="shader_default.cpp">
+    <ClCompile Include="material.cpp">
+      <Filter>Source Files\material</Filter>
+    </ClCompile>
+    <ClCompile Include="material_default.cpp">
+      <Filter>Source Files\material</Filter>
+    </ClCompile>
+    <ClCompile Include="material_lambert.cpp">
+      <Filter>Source Files\material</Filter>
+    </ClCompile>
+    <ClCompile Include="shader_lambert.cpp">
       <Filter>Source Files\shader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="fragmentshader_texture.frag">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="vertexshader_default.vert">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="fragmentshader_default.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="fragmentshader_lambert.frag">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
@@ -136,11 +151,20 @@
     <ClInclude Include="animation_rotate.h">
       <Filter>Header Files\animation</Filter>
     </ClInclude>
-    <ClInclude Include="shader_texture.h">
-      <Filter>Header Files\shader</Filter>
-    </ClInclude>
     <ClInclude Include="shader_default.h">
       <Filter>Header Files\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="shader_lambert.h">
+      <Filter>Header Files\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="material.h">
+      <Filter>Header Files\material</Filter>
+    </ClInclude>
+    <ClInclude Include="material_default.h">
+      <Filter>Header Files\material</Filter>
+    </ClInclude>
+    <ClInclude Include="material_lambert.h">
+      <Filter>Header Files\material</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
