@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "shader.h"
 
-class shader_primitive
+class shader_line_shape
 {
 public:
 	// ID's
@@ -11,9 +11,9 @@ public:
 	// Uniform ID's
 	GLint uniform_mvp{};
 
-	shader_primitive();
-	shader_primitive(const char* vertex_shader_filename, const char* fragment_shader_filename);
-	~shader_primitive() = default;
+	shader_line_shape();
+	shader_line_shape(const char* vertex_shader_filename, const char* fragment_shader_filename);
+	~shader_line_shape() = default;
 
 	void init_buffers(const GLfloat vertices[], const GLsizeiptr vertices_size, const GLfloat colors[], const GLsizeiptr colors_size, const GLushort cube_elements[], const GLsizeiptr cube_elements_size);
 

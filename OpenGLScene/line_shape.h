@@ -3,12 +3,12 @@
 
 #include "camera.h"
 #include "entity.h"
-#include "shader_primitive.h"
+#include "shader_line_shape.h"
 
-class shape final: public entity
+class line_shape final: public entity
 {
 private:
-	shader_primitive *shader_;
+	shader_line_shape *shader_;
 
 	glm::mat4 model_view_projection_;
 
@@ -60,8 +60,8 @@ private:
 	    4,5,5,6,6,7,7,4   // back
 	};
 public:
-	explicit shape(const float x, const float y, const float z);
-	~shape() override;
+	explicit line_shape(const float x, const float y, const float z);
+	~line_shape() override;
 
 	// Required methods for rendering
 	void init_buffers() override;
