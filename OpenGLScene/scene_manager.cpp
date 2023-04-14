@@ -99,7 +99,7 @@ void scene_manager::init()
         glm::vec3(1),
         1,
         1,
-        1
+        0.5
     );
     auto *box3 = new object(box3_position, box3_light_position, box_material_metal);
     box3->set_object("Objects/box.obj");
