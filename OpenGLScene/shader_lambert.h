@@ -9,6 +9,7 @@ private:
 	// Uniform ID's
 	GLint uniform_material_ambient_{};
 	GLint uniform_material_diffuse_{};
+	GLint uniform_material_metalness_{};
 	GLint uniform_model_view_{};
 	GLint uniform_projection_{};
 	GLint uniform_light_position_{};

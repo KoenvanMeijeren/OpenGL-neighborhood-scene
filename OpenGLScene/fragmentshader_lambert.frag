@@ -5,6 +5,7 @@ uniform vec3 mat_ambient;
 uniform vec3 mat_diffuse;
 uniform sampler2D textSampler;
 uniform int apply_texture;
+uniform float mat_metalness;
 
 // Input from vertex shader
 in VS_OUT
@@ -32,6 +33,7 @@ void main()
     // Compute the diffuse and specular components for each fragment
     vec3 ambient;
     vec3 diffuse;
+    vec3 specular;
     if (apply_texture == 1) {
         ambient = vec3(0.0, 0.0, 0.0);
         diffuse = max(dot(N, L), 0.0) * texture2D(textSampler, UV).rgb;
@@ -39,7 +41,13 @@ void main()
         ambient = mat_ambient;
         diffuse = max(dot(N, L), 0.0) * mat_diffuse;
     }
+    
+    // add metalness effect to specular
+    specular = mix(vec3(0.04), mat_diffuse, mat_metalness);
+
+    // Compute final color using the lighting equation
+    vec3 result = mat_ambient + diffuse + specular;
 
     // Write final color to the framebuffer
-    fragColor = vec4(mat_ambient + diffuse, 1.0);
+    fragColor = vec4(result, 1.0);
 }

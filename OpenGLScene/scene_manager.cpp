@@ -83,7 +83,8 @@ void scene_manager::init()
     material* box_material_lambert = new material_lambert(
         glm::vec3(0.3, 0.3, 0.0), 
         glm::vec3(0.5, 0, 0.5), 
-        glm::vec3(1)
+        glm::vec3(1),
+        1
     );
     auto *box2 = new object(box2_position, box2_light_position, box_material_lambert);
     box2->set_object("Objects/box.obj");

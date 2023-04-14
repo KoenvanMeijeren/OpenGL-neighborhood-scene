@@ -23,6 +23,7 @@ void shader_lambert::init_buffers(const std::vector<glm::vec3>& vertices, const 
 	uniform_light_position_ = glGetUniformLocation(program_id_, "light_pos");
     uniform_material_ambient_ = glGetUniformLocation(program_id_, "mat_ambient");
     uniform_material_diffuse_ = glGetUniformLocation(program_id_, "mat_diffuse");
+    uniform_material_metalness_ = glGetUniformLocation(program_id_, "mat_metalness");
     uniform_apply_texture_ = glGetUniformLocation(program_id_, "apply_texture");
 }
 
@@ -34,6 +35,7 @@ void shader_lambert::fill_uniform_vars(const glm::mat4& model_view, const glm::m
     glUniform3fv(uniform_light_position_, 1, glm::value_ptr(light.position));
     glUniform3fv(uniform_material_ambient_, 1, glm::value_ptr(material.ambient_color));
     glUniform3fv(uniform_material_diffuse_, 1, glm::value_ptr(material.diffuse_color));
+    glUniform1f(uniform_material_metalness_, material.metalness);
 
     // Bind textures
     glUniform1i(uniform_apply_texture_, 0);

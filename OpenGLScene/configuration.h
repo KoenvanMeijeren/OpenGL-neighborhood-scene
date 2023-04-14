@@ -20,5 +20,6 @@ struct material_struct
     glm::vec3 ambient_color;
     glm::vec3 diffuse_color;
     glm::vec3 specular_color;
-    float power{};
+    float power;
+    float metalness;
 };
