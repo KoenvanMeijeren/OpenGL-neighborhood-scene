@@ -9,7 +9,8 @@
 #include "material_lambert.h"
 #include "material_metal.h"
 #include "object_cube.h"
-#include "line_shape.h"
+#include "line_shape_cube.h"
+#include "object_rectangle.h"
 
 scene_manager::scene_manager()
 {
@@ -136,7 +137,7 @@ void scene_manager::init()
     objects_.push_back(box2);
     objects_.push_back(box3);
 
-    auto *line_shape_object = new line_shape(3, -3, 0);
+    auto *line_shape_object = new line_shape_cube(3, -3, 0);
     line_shape_object->add_animation(new animation_rotate(0.01f, 0.0f, 1.0f, 0.0f));
     line_shape_objects_.push_back(line_shape_object);
 
@@ -172,6 +173,21 @@ void scene_manager::init()
         cube2_material_metal
     );
     objects_.push_back(cube2);
+
+    const auto rectangle_position = glm::vec3(-10, -5, 0);
+	const auto rectangle_light_position = glm::vec3(1.0, 1.0, 1.0);
+    material* rectangle_material_metal = new material_default(
+        glm::vec3(0.3, 10, 0), 
+        glm::vec3(0, 5, 0), 
+        glm::vec3(1),
+        1
+    );
+    auto *rectangle = new object_rectangle(
+        rectangle_position,
+        rectangle_light_position, 
+        rectangle_material_metal
+    );
+    objects_.push_back(rectangle);
 }
 
 void scene_manager::render() const
