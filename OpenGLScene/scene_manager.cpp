@@ -7,6 +7,7 @@
 #include "glsl.h"
 #include "material_default.h"
 #include "material_lambert.h"
+#include "material_metal.h"
 
 scene_manager::scene_manager()
 {
@@ -90,11 +91,26 @@ void scene_manager::init()
     box2->set_object("Objects/box.obj");
     box2->init_buffers();
 
+    const auto box3_position = glm::vec3(-3.0, -7.5, 0);
+	const auto box3_light_position = glm::vec3(4.0, 4.0, 4.0);
+    material* box_material_metal = new material_metal(
+        glm::vec3(0.3, 0.3, 0.0), 
+        glm::vec3(0.5, 0, 0.5), 
+        glm::vec3(1),
+        1,
+        1,
+        1
+    );
+    auto *box3 = new object(box3_position, box3_light_position, box_material_metal);
+    box3->set_object("Objects/box.obj");
+    box3->init_buffers();
+
     objects_.push_back(teapot);
     objects_.push_back(teapot1);
     objects_.push_back(torus);
     objects_.push_back(box);
     objects_.push_back(box2);
+    objects_.push_back(box3);
 }
 
 void scene_manager::render() const
