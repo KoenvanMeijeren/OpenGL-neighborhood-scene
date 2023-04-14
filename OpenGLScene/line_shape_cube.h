@@ -5,7 +5,7 @@
 #include "entity.h"
 #include "shader_line_shape.h"
 
-class line_shape final: public entity
+class line_shape_cube final: public entity
 {
 private:
 	shader_line_shape *shader_;
@@ -60,8 +60,8 @@ private:
 	    4,5,5,6,6,7,7,4   // back
 	};
 public:
-	explicit line_shape(const float x, const float y, const float z);
-	~line_shape() override;
+	explicit line_shape_cube(const float x, const float y, const float z);
+	~line_shape_cube() override;
 
 	// Required methods for rendering
 	void init_buffers() override;

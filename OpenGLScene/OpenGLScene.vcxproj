@@ -141,6 +141,7 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="glsl.cpp" />
     <ClCompile Include="keyboard_handler.cpp" />
+    <ClCompile Include="line_shape_rectangle.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="material.cpp" />
     <ClCompile Include="material_default.cpp" />
@@ -150,7 +151,8 @@
     <ClCompile Include="object.cpp" />
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="object_cube.cpp" />
-    <ClCompile Include="line_shape.cpp" />
+    <ClCompile Include="line_shape_cube.cpp" />
+    <ClCompile Include="object_rectangle.cpp" />
     <ClCompile Include="scene_manager.cpp" />
     <ClCompile Include="objloader.cpp" />
     <ClCompile Include="shader.cpp" />
@@ -175,6 +177,7 @@
     <ClInclude Include="configuration.h" />
     <ClInclude Include="glsl.h" />
     <ClInclude Include="keyboard_handler.h" />
+    <ClInclude Include="line_shape_rectangle.h" />
     <ClInclude Include="material.h" />
     <ClInclude Include="material_default.h" />
     <ClInclude Include="material_lambert.h" />
@@ -183,7 +186,8 @@
     <ClInclude Include="object.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="object_cube.h" />
-    <ClInclude Include="line_shape.h" />
+    <ClInclude Include="line_shape_cube.h" />
+    <ClInclude Include="object_rectangle.h" />
     <ClInclude Include="scene_manager.h" />
     <ClInclude Include="objloader.h" />
     <ClInclude Include="shader.h" />
