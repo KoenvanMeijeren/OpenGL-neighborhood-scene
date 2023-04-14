@@ -145,6 +145,7 @@
     <ClCompile Include="material.cpp" />
     <ClCompile Include="material_default.cpp" />
     <ClCompile Include="material_lambert.cpp" />
+    <ClCompile Include="material_metal.cpp" />
     <ClCompile Include="matrix_transformations.cpp" />
     <ClCompile Include="object.cpp" />
     <ClCompile Include="scene_manager.cpp" />
@@ -152,11 +153,13 @@
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="shader_default.cpp" />
     <ClCompile Include="shader_lambert.cpp" />
+    <ClCompile Include="shader_metal.cpp" />
     <ClCompile Include="texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="fragmentshader_default.frag" />
     <None Include="fragmentshader_lambert.frag" />
+    <None Include="fragmentshader_metal.frag" />
     <None Include="vertexshader_default.vert" />
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +172,7 @@
     <ClInclude Include="material.h" />
     <ClInclude Include="material_default.h" />
     <ClInclude Include="material_lambert.h" />
+    <ClInclude Include="material_metal.h" />
     <ClInclude Include="matrix_transformations.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="scene_manager.h" />
@@ -176,6 +180,7 @@
     <ClInclude Include="shader.h" />
     <ClInclude Include="shader_default.h" />
     <ClInclude Include="shader_lambert.h" />
+    <ClInclude Include="shader_metal.h" />
     <ClInclude Include="texture.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
