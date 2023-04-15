@@ -108,6 +108,24 @@
     <ClCompile Include="material_metal.cpp">
       <Filter>Source Files\material</Filter>
     </ClCompile>
+    <ClCompile Include="entity.cpp">
+      <Filter>Source Files\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="shader_line_shape.cpp">
+      <Filter>Source Files\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="line_shape_cube.cpp">
+      <Filter>Source Files\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="line_shape_rectangle.cpp">
+      <Filter>Source Files\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="object_cube.cpp">
+      <Filter>Source Files\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="object_rectangle.cpp">
+      <Filter>Source Files\scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="vertexshader_default.vert">
@@ -120,6 +138,12 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="fragmentshader_metal.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="fragmentshader_basic.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="vertexshader_basic.vert">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
@@ -180,6 +204,24 @@
     </ClInclude>
     <ClInclude Include="material_metal.h">
       <Filter>Header Files\material</Filter>
+    </ClInclude>
+    <ClInclude Include="entity.h">
+      <Filter>Header Files\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="shader_line_shape.h">
+      <Filter>Header Files\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="line_shape_cube.h">
+      <Filter>Header Files\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="line_shape_rectangle.h">
+      <Filter>Header Files\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="object_cube.h">
+      <Filter>Header Files\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="object_rectangle.h">
+      <Filter>Header Files\scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
