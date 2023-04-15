@@ -5,5 +5,5 @@ class animation
 {
 public:
 	virtual ~animation();
-	virtual glm::mat4 execute(const glm::mat4& model) const;
+	virtual glm::mat4 execute(const glm::mat4& model);
 };

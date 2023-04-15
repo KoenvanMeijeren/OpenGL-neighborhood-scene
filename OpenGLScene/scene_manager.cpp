@@ -1,6 +1,7 @@
 ﻿#include "scene_manager.h"
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "animation_move_in_range.h"
 #include "animation_rotate.h"
 #include "objloader.h"
 #include "camera.h"
@@ -100,8 +101,10 @@ void scene_manager::init()
     );
     car_object->rotate(1.55f, 0, 0.2f, 0);
     car_object->scale(0.6f);
+    car_object->translate(0, 0, -35);
+    car_object->add_animation(new animation_move_in_range(0.2f, 0, 0, 65));
 
-    const auto car_reversed_object_position = glm::vec3(5, 0, 2.2);
+    const auto car_reversed_object_position = glm::vec3(20, 0, 2.4);
 	const auto car_reversed_object_light_position = glm::vec3(1, 1, 1);
     material* car_reversed_object_material_metal = new material_default(
         glm::vec3(1, 0, 0), 
@@ -117,6 +120,7 @@ void scene_manager::init()
     );
     car_reversed_object->rotate(4.7f, 0, 0.5f, 0);
     car_reversed_object->scale(0.6f);
+    car_reversed_object->add_animation(new animation_move_in_range(0.2f, 0, 0, 65));
 
     objects_.push_back(teapot);
     objects_.push_back(teapot1);
