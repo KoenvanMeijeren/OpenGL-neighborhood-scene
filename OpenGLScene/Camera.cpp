@@ -186,6 +186,14 @@ void camera::handle_keyboard_input(const unsigned char key)
 		}
 
 		this->update_after_yaw_or_pitch_change();
+
+		// Sets the correct height of the view when in walk mode.
+		// Could not figure out why it didn't work with the other settings.
+		if (!this->is_drone_mode_enabled)
+		{
+			this->position->y = default_walk_position_y;
+		}
+
 		this->update();
 		break;
 	case key_b_lower:
