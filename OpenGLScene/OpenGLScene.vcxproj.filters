@@ -49,6 +49,12 @@
     <Filter Include="Source Files\material">
       <UniqueIdentifier>{ca7fa4ba-947d-4e4c-90ad-085c394824c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\scene\primitive-object">
+      <UniqueIdentifier>{45c86961-bd97-4c8b-9ca1-e792d7eb5232}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scene\primitive-object">
+      <UniqueIdentifier>{1b9c3407-d7b2-468f-88e4-985b4f404085}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -115,25 +121,25 @@
       <Filter>Source Files\shader</Filter>
     </ClCompile>
     <ClCompile Include="line_shape_cube.cpp">
-      <Filter>Source Files\scene</Filter>
+      <Filter>Source Files\scene\primitive-object</Filter>
     </ClCompile>
     <ClCompile Include="line_shape_rectangle.cpp">
-      <Filter>Source Files\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="object_cube.cpp">
-      <Filter>Source Files\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="object_rectangle.cpp">
-      <Filter>Source Files\scene</Filter>
+      <Filter>Source Files\scene\primitive-object</Filter>
     </ClCompile>
     <ClCompile Include="object_bar.cpp">
-      <Filter>Source Files\scene</Filter>
+      <Filter>Source Files\scene\primitive-object</Filter>
     </ClCompile>
-    <ClCompile Include="object_square.cpp">
-      <Filter>Source Files\scene</Filter>
+    <ClCompile Include="object_cube.cpp">
+      <Filter>Source Files\scene\primitive-object</Filter>
+    </ClCompile>
+    <ClCompile Include="object_rectangle.cpp">
+      <Filter>Source Files\scene\primitive-object</Filter>
     </ClCompile>
     <ClCompile Include="object_triangle.cpp">
-      <Filter>Source Files\scene</Filter>
+      <Filter>Source Files\scene\primitive-object</Filter>
+    </ClCompile>
+    <ClCompile Include="object_square.cpp">
+      <Filter>Source Files\scene\primitive-object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -220,26 +226,26 @@
     <ClInclude Include="shader_line_shape.h">
       <Filter>Header Files\shader</Filter>
     </ClInclude>
-    <ClInclude Include="line_shape_cube.h">
-      <Filter>Header Files\scene</Filter>
-    </ClInclude>
-    <ClInclude Include="line_shape_rectangle.h">
-      <Filter>Header Files\scene</Filter>
+    <ClInclude Include="object_bar.h">
+      <Filter>Header Files\scene\primitive-object</Filter>
     </ClInclude>
     <ClInclude Include="object_cube.h">
-      <Filter>Header Files\scene</Filter>
+      <Filter>Header Files\scene\primitive-object</Filter>
     </ClInclude>
     <ClInclude Include="object_rectangle.h">
-      <Filter>Header Files\scene</Filter>
-    </ClInclude>
-    <ClInclude Include="object_bar.h">
-      <Filter>Header Files\scene</Filter>
+      <Filter>Header Files\scene\primitive-object</Filter>
     </ClInclude>
     <ClInclude Include="object_square.h">
-      <Filter>Header Files\scene</Filter>
+      <Filter>Header Files\scene\primitive-object</Filter>
     </ClInclude>
     <ClInclude Include="object_triangle.h">
-      <Filter>Header Files\scene</Filter>
+      <Filter>Header Files\scene\primitive-object</Filter>
+    </ClInclude>
+    <ClInclude Include="line_shape_rectangle.h">
+      <Filter>Header Files\scene\primitive-object</Filter>
+    </ClInclude>
+    <ClInclude Include="line_shape_cube.h">
+      <Filter>Header Files\scene\primitive-object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
