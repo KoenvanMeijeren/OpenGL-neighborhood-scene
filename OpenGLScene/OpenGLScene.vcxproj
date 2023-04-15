@@ -152,8 +152,10 @@
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="object_cube.cpp" />
     <ClCompile Include="line_shape_cube.cpp" />
-    <ClCompile Include="object_plane.cpp" />
+    <ClCompile Include="object_rectangle.cpp" />
+    <ClCompile Include="object_square.cpp" />
     <ClCompile Include="object_bar.cpp" />
+    <ClCompile Include="object_triangle.cpp" />
     <ClCompile Include="scene_manager.cpp" />
     <ClCompile Include="objloader.cpp" />
     <ClCompile Include="shader.cpp" />
@@ -188,8 +190,10 @@
     <ClInclude Include="entity.h" />
     <ClInclude Include="object_cube.h" />
     <ClInclude Include="line_shape_cube.h" />
-    <ClInclude Include="object_plane.h" />
+    <ClInclude Include="object_rectangle.h" />
+    <ClInclude Include="object_square.h" />
     <ClInclude Include="object_bar.h" />
+    <ClInclude Include="object_triangle.h" />
     <ClInclude Include="scene_manager.h" />
     <ClInclude Include="objloader.h" />
     <ClInclude Include="shader.h" />
