@@ -55,6 +55,12 @@
     <Filter Include="Header Files\scene\primitive-object">
       <UniqueIdentifier>{1b9c3407-d7b2-468f-88e4-985b4f404085}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\scene\builder">
+      <UniqueIdentifier>{ce8a1c50-55f3-4329-a5b8-dd69ff1c8033}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scene\builder">
+      <UniqueIdentifier>{d6347cb5-cae9-4aa2-88c5-e07a635711a1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -140,6 +146,12 @@
     </ClCompile>
     <ClCompile Include="object_square.cpp">
       <Filter>Source Files\scene\primitive-object</Filter>
+    </ClCompile>
+    <ClCompile Include="object-builder.cpp">
+      <Filter>Source Files\scene\builder</Filter>
+    </ClCompile>
+    <ClCompile Include="floor-builder.cpp">
+      <Filter>Source Files\scene\builder</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -246,6 +258,12 @@
     </ClInclude>
     <ClInclude Include="line_shape_cube.h">
       <Filter>Header Files\scene\primitive-object</Filter>
+    </ClInclude>
+    <ClInclude Include="object-builder.h">
+      <Filter>Header Files\scene\builder</Filter>
+    </ClInclude>
+    <ClInclude Include="floor-builder.h">
+      <Filter>Header Files\scene\builder</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
