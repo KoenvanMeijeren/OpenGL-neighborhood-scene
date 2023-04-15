@@ -31,4 +31,10 @@ public:
 	// Required methods for rendering
 	void init_buffers() override;
 	void render() override;
+
+	// Debug methods.
+	void print_structure() const;
+	void print_vertices() const;
+	void print_normals() const;
+	void print_uvs() const;
 };

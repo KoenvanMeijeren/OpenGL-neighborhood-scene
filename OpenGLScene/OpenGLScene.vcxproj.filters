@@ -126,6 +126,9 @@
     <ClCompile Include="object_rectangle.cpp">
       <Filter>Source Files\scene</Filter>
     </ClCompile>
+    <ClCompile Include="object_bar.cpp">
+      <Filter>Source Files\scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="vertexshader_default.vert">
@@ -221,6 +224,9 @@
       <Filter>Header Files\scene</Filter>
     </ClInclude>
     <ClInclude Include="object_rectangle.h">
+      <Filter>Header Files\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="object_bar.h">
       <Filter>Header Files\scene</Filter>
     </ClInclude>
   </ItemGroup>

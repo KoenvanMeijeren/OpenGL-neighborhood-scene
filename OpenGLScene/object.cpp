@@ -1,5 +1,6 @@
 ﻿#include "object.h"
 
+#include <iostream>
 #include <GL/gl.h>
 #include <GL/glew.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -71,4 +72,35 @@ void object::render()
 
     // Before ending the rendering of the object, the shader needs to be updated.
     material_->render(model_view_, camera_->get_projection(), light_, vertices_);
+}
+
+void object::print_structure() const
+{
+    print_vertices();
+    print_uvs();
+    print_normals();
+}
+
+void object::print_vertices() const
+{
+	for (const auto& vertex : vertices_)
+	{
+		std::cout << "{" << vertex.x << ", " << vertex.y << ", " << vertex.z << "},\n";
+	}
+}
+
+void object::print_normals() const
+{
+    for (const auto& normal : normals_)
+	{
+		std::cout << "{" << normal.x << ", " << normal.y << ", " << normal.z << "},\n";
+	}
+}
+
+void object::print_uvs() const
+{
+    for (const auto& uv : uvs_)
+	{
+		std::cout << "{" << uv.x << ", " << uv.y << "},\n";
+	}
 }
