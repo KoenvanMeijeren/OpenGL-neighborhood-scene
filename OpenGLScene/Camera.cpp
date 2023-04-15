@@ -190,9 +190,11 @@ void camera::handle_keyboard_input(const unsigned char key)
 		break;
 	case key_b_lower:
 	case key_b_upper:
-		std::cout << "Position: x:" << this->position->x << ", y: " << this->position->y << ", z: " << this->position->z;
-		std::cout << " Target: x:" << this->front->x << ", y: " << this->front->y << ", z: " << this->front->z;
-		std::cout << " YAW: " << this->yaw;
+		std::cout << "\nCamera debugging information\n";
+		std::cout << "Position: x:" << this->position->x << ", y: " << this->position->y << ", z: " << this->position->z << "\n";
+		std::cout << "Front: x:" << this->front->x << ", y: " << this->front->y << ", z: " << this->front->z << "\n";
+		std::cout << "Up: x:" << this->up->x << ", y: " << this->up->y << ", z: " << this->up->z << "\n";
+		std::cout << "YAW: " << this->yaw;
 		std::cout << " PITCH: " << this->pitch;
 		std::cout << " FOV: " << this->fov;
 		std::cout << " Drone mode enabled: " << (this->is_drone_mode_enabled ? "Yes" : "No");

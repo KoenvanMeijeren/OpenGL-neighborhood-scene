@@ -15,23 +15,24 @@ public:
 	glm::mat4 *projection;
 	glm::mat4 *view;
 
-	glm::vec3 default_drone_position = glm::vec3(0, 5.2, 23.0);
+	// Position: x:-4.29697, y: 15.7, z: 18.95 Target: x:0.221551, y: -0.559194, z: -0.798885 YAW: -74.4999 PITCH: -34.0001 FOV: 45
+	glm::vec3 default_drone_position = glm::vec3(-4.2, 15.7, 18.95);
 	glm::vec3 default_drone_front_position = glm::vec3(0, 0, 0);
 	glm::vec3 default_drone_up_position = glm::vec3(0, 1, 0);
 	glm::vec3 default_walk_position = glm::vec3(0, 5.2, 13.0);
 	glm::vec3 default_walk_front_position = glm::vec3(0, 0, 0);
 	glm::vec3 default_walk_up_position = glm::vec3(0, 1, 0);
-	glm::vec3 *position = new glm::vec3(0, 3.2, 23.8); // x, y, z
+	glm::vec3 *position = new glm::vec3(-4.2, 15.7, 18.95); // x, y, z
 	glm::vec3 *front = new glm::vec3(0, 0, 0); // x, y, z
 	glm::vec3 *up = new glm::vec3(0, 1, 0); // x, y, z
 
 	// The yaw values determines if we are looking left/right.
-	const float default_drone_yaw = -86.0f;
+	const float default_drone_yaw = -74.5f;
 	const float default_walk_yaw = -86.0f;
 	float yaw = default_drone_yaw;
 
 	// The pitch values determines if we are looking up/down.
-	const float default_drone_pitch = -12.4f;
+	const float default_drone_pitch = -34.0f;
 	const float default_walk_pitch = -7.4f;
 	float pitch = default_drone_pitch;
 
