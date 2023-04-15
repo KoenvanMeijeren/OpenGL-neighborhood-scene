@@ -129,21 +129,20 @@ void scene_manager::init()
         "Objects/box.obj"
     );
 
-    const auto test_object_position = glm::vec3(7.0, 7.5, 0);
-	const auto test_object_light_position = glm::vec3(1.0, 1.0, 0);
-    material* test_object_material_metal = new material_default(
-        glm::vec3(0.5, 0.1, 0.1), 
-        glm::vec3(0.5, 0.1, 0.1), 
-        glm::vec3(1),
-        4
+    const auto car_object_position = glm::vec3(7.0, 7.5, 0);
+	const auto car_object_light_position = glm::vec3(1.0, 1.0, 1.0);
+    material* car_object_material_metal = new material_default(
+        glm::vec3(0, 0.5, 0), 
+        glm::vec3(0, 0.5, 0), 
+        glm::vec3(0.1f),
+        2024
     );
-    auto *test_object = new object(
-        test_object_position, 
-        test_object_light_position,
-        test_object_material_metal, 
-        "Objects/rectangle.obj"
+    auto *car_object = new object(
+        car_object_position, 
+        car_object_light_position,
+        car_object_material_metal, 
+        "Objects/car-taxi3.obj"
     );
-    test_object->print_structure();
 
     objects_.push_back(teapot);
     objects_.push_back(teapot1);
@@ -151,7 +150,7 @@ void scene_manager::init()
     objects_.push_back(box);
     objects_.push_back(box2);
     objects_.push_back(box3);
-    objects_.push_back(test_object);
+    objects_.push_back(car_object);
 
     auto *line_cube = new line_shape_cube(3, -3, 0);
     line_cube->add_animation(new animation_rotate(0.01f, 0.0f, 1.0f, 0.0f));
