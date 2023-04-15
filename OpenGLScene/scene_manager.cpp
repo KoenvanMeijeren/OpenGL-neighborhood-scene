@@ -12,7 +12,7 @@
 #include "line_shape_cube.h"
 #include "line_shape_rectangle.h"
 #include "object_bar.h"
-#include "object_rectangle.h"
+#include "object_plane.h"
 
 scene_manager::scene_manager()
 {
@@ -199,7 +199,7 @@ void scene_manager::init()
         glm::vec3(1),
         1
     );
-    auto *rectangle = new object_rectangle(
+    auto *rectangle = new object_plane(
         rectangle_position,
         rectangle_light_position, 
         rectangle_material_metal
