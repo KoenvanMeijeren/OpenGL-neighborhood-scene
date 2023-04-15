@@ -11,6 +11,7 @@
 #include "object_cube.h"
 #include "line_shape_cube.h"
 #include "line_shape_rectangle.h"
+#include "object_bar.h"
 #include "object_rectangle.h"
 
 scene_manager::scene_manager()
@@ -126,12 +127,28 @@ void scene_manager::init()
         "Objects/box.obj"
     );
 
+    const auto bar_object_position = glm::vec3(7.0, 7.5, 0);
+	const auto bar_object_light_position = glm::vec3(1.0, 1.0, 0);
+    material* bar_object_material_metal = new material_default(
+        glm::vec3(0.5, 0.1, 0.1), 
+        glm::vec3(0.5, 0.1, 0.1), 
+        glm::vec3(1),
+        4
+    );
+    auto *bar_object = new object(
+        bar_object_position, 
+        bar_object_light_position,
+        bar_object_material_metal, 
+        "Objects/bar.obj"
+    );
+
     objects_.push_back(teapot);
     objects_.push_back(teapot1);
     objects_.push_back(torus);
     objects_.push_back(box);
     objects_.push_back(box2);
     objects_.push_back(box3);
+    objects_.push_back(bar_object);
 
     auto *line_cube = new line_shape_cube(3, -3, 0);
     line_cube->add_animation(new animation_rotate(0.01f, 0.0f, 1.0f, 0.0f));
@@ -188,6 +205,21 @@ void scene_manager::init()
         rectangle_material_metal
     );
     objects_.push_back(rectangle);
+
+	const auto bar_position = glm::vec3(-10, -10, 0);
+	const auto bar_light_position = glm::vec3(1.0, 1.0, 1.0);
+    material* bar_material = new material_default(
+        glm::vec3(0.3, 1, 0.5), 
+        glm::vec3(0, 5, 0.5), 
+        glm::vec3(1),
+        1
+    );
+    auto *bar = new object_bar(
+        bar_position,
+        bar_light_position, 
+        bar_material
+    );
+    objects_.push_back(bar);
 }
 
 void scene_manager::render() const
