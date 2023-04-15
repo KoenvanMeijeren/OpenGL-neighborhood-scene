@@ -152,7 +152,7 @@
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="object_cube.cpp" />
     <ClCompile Include="line_shape_cube.cpp" />
-    <ClCompile Include="object_plane.cpp" />
+    <ClCompile Include="object_square.cpp" />
     <ClCompile Include="object_bar.cpp" />
     <ClCompile Include="scene_manager.cpp" />
     <ClCompile Include="objloader.cpp" />
@@ -188,7 +188,7 @@
     <ClInclude Include="entity.h" />
     <ClInclude Include="object_cube.h" />
     <ClInclude Include="line_shape_cube.h" />
-    <ClInclude Include="object_plane.h" />
+    <ClInclude Include="object_square.h" />
     <ClInclude Include="object_bar.h" />
     <ClInclude Include="scene_manager.h" />
     <ClInclude Include="objloader.h" />

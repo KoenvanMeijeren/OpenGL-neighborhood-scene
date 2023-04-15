@@ -12,7 +12,7 @@
 #include "line_shape_cube.h"
 #include "line_shape_rectangle.h"
 #include "object_bar.h"
-#include "object_plane.h"
+#include "object_square.h"
 
 scene_manager::scene_manager()
 {
@@ -191,20 +191,20 @@ void scene_manager::init()
     );
     objects_.push_back(cube2);
 
-    const auto rectangle_position = glm::vec3(-10, -5, 0);
-	const auto rectangle_light_position = glm::vec3(1.0, 1.0, 1.0);
-    material* rectangle_material_metal = new material_default(
+    const auto square_position = glm::vec3(-10, -5, 0);
+	const auto square_light_position = glm::vec3(1.0, 1.0, 1.0);
+    material* square_material_metal = new material_default(
         glm::vec3(0.3, 10, 0), 
         glm::vec3(0, 5, 0), 
         glm::vec3(1),
         1
     );
-    auto *rectangle = new object_plane(
-        rectangle_position,
-        rectangle_light_position, 
-        rectangle_material_metal
+    auto *square = new object_square(
+        square_position,
+        square_light_position, 
+        square_material_metal
     );
-    objects_.push_back(rectangle);
+    objects_.push_back(square);
 
 	const auto bar_position = glm::vec3(-10, -10, 0);
 	const auto bar_light_position = glm::vec3(1.0, 1.0, 1.0);
