@@ -4,17 +4,14 @@
 #include "animation_rotate.h"
 #include "objloader.h"
 #include "camera.h"
+#include "floor-builder.h"
 #include "glsl.h"
 #include "material_default.h"
 #include "material_lambert.h"
+#include "line_shape_cube.h"
 #include "material_metal.h"
 #include "object_cube.h"
-#include "line_shape_cube.h"
-#include "line_shape_rectangle.h"
-#include "object_bar.h"
-#include "object_rectangle.h"
 #include "object_square.h"
-#include "object_triangle.h"
 
 scene_manager::scene_manager()
 {
@@ -28,11 +25,16 @@ scene_manager::~scene_manager()
     {
 	    delete object;
     }
+
+    for (const auto object_builder : object_builders_)
+    {
+	    delete object_builder;
+    }
 }
 
 void scene_manager::init()
 {
-	const auto teapot_position = glm::vec3(0, 0, 0);
+	const auto teapot_position = glm::vec3(6, 2, 0);
 	const auto teapot_light_position = glm::vec3(4.0, 4.0, 4.0);
     material* teapot_material = new material_default(
         glm::vec3(1.0, 0.0, 0.0), 
@@ -81,177 +83,47 @@ void scene_manager::init()
     );
     torus->add_animation(new animation_rotate(0.05f, 1.0f, 0.5f, 0.5f));
 
-    const auto box_position = glm::vec3(-3.0, -2.5, 0);
-	const auto box_light_position = glm::vec3(4.0, 4.0, 4.0);
-    material* box_material = new material_default(
-        glm::vec3(0.3, 0.3, 0.0), 
-        glm::vec3(0.5, 0, 0.5), 
-        glm::vec3(1), 
-        2
-    );
-    auto *box = new object(
-        box_position, 
-        box_light_position, 
-        box_material, 
-        "Objects/box.obj"
-    );
-    box->add_animation(new animation_rotate(0.05f, 1.0f, 0, 0));
-
-    const auto box2_position = glm::vec3(-3.0, 2.5, 0);
-	const auto box2_light_position = glm::vec3(4.0, 4.0, 4.0);
-    material* box_material_lambert = new material_lambert(
-        glm::vec3(0.3, 0.3, 0.0), 
-        glm::vec3(0.5, 0, 0.5), 
-        glm::vec3(1),
-        1
-    );
-    auto *box2 = new object(
-        box2_position, 
-        box2_light_position,
-        box_material_lambert, 
-        "Objects/box.obj"
-    );
-
-    const auto box3_position = glm::vec3(-3.0, -7.5, 0);
-	const auto box3_light_position = glm::vec3(4.0, 4.0, 4.0);
-    material* box_material_metal = new material_metal(
-        glm::vec3(1, 0, 0), 
-        glm::vec3(1, 0, 0), 
-        glm::vec3(1),
-        1,
-        1,
-        0.5
-    );
-    auto *box3 = new object(
-        box3_position, 
-        box3_light_position,
-        box_material_metal, 
-        "Objects/box.obj"
-    );
-
-    const auto car_object_position = glm::vec3(7.0, 7.5, 0);
-	const auto car_object_light_position = glm::vec3(1.0, 1.0, 1.0);
-    material* car_object_material_metal = new material_default(
-        glm::vec3(0, 0.5, 0), 
-        glm::vec3(0, 0.5, 0), 
-        glm::vec3(0.1f),
-        2024
-    );
-    auto *car_object = new object(
-        car_object_position, 
-        car_object_light_position,
-        car_object_material_metal, 
-        "Objects/car-taxi3.obj"
-    );
+ //    const auto car_object_position = glm::vec3(7, 2, 0);
+	// const auto car_object_light_position = glm::vec3(1, 1, 1);
+ //    material* car_object_material_metal = new material_default(
+ //        glm::vec3(0, 0.5, 0), 
+ //        glm::vec3(0, 0.5, 0), 
+ //        glm::vec3(0.1f),
+ //        2024
+ //    );
+ //    auto *car_object = new object(
+ //        car_object_position, 
+ //        car_object_light_position,
+ //        car_object_material_metal, 
+ //        "Objects/car-taxi3.obj"
+ //    );
 
     objects_.push_back(teapot);
     objects_.push_back(teapot1);
     objects_.push_back(torus);
-    objects_.push_back(box);
-    objects_.push_back(box2);
-    objects_.push_back(box3);
-    objects_.push_back(car_object);
+    // Enable this when the scene is completed
+    // objects_.push_back(car_object);
 
-    auto *line_cube = new line_shape_cube(3, -3, 0);
-    line_cube->add_animation(new animation_rotate(0.01f, 0.0f, 1.0f, 0.0f));
-    objects_.push_back(line_cube);
-
-    auto *line_rectangle = new line_shape_rectangle(5, -13, 0);
-    line_rectangle->add_animation(new animation_rotate(0.05f, 0.0f, 1.0f, 0.0f));
-    objects_.push_back(line_rectangle);
-
-    const auto cube_position = glm::vec3(5, -5, 0);
+    const auto cube_position = glm::vec3(5, 0, 5);
 	const auto cube_light_position = glm::vec3(4.0, 4.0, 4.0);
-    material* cube_material_metal = new material_metal(
+    material* cube_material_metal = new material_lambert(
         glm::vec3(3, 0.3, 0.0), 
         glm::vec3(3, 0, 0), 
         glm::vec3(1),
-        1,
-        1,
-        0.5
+        1024
     );
     auto *cube = new object_cube(
         cube_position,
         cube_light_position, 
-        cube_material_metal,
-        "Textures/uvtemplate.bmp"
+        cube_material_metal
     );
     objects_.push_back(cube);
 
-    const auto cube2_position = glm::vec3(10, -5, 0);
-	const auto cube2_light_position = glm::vec3(1.0, 1.0, 1.0);
-    material* cube2_material_metal = new material_default(
-        glm::vec3(5, 5, 0), 
-        glm::vec3(5, 5, 0), 
-        glm::vec3(1),
-        1
-    );
-    auto *cube2 = new object_cube(
-        cube2_position,
-        cube2_light_position, 
-        cube2_material_metal
-    );
-    objects_.push_back(cube2);
-
-    const auto square_position = glm::vec3(-10, -5, 0);
-	const auto square_light_position = glm::vec3(1.0, 1.0, 1.0);
-    material* square_material_metal = new material_default(
-        glm::vec3(0.3, 10, 0), 
-        glm::vec3(0, 5, 0), 
-        glm::vec3(1),
-        1
-    );
-    auto *square = new object_square(
-        square_position,
-        square_light_position, 
-        square_material_metal
-    );
-    objects_.push_back(square);
-
-	const auto bar_position = glm::vec3(-10, -10, 0);
-	const auto bar_light_position = glm::vec3(1.0, 1.0, 1.0);
-    material* bar_material = new material_default(
-        glm::vec3(0.3, 1, 0.5), 
-        glm::vec3(0, 5, 0.5), 
-        glm::vec3(1),
-        1
-    );
-    auto *bar = new object_bar(
-        bar_position,
-        bar_light_position, 
-        bar_material
-    );
-    objects_.push_back(bar);
-
-    const auto rectangle_position = glm::vec3(-12.5, -10, 0);
-	const auto rectangle_light_position = glm::vec3(1.0, 1.0, 1.0);
-    material* rectangle_material = new material_default(
-        glm::vec3(0.3, 0, 0.5), 
-        glm::vec3(0, 1, 0.5), 
-        glm::vec3(1),
-        1
-    );
-    auto *rectangle = new object_rectangle(
-        rectangle_position,
-        rectangle_light_position, 
-        rectangle_material
-    );
-    objects_.push_back(rectangle);
-
-    const auto triangle_position = glm::vec3(-4.5, -7.5, 0);
-	const auto triangle_light_position = glm::vec3(1.0, 1.0, 1.0);
-    material* triangle_material = new material_default(
-        glm::vec3(0, 1, 0.5), 
-        glm::vec3(0, 0.6, 0), 
-        glm::vec3(1),
-        1024
-    );
-    auto *triangle = new object_triangle(
-        triangle_position,
-        triangle_light_position, 
-        triangle_material
-    );
-    objects_.push_back(triangle);
+    object_builders_.push_back(new floor_builder());
+	for (const auto object_builder : object_builders_)
+	{
+		object_builder->init();
+	}
 }
 
 void scene_manager::render() const
@@ -267,6 +139,11 @@ void scene_manager::render() const
     {
 	    object->render();
     }
+
+    for (const auto object_builder : object_builders_)
+	{
+		object_builder->render();
+	}
 
     glutSwapBuffers();
 }

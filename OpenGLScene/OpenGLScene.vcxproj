@@ -139,6 +139,7 @@
     <ClCompile Include="animation.cpp" />
     <ClCompile Include="animation_rotate.cpp" />
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="floor-builder.cpp" />
     <ClCompile Include="glsl.cpp" />
     <ClCompile Include="keyboard_handler.cpp" />
     <ClCompile Include="line_shape_rectangle.cpp" />
@@ -148,6 +149,7 @@
     <ClCompile Include="material_lambert.cpp" />
     <ClCompile Include="material_metal.cpp" />
     <ClCompile Include="matrix_transformations.cpp" />
+    <ClCompile Include="object-builder.cpp" />
     <ClCompile Include="object.cpp" />
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="object_cube.cpp" />
@@ -178,6 +180,7 @@
     <ClInclude Include="animation_rotate.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="configuration.h" />
+    <ClInclude Include="floor-builder.h" />
     <ClInclude Include="glsl.h" />
     <ClInclude Include="keyboard_handler.h" />
     <ClInclude Include="line_shape_rectangle.h" />
@@ -186,6 +189,7 @@
     <ClInclude Include="material_lambert.h" />
     <ClInclude Include="material_metal.h" />
     <ClInclude Include="matrix_transformations.h" />
+    <ClInclude Include="object-builder.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="object_cube.h" />
