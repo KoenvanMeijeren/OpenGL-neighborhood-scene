@@ -12,6 +12,7 @@
 #include "material_metal.h"
 #include "object_cube.h"
 #include "object_square.h"
+#include "road-builder.h"
 
 scene_manager::scene_manager()
 {
@@ -34,7 +35,7 @@ scene_manager::~scene_manager()
 
 void scene_manager::init()
 {
-	const auto teapot_position = glm::vec3(6, 2, 0);
+	const auto teapot_position = glm::vec3(6, 2, -3);
 	const auto teapot_light_position = glm::vec3(4.0, 4.0, 4.0);
     material* teapot_material = new material_default(
         glm::vec3(1.0, 0.0, 0.0), 
@@ -50,7 +51,7 @@ void scene_manager::init()
     );
     teapot->add_animation(new animation_rotate(0.01f, 0.5f, 1.0f, 0.2f));
 
-    const auto teapot1_position = glm::vec3(0, 5, 0);
+    const auto teapot1_position = glm::vec3(3, 0, -5);
 	const auto teapot1_light_position = glm::vec3(4.0, 4.0, 4.0);
     material* teapot1_material = new material_default(
         glm::vec3(0.0, 0.0, 0.0), 
@@ -66,7 +67,7 @@ void scene_manager::init()
         "Textures/Yellobrk.bmp"
     );
 
-    const auto torus_position = glm::vec3(3.0, 2.5, 0);
+    const auto torus_position = glm::vec3(-5, 2.5, -5);
 	const auto torus_light_position = glm::vec3(4.0, 4.0, 4.0);
     material* torus_material = new material_default(
         glm::vec3(0.0, 0.0, 0.0), 
@@ -120,6 +121,7 @@ void scene_manager::init()
     objects_.push_back(cube);
 
     object_builders_.push_back(new floor_builder());
+    object_builders_.push_back(new road_builder());
 	for (const auto object_builder : object_builders_)
 	{
 		object_builder->init();
