@@ -15,11 +15,6 @@ public:
 	glm::mat4 *projection;
 	glm::mat4 *view;
 
-// Camera debugging information
-// Position: x:-5, y: 0.2, z: 17
-// Front: x:0.537324, y: 0.0732381, z: -0.84019
-// Up: x:0, y: 1, z: 0
-// YAW: -57.4 PITCH: 4.2 FOV: 45 Drone mode enabled: No
 	glm::vec3 default_drone_position = glm::vec3(-4.2, 15.7, 18.95);
 	glm::vec3 default_drone_front_position = glm::vec3(0, 0, 0);
 	glm::vec3 default_drone_up_position = glm::vec3(0, 1, 0);
