@@ -15,7 +15,7 @@ animation_rotate::animation_rotate(const float rotate_speed, const float rotate_
 {
 }
 
-glm::mat4 animation_rotate::execute(const glm::mat4& model) const
+glm::mat4 animation_rotate::execute(const glm::mat4& model)
 {
 	return matrix_rotate(model, rotate_speed_, rotate_x_, rotate_y_, rotate_z_);
 }
