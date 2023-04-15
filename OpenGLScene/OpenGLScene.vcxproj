@@ -158,6 +158,7 @@
     <ClCompile Include="object_square.cpp" />
     <ClCompile Include="object_bar.cpp" />
     <ClCompile Include="object_triangle.cpp" />
+    <ClCompile Include="road-builder.cpp" />
     <ClCompile Include="scene_manager.cpp" />
     <ClCompile Include="objloader.cpp" />
     <ClCompile Include="shader.cpp" />
@@ -198,6 +199,7 @@
     <ClInclude Include="object_square.h" />
     <ClInclude Include="object_bar.h" />
     <ClInclude Include="object_triangle.h" />
+    <ClInclude Include="road-builder.h" />
     <ClInclude Include="scene_manager.h" />
     <ClInclude Include="objloader.h" />
     <ClInclude Include="shader.h" />

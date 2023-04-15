@@ -12,6 +12,7 @@
 #include "material_metal.h"
 #include "object_cube.h"
 #include "object_square.h"
+#include "road-builder.h"
 
 scene_manager::scene_manager()
 {
@@ -34,7 +35,7 @@ scene_manager::~scene_manager()
 
 void scene_manager::init()
 {
-	const auto teapot_position = glm::vec3(6, 2, 0);
+	const auto teapot_position = glm::vec3(6, 2, -3);
 	const auto teapot_light_position = glm::vec3(4.0, 4.0, 4.0);
     material* teapot_material = new material_default(
         glm::vec3(1.0, 0.0, 0.0), 
@@ -50,7 +51,7 @@ void scene_manager::init()
     );
     teapot->add_animation(new animation_rotate(0.01f, 0.5f, 1.0f, 0.2f));
 
-    const auto teapot1_position = glm::vec3(0, 5, 0);
+    const auto teapot1_position = glm::vec3(3, 0, -5);
 	const auto teapot1_light_position = glm::vec3(4.0, 4.0, 4.0);
     material* teapot1_material = new material_default(
         glm::vec3(0.0, 0.0, 0.0), 
@@ -66,7 +67,7 @@ void scene_manager::init()
         "Textures/Yellobrk.bmp"
     );
 
-    const auto torus_position = glm::vec3(3.0, 2.5, 0);
+    const auto torus_position = glm::vec3(-5, 2.5, -5);
 	const auto torus_light_position = glm::vec3(4.0, 4.0, 4.0);
     material* torus_material = new material_default(
         glm::vec3(0.0, 0.0, 0.0), 
@@ -83,26 +84,45 @@ void scene_manager::init()
     );
     torus->add_animation(new animation_rotate(0.05f, 1.0f, 0.5f, 0.5f));
 
- //    const auto car_object_position = glm::vec3(7, 2, 0);
-	// const auto car_object_light_position = glm::vec3(1, 1, 1);
- //    material* car_object_material_metal = new material_default(
- //        glm::vec3(0, 0.5, 0), 
- //        glm::vec3(0, 0.5, 0), 
- //        glm::vec3(0.1f),
- //        2024
- //    );
- //    auto *car_object = new object(
- //        car_object_position, 
- //        car_object_light_position,
- //        car_object_material_metal, 
- //        "Objects/car-taxi3.obj"
- //    );
+    const auto car_object_position = glm::vec3(1, 0, 0.2f);
+	const auto car_object_light_position = glm::vec3(1, 1, 1);
+    material* car_object_material_metal = new material_default(
+        glm::vec3(0.1, 0.5, 0.3), 
+        glm::vec3(0.1, 0.7, 0.4), 
+        glm::vec3(0.1f),
+        2024
+    );
+    auto *car_object = new object(
+        car_object_position, 
+        car_object_light_position,
+        car_object_material_metal, 
+        "Objects/car-taxi3.obj"
+    );
+    car_object->rotate(1.55f, 0, 0.2f, 0);
+    car_object->scale(0.6f);
+
+    const auto car_reversed_object_position = glm::vec3(5, 0, 2.2);
+	const auto car_reversed_object_light_position = glm::vec3(1, 1, 1);
+    material* car_reversed_object_material_metal = new material_default(
+        glm::vec3(1, 0, 0), 
+        glm::vec3(1, 1.0, 0), 
+        glm::vec3(0.1f),
+        2024
+    );
+    auto *car_reversed_object = new object(
+        car_reversed_object_position, 
+        car_reversed_object_light_position,
+        car_reversed_object_material_metal, 
+        "Objects/car-taxi3.obj"
+    );
+    car_reversed_object->rotate(4.7f, 0, 0.5f, 0);
+    car_reversed_object->scale(0.6f);
 
     objects_.push_back(teapot);
     objects_.push_back(teapot1);
     objects_.push_back(torus);
-    // Enable this when the scene is completed
-    // objects_.push_back(car_object);
+    objects_.push_back(car_object);
+    objects_.push_back(car_reversed_object);
 
     const auto cube_position = glm::vec3(5, 0, 5);
 	const auto cube_light_position = glm::vec3(4.0, 4.0, 4.0);
@@ -120,6 +140,7 @@ void scene_manager::init()
     objects_.push_back(cube);
 
     object_builders_.push_back(new floor_builder());
+    object_builders_.push_back(new road_builder());
 	for (const auto object_builder : object_builders_)
 	{
 		object_builder->init();

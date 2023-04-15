@@ -153,6 +153,9 @@
     <ClCompile Include="floor-builder.cpp">
       <Filter>Source Files\scene\builder</Filter>
     </ClCompile>
+    <ClCompile Include="road-builder.cpp">
+      <Filter>Source Files\scene\builder</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="vertexshader_default.vert">
@@ -263,6 +266,9 @@
       <Filter>Header Files\scene\builder</Filter>
     </ClInclude>
     <ClInclude Include="floor-builder.h">
+      <Filter>Header Files\scene\builder</Filter>
+    </ClInclude>
+    <ClInclude Include="road-builder.h">
       <Filter>Header Files\scene\builder</Filter>
     </ClInclude>
   </ItemGroup>
