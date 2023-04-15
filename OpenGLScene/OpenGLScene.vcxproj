@@ -159,6 +159,7 @@
     <ClCompile Include="object_square.cpp" />
     <ClCompile Include="object_bar.cpp" />
     <ClCompile Include="object_triangle.cpp" />
+    <ClCompile Include="primitive-person-builder.cpp" />
     <ClCompile Include="road-builder.cpp" />
     <ClCompile Include="scene_manager.cpp" />
     <ClCompile Include="objloader.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="object_square.h" />
     <ClInclude Include="object_bar.h" />
     <ClInclude Include="object_triangle.h" />
+    <ClInclude Include="primitive-person-builder.h" />
     <ClInclude Include="road-builder.h" />
     <ClInclude Include="scene_manager.h" />
     <ClInclude Include="objloader.h" />

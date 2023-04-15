@@ -1,7 +1,5 @@
 ﻿#include "animation_move_in_range.h"
 
-#include <iostream>
-
 #include "matrix_transformations.h"
 
 animation_move_in_range::animation_move_in_range(const float movement_speed, const float position_x_max_value, const float position_y_max_value,
@@ -19,7 +17,6 @@ glm::mat4 animation_move_in_range::execute(const glm::mat4& model)
 	{
 		original_model_ = model;
 		original_model_initialized_ = true;
-		std::cout << "Initialized model\n";
 	}
 
 	bool has_reset_value = false;
@@ -32,7 +29,6 @@ glm::mat4 animation_move_in_range::execute(const glm::mat4& model)
 		{
 			current_position_x_ = 0;
 			has_reset_value = true;
-			std::cout << "Reset after x change\n";
 		}
 	}
 
@@ -45,7 +41,6 @@ glm::mat4 animation_move_in_range::execute(const glm::mat4& model)
 		{
 			current_position_y_ = 0;
 			has_reset_value = true;
-			std::cout << "Reset after y change\n";
 		}
 	}
 
@@ -54,18 +49,15 @@ glm::mat4 animation_move_in_range::execute(const glm::mat4& model)
 	{
 		translate_position_z = movement_speed_;
 		current_position_z_ += movement_speed_;
-		std::cout << "Change z position\n";
 		if (current_position_z_ > position_z_max_)
 		{
 			current_position_z_ = 0;
 			has_reset_value = true;
-			std::cout << "Reset after z change\n";
 		}
 	}
 
 	if (has_reset_value)
 	{
-		std::cout << "Reset model";
 		return original_model_;
 	}
 

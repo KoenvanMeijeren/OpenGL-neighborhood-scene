@@ -13,6 +13,7 @@
 #include "material_metal.h"
 #include "object_cube.h"
 #include "object_square.h"
+#include "primitive-person-builder.h"
 #include "road-builder.h"
 
 scene_manager::scene_manager()
@@ -103,7 +104,7 @@ void scene_manager::init()
     car_object->scale(0.6f);
     car_object->translate(0, 0, -35);
     car_object->add_animation(new animation_move_in_range(0.2f, 0, 0, 65));
-
+ 
     const auto car_reversed_object_position = glm::vec3(20, 0, 2.4);
 	const auto car_reversed_object_light_position = glm::vec3(1, 1, 1);
     material* car_reversed_object_material_metal = new material_default(
@@ -128,23 +129,9 @@ void scene_manager::init()
     objects_.push_back(car_object);
     objects_.push_back(car_reversed_object);
 
-    const auto cube_position = glm::vec3(5, 0, 5);
-	const auto cube_light_position = glm::vec3(4.0, 4.0, 4.0);
-    material* cube_material_metal = new material_lambert(
-        glm::vec3(3, 0.3, 0.0), 
-        glm::vec3(3, 0, 0), 
-        glm::vec3(1),
-        1024
-    );
-    auto *cube = new object_cube(
-        cube_position,
-        cube_light_position, 
-        cube_material_metal
-    );
-    objects_.push_back(cube);
-
     object_builders_.push_back(new floor_builder());
     object_builders_.push_back(new road_builder());
+    object_builders_.push_back(new primitive_person_builder());
 	for (const auto object_builder : object_builders_)
 	{
 		object_builder->init();
