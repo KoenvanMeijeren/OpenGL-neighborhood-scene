@@ -162,6 +162,9 @@
     <ClCompile Include="primitive-person-builder.cpp">
       <Filter>Source Files\scene\builder</Filter>
     </ClCompile>
+    <ClCompile Include="leaves-builder.cpp">
+      <Filter>Source Files\scene\builder</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="vertexshader_default.vert">
@@ -281,6 +284,9 @@
       <Filter>Header Files\animation</Filter>
     </ClInclude>
     <ClInclude Include="primitive-person-builder.h">
+      <Filter>Header Files\scene\builder</Filter>
+    </ClInclude>
+    <ClInclude Include="leaves-builder.h">
       <Filter>Header Files\scene\builder</Filter>
     </ClInclude>
   </ItemGroup>
