@@ -12,7 +12,9 @@
 #include "line_shape_cube.h"
 #include "line_shape_rectangle.h"
 #include "object_bar.h"
+#include "object_rectangle.h"
 #include "object_square.h"
+#include "object_triangle.h"
 
 scene_manager::scene_manager()
 {
@@ -127,20 +129,21 @@ void scene_manager::init()
         "Objects/box.obj"
     );
 
-    const auto bar_object_position = glm::vec3(7.0, 7.5, 0);
-	const auto bar_object_light_position = glm::vec3(1.0, 1.0, 0);
-    material* bar_object_material_metal = new material_default(
+    const auto test_object_position = glm::vec3(7.0, 7.5, 0);
+	const auto test_object_light_position = glm::vec3(1.0, 1.0, 0);
+    material* test_object_material_metal = new material_default(
         glm::vec3(0.5, 0.1, 0.1), 
         glm::vec3(0.5, 0.1, 0.1), 
         glm::vec3(1),
         4
     );
-    auto *bar_object = new object(
-        bar_object_position, 
-        bar_object_light_position,
-        bar_object_material_metal, 
-        "Objects/bar.obj"
+    auto *test_object = new object(
+        test_object_position, 
+        test_object_light_position,
+        test_object_material_metal, 
+        "Objects/rectangle.obj"
     );
+    test_object->print_structure();
 
     objects_.push_back(teapot);
     objects_.push_back(teapot1);
@@ -148,7 +151,7 @@ void scene_manager::init()
     objects_.push_back(box);
     objects_.push_back(box2);
     objects_.push_back(box3);
-    objects_.push_back(bar_object);
+    objects_.push_back(test_object);
 
     auto *line_cube = new line_shape_cube(3, -3, 0);
     line_cube->add_animation(new animation_rotate(0.01f, 0.0f, 1.0f, 0.0f));
@@ -220,6 +223,36 @@ void scene_manager::init()
         bar_material
     );
     objects_.push_back(bar);
+
+    const auto rectangle_position = glm::vec3(-12.5, -10, 0);
+	const auto rectangle_light_position = glm::vec3(1.0, 1.0, 1.0);
+    material* rectangle_material = new material_default(
+        glm::vec3(0.3, 0, 0.5), 
+        glm::vec3(0, 1, 0.5), 
+        glm::vec3(1),
+        1
+    );
+    auto *rectangle = new object_rectangle(
+        rectangle_position,
+        rectangle_light_position, 
+        rectangle_material
+    );
+    objects_.push_back(rectangle);
+
+    const auto triangle_position = glm::vec3(-4.5, -7.5, 0);
+	const auto triangle_light_position = glm::vec3(1.0, 1.0, 1.0);
+    material* triangle_material = new material_default(
+        glm::vec3(0, 1, 0.5), 
+        glm::vec3(0, 0.6, 0), 
+        glm::vec3(1),
+        1024
+    );
+    auto *triangle = new object_triangle(
+        triangle_position,
+        triangle_light_position, 
+        triangle_material
+    );
+    objects_.push_back(triangle);
 }
 
 void scene_manager::render() const

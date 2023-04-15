@@ -76,8 +76,13 @@ void object::render()
 
 void object::print_structure() const
 {
+	std::cout << "Vertices of object: \n";
     print_vertices();
+
+	std::cout << "UVS of object: \n";
     print_uvs();
+
+	std::cout << "Normals of object: \n";
     print_normals();
 }
 
