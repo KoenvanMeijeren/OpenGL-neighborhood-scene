@@ -1,7 +1,9 @@
 ﻿#pragma once
+#include <malloc.h>
+
 #include "animation.h"
 
-class animation_move_in_range final : public animation
+__declspec(align(16)) class animation_move_in_range final : public animation
 {
 private:
 	bool original_model_initialized_ = false;
@@ -11,5 +13,16 @@ private:
 	float position_x_max_ = 0, position_y_max_ = 0, position_z_max_ = 0;
 public:
 	explicit animation_move_in_range(const float movement_speed, const float position_x_max_value, const float position_y_max_value, const float position_z_max_value);
+
+	void* operator new(const size_t size)
+	{
+	    return _mm_malloc(size, 16);
+	}
+
+	void operator delete(void* pointer)
+	{
+	    _mm_free(pointer);
+	}
+
 	glm::mat4 execute(const glm::mat4& model) override;
 };
