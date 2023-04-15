@@ -7,6 +7,7 @@
 #include "camera.h"
 #include "floor-builder.h"
 #include "glsl.h"
+#include "leaves-builder.h"
 #include "material_default.h"
 #include "material_lambert.h"
 #include "line_shape_cube.h"
@@ -131,6 +132,7 @@ void scene_manager::init()
 
     object_builders_.push_back(new floor_builder());
     object_builders_.push_back(new road_builder());
+    object_builders_.push_back(new leaves_builder());
     object_builders_.push_back(new primitive_person_builder());
 	for (const auto object_builder : object_builders_)
 	{

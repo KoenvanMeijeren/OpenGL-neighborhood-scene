@@ -143,6 +143,7 @@
     <ClCompile Include="floor-builder.cpp" />
     <ClCompile Include="glsl.cpp" />
     <ClCompile Include="keyboard_handler.cpp" />
+    <ClCompile Include="leaves-builder.cpp" />
     <ClCompile Include="line_shape_rectangle.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="material.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="floor-builder.h" />
     <ClInclude Include="glsl.h" />
     <ClInclude Include="keyboard_handler.h" />
+    <ClInclude Include="leaves-builder.h" />
     <ClInclude Include="line_shape_rectangle.h" />
     <ClInclude Include="material.h" />
     <ClInclude Include="material_default.h" />
